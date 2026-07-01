@@ -1,4 +1,3 @@
-from pydantic import BaseModel, Field
 from google import genai
 from google.genai import types
 from dotenv import load_dotenv
@@ -15,19 +14,6 @@ def get_genai_client():
     if api_key:
         return genai.Client(api_key=api_key)
     return genai.Client()
-
-class CondensedLocationRow(BaseModel):
-    vegetation_index: float = Field(description="The exact ndvi_mean float from satellite imagery data.")
-    flood_proximity_score: int = Field(description="1 for minimal water, 2 for local streams/ponds, 3 for proximity to major river channels.")
-    extreme_wind_count: int = Field(description="Count of days in the 7-day forecast where windspeed_10m_max exceeds 20.0 km/h.")
-    infrastructure_hazard: int = Field(description="Total counted number of complex industrial/infrastructure features inside the payload.")
-    urbanization_index: float = Field(description="1.0 for rural areas, 2.0 for suburban residential/subdivisions, 3.0 for high-density metropolitan spaces.")
-    slope_gradient: float = Field(description="The exact slope_mean_deg float extracted from the elevation raster data.")
-    snowfall_risk: float = Field(description="The aggregated sum of all values inside the weekly snowfall_sum array.")
-    soil_drainage_ratio: float = Field(description="Calculated sand_mean_g_kg divided by clay_mean_g_kg.")
-    crime_risk_index: float = Field(description="A calculated safety rating from 1.0 (safest) to 5.0 (highest crime) for the area resolved in demographics.")
-    is_soil_fallback: int = Field(description="Strictly output 1 if the raw soil payload contains a fallback status banner, otherwise output 0.")
-    is_crime_fallback: int = Field(description="Strictly output 1 if the injected crime score was forced to the 2.5 baseline due to an API error, otherwise output 0.")
 
 def lookup_local_crime_rate(city, county, state, country):
     """
@@ -99,7 +85,6 @@ def process_raw_dump_to_database_row(raw_api_payload, location_name="loc_01"):
             contents=prompt,
             config=types.GenerateContentConfig(
                 response_mime_type="application/json",
-                response_schema=CondensedLocationRow,
                 temperature=0.0
             )
         )
