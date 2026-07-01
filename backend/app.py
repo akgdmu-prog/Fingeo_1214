@@ -318,11 +318,16 @@ app.secret_key = os.getenv("FLASK_SECRET_KEY", "dev-secret-change-me")
 # CONFIGURATION: XGBOOST RISK MODEL LOAD
 # ------------------------------------------------------------------
 MODEL_PATH = os.path.join(base_dir, "risk_xgboost_model.json")
-xgb_model = xgb.XGBRegressor()
+xgb_model = None
 
 if os.path.exists(MODEL_PATH):
-    xgb_model.load_model(MODEL_PATH)
-    print("[SYSTEM] XGBoost Multi-Hazard Risk Model loaded successfully!")
+    try:
+        xgb_model = xgb.XGBRegressor()
+        xgb_model.load_model(MODEL_PATH)
+        print("[SYSTEM] XGBoost Multi-Hazard Risk Model loaded successfully!")
+    except Exception as exc:
+        xgb_model = None
+        print(f"[WARNING] XGBoost model could not be loaded: {exc}")
 else:
     print("[WARNING] XGBoost model file not found. System will omit live prediction indices.")
 
@@ -464,7 +469,7 @@ def analyze_risk():
         # ------------------------------------------------------------------
         # LIVE XGBOOST INFERENCE ENGINE LAYER
         # ------------------------------------------------------------------
-        if clean_numerical_features and os.path.exists(MODEL_PATH):
+        if clean_numerical_features and xgb_model is not None:
             print("[XGBOOST] Formatting tabular feature vector for inference...")
             
             feature_order = [
@@ -488,7 +493,9 @@ def analyze_risk():
             payload["ai_summary"] = ai_generated_summary
             
         elif clean_numerical_features:
-            clean_numerical_features["xgboost_predicted_risk_score"] = "Model Artifact Missing"
+            clean_numerical_features["xgboost_predicted_risk_score"] = "Model Unavailable"
+            payload["calculated_risk_score"] = None
+            payload["ai_summary"] = "Risk scoring is running in fallback mode because the model artifact is unavailable in this runtime."
             
         if clean_numerical_features:
             payload["ai_normalized_tabular_features"] = clean_numerical_features
