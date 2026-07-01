@@ -14,6 +14,11 @@ from dotenv import load_dotenv
 import xgboost as xgb
 
 try:
+    from .risk_engine import FEATURE_ORDER, build_feature_map_from_payload, score_with_fallback
+except ImportError:
+    from risk_engine import FEATURE_ORDER, build_feature_map_from_payload, score_with_fallback
+
+try:
     from .pipeline import process_raw_dump_to_database_row
 except ImportError:
     from pipeline import process_raw_dump_to_database_row
@@ -42,7 +47,7 @@ def generate_ai_risk_overview(condensed_features, final_score):
     contextualizing the overall safety environment for a property asset. Do not use Markdown styling.
     
     Data Metrics Profile:
-    - Final Calculated XGBoost Safety Risk Index: {final_score}/100
+    - Final Calculated Safety Risk Index: {final_score}/100
     - Vegetation Canopy Densities (NDVI): {condensed_features.get('vegetation_index', 0.0):.4f}
     - Flood Vector Drainage Proximity Score (1-3): {condensed_features.get('flood_proximity_score', 1)}
     - Topographic Slope Gradient: {condensed_features.get('slope_gradient', 0.0):.2f} degrees
@@ -57,9 +62,13 @@ def generate_ai_risk_overview(condensed_features, final_score):
             model='gemini-2.5-flash',
             contents=prompt,
         )
-        return response.text.strip()
+        text = getattr(response, "text", "")
+        if text:
+            return text.strip()
     except Exception as e:
-        return f"AI Risk Synthesis Engine temporary fallback route active. Composite Index analyzed at {final_score}%."
+        print(f"[AI SUMMARY] Gemini unavailable, using deterministic fallback: {e}")
+
+    return f"AI Risk Synthesis Engine fallback active. Composite Index analyzed at {final_score:.1f}%. The score is based on flood proximity, slope, vegetation, soil drainage, crime pressure, and infrastructure exposure."
 
 def get_climate_and_elevation_data(lat, lng):
     url = f"https://api.open-meteo.com/v1/forecast?latitude={lat}&longitude={lng}&hourly=temperature_2m,precipitation,rain,snowfall,cloudcover,windspeed_10m&daily=temperature_2m_max,temperature_2m_min,precipitation_sum,rain_sum,snowfall_sum,cloudcover_mean,windspeed_10m_max&current_weather=true&timezone=auto"
@@ -468,33 +477,14 @@ def analyze_risk():
         # ------------------------------------------------------------------
         # LIVE XGBOOST INFERENCE ENGINE LAYER
         # ------------------------------------------------------------------
-        if clean_numerical_features and xgb_model is not None:
+        if clean_numerical_features:
             print("[XGBOOST] Formatting tabular feature vector for inference...")
-            
-            feature_order = [
-                "vegetation_index", "flood_proximity_score", "extreme_wind_count",
-                "infrastructure_hazard", "urbanization_index", "slope_gradient",
-                "snowfall_risk", "soil_drainage_ratio", "crime_risk_index",
-                "is_soil_fallback", "is_crime_fallback"
-            ]
-            
-            input_row = np.array([[clean_numerical_features.get(k, 0.0) for k in feature_order]], dtype=float)
-            dmatrix = xgb.DMatrix(input_row, feature_names=feature_order)
-            raw_prediction = xgb_model.predict(dmatrix)
-            final_risk_score = float(np.clip(raw_prediction[0], 0.0, 100.0))
-            
-            print(f"[XGBOOST SUCCESS] Calculated Real-Time Composite Risk: {final_risk_score:.2f}/100")
+            inference_features = build_feature_map_from_payload(payload, clean_numerical_features)
+            final_risk_score = score_with_fallback(xgb_model, inference_features)
             clean_numerical_features["xgboost_predicted_risk_score"] = round(final_risk_score, 2)
-
-            # --- AI-generated natural language risk summary ---
             ai_generated_summary = generate_ai_risk_overview(clean_numerical_features, round(final_risk_score, 2))
             payload["calculated_risk_score"] = round(final_risk_score, 2)
             payload["ai_summary"] = ai_generated_summary
-            
-        elif clean_numerical_features:
-            clean_numerical_features["xgboost_predicted_risk_score"] = "Model Unavailable"
-            payload["calculated_risk_score"] = None
-            payload["ai_summary"] = "Risk scoring is running in fallback mode because the model artifact is unavailable in this runtime."
             
         if clean_numerical_features:
             payload["ai_normalized_tabular_features"] = clean_numerical_features
