@@ -1,4 +1,3 @@
-from pydantic import BaseModel
 from flask import Flask, jsonify, request, render_template, session
 import math
 import os
@@ -15,16 +14,32 @@ import numpy as np
 import rasterio
 from rasterio.windows import from_bounds
 from rasterio.warp import transform_bounds
-from pipeline import process_raw_dump_to_database_row
+from dotenv import load_dotenv
 import xgboost as xgb
 import pandas as pd
+
+try:
+    from .pipeline import process_raw_dump_to_database_row
+except ImportError:
+    from pipeline import process_raw_dump_to_database_row
+
+base_dir = os.path.dirname(os.path.abspath(__file__))
+dotenv_path = os.path.abspath(os.path.join(base_dir, "..", ".env"))
+load_dotenv(dotenv_path=dotenv_path)
+
+
+def get_genai_client():
+    api_key = os.getenv("GOOGLE_API_KEY")
+    if api_key:
+        return genai.Client(api_key=api_key)
+    return genai.Client()
 
 def generate_ai_risk_overview(condensed_features, final_score):
     """
     Leverages Gemini to synthesize the final model score and tabular metrics
     into a natural language descriptive summary for the end-user.
     """
-    client = genai.Client()
+    client = get_genai_client()
 
     prompt = f"""
     You are an expert geospatial risk underwriting intelligence assistant for the FinGeoRisk platform.
@@ -327,10 +342,9 @@ def get_soil_data_for_bbox(bbox):
         "note": "Estimated using dynamic regional geographic vectoring."
     }
 
-base_dir = os.path.dirname(os.path.abspath(__file__))
 template_dir = os.path.abspath(os.path.join(base_dir, '..', 'frontend', 'templates'))
 app = Flask(__name__, template_folder=template_dir)
-app.secret_key = "super_secret_fingeorisk_key_99"
+app.secret_key = os.getenv("FLASK_SECRET_KEY", "dev-secret-change-me")
 
 # ------------------------------------------------------------------
 # CONFIGURATION: XGBOOST RISK MODEL LOAD
@@ -519,4 +533,4 @@ def analyze_risk():
     return jsonify(payload)
 
 if __name__ == '__main__':
-    app.run(debug=True)
+    app.run(host="0.0.0.0", port=int(os.getenv("PORT", 5000)), debug=False)

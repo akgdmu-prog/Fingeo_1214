@@ -1,8 +1,20 @@
 from pydantic import BaseModel, Field
 from google import genai
 from google.genai import types
+from dotenv import load_dotenv
 import json
 import os
+
+base_dir = os.path.dirname(os.path.abspath(__file__))
+dotenv_path = os.path.abspath(os.path.join(base_dir, "..", ".env"))
+load_dotenv(dotenv_path=dotenv_path)
+
+
+def get_genai_client():
+    api_key = os.getenv("GOOGLE_API_KEY")
+    if api_key:
+        return genai.Client(api_key=api_key)
+    return genai.Client()
 
 class CondensedLocationRow(BaseModel):
     vegetation_index: float = Field(description="The exact ndvi_mean float from satellite imagery data.")
@@ -21,7 +33,7 @@ def lookup_local_crime_rate(city, county, state, country):
     """
     Step 1: Uses dynamic Google Search Grounding using BOTH City and County definitions.
     """
-    client = genai.Client()
+    client = get_genai_client()
     
     # If no city or county is available, exit early to safety baseline
     if (not city or city in ["Unknown", "n/a", "N/A"]) and (not county or county in ["Unknown", "n/a", "N/A"]):
@@ -53,7 +65,7 @@ def lookup_local_crime_rate(city, county, state, country):
         return 2.5, True
 
 def process_raw_dump_to_database_row(raw_api_payload, location_name="loc_01"):
-    client = genai.Client()
+    client = get_genai_client()
     
     demographics = raw_api_payload.get("demographics", {}) or {}
     city = demographics.get("city_town", "Unknown")
