@@ -322,8 +322,7 @@ xgb_model = None
 
 if os.path.exists(MODEL_PATH):
     try:
-        xgb_model = xgb.XGBRegressor()
-        xgb_model.load_model(MODEL_PATH)
+        xgb_model = xgb.Booster(model_file=MODEL_PATH)
         print("[SYSTEM] XGBoost Multi-Hazard Risk Model loaded successfully!")
     except Exception as exc:
         xgb_model = None
@@ -480,8 +479,8 @@ def analyze_risk():
             ]
             
             input_row = np.array([[clean_numerical_features.get(k, 0.0) for k in feature_order]], dtype=float)
-            
-            raw_prediction = xgb_model.predict(input_row)
+            dmatrix = xgb.DMatrix(input_row, feature_names=feature_order)
+            raw_prediction = xgb_model.predict(dmatrix)
             final_risk_score = float(np.clip(raw_prediction[0], 0.0, 100.0))
             
             print(f"[XGBOOST SUCCESS] Calculated Real-Time Composite Risk: {final_risk_score:.2f}/100")
