@@ -1,0 +1,307 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>FinGeoRisk - Get Started</title>
+    <link href="https://cesium.com/downloads/cesiumjs/releases/1.118/Build/Cesium/Widgets/widgets.css" rel="stylesheet">
+    <script src="https://cesium.com/downloads/cesiumjs/releases/1.118/Build/Cesium/Cesium.js"></script>
+
+    <style>
+        * {
+            box-sizing: border-box;
+        }
+
+        body {
+            margin: 0;
+            background: #090d16;
+            font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+            color: #4a5568;
+            height: 100vh;
+            display: flex;
+            flex-direction: column;
+            overflow: hidden;
+            position: relative;
+        }
+
+        /* --- HEADER --- */
+        .top-header-panel {
+            position: absolute;
+            top: 24px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 90%;
+            max-width: 1100px;
+            height: 66px;
+            padding: 0 30px;
+
+            background: rgba(230, 238, 248, 0.88);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            border: 1px solid rgba(255, 255, 255, 0.6);
+            border-radius: 50px;
+            box-shadow: 0 12px 40px rgba(0, 0, 0, 0.25),
+                        inset 1px 1px 3px rgba(255, 255, 255, 0.6);
+
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            z-index: 1000;
+            transition: all 0.6s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+
+        .logo-area {
+            display: flex;
+            align-items: center;
+        }
+
+        .logo-title {
+            font-size: 1.35rem;
+            font-weight: 800;
+            background: linear-gradient(135deg, #1e3a8a, #3b82f6);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            letter-spacing: -0.5px;
+        }
+
+        .btn-get-started {
+            background: #3b82f6;
+            color: white;
+            border: none;
+            padding: 10px 26px;
+            font-size: 0.95rem;
+            font-weight: 600;
+            border-radius: 25px;
+            cursor: pointer;
+            box-shadow: 0 4px 14px rgba(59, 130, 246, 0.4);
+            transition: all 0.3s ease;
+        }
+
+        .btn-get-started:hover {
+            background: #2563eb;
+            transform: translateY(-1px);
+            box-shadow: 0 6px 20px rgba(37, 99, 235, 0.5);
+        }
+
+        /* --- GLOBE --- */
+        #cesiumContainer {
+            width: 100%;
+            height: 100%;
+            position: absolute;
+            top: 0;
+            left: 0;
+            z-index: 1;
+        }
+
+        .cesium-viewer-bottom,
+        .cesium-viewer-animationContainer,
+        .cesium-viewer-timelineContainer,
+        .cesium-viewer-toolbar {
+            display: none !important;
+        }
+
+        /* --- ROLE SELECTION MODAL --- */
+        .role-container {
+            position: absolute;
+            top: 55%;
+            left: 50%;
+            transform: translate(-50%, -50%) scale(0.9);
+            width: 90%;
+            max-width: 480px;
+
+            background: rgba(10, 17, 34, 0.7);
+            backdrop-filter: blur(18px);
+            -webkit-backdrop-filter: blur(18px);
+            border: 1px solid rgba(255, 255, 255, 0.12);
+            box-shadow: 0 30px 70px rgba(0, 0, 0, 0.5);
+
+            border-radius: 28px;
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+            z-index: 2000;
+            opacity: 0;
+            pointer-events: none;
+            transition: all 0.8s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+
+        .role-container.active {
+            opacity: 1;
+            pointer-events: auto;
+            transform: translate(-50%, -50%) scale(1);
+        }
+
+        .role-header {
+            background: rgba(59, 130, 246, 0.15);
+            border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+            color: #f8fafc;
+            padding: 22px 24px 4px;
+            font-weight: 700;
+            font-size: 16px;
+        }
+
+        .role-subtext {
+            color: #94a3b8;
+            font-size: 13px;
+            padding: 0 24px 18px;
+        }
+
+        .role-options {
+            display: flex;
+            flex-direction: column;
+            gap: 14px;
+            padding: 8px 24px 28px;
+        }
+
+        .role-btn {
+            display: flex;
+            align-items: center;
+            gap: 14px;
+            background: rgba(30, 41, 59, 0.8);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            color: #f8fafc;
+            padding: 18px 20px;
+            border-radius: 16px;
+            font-size: 15px;
+            font-weight: 600;
+            cursor: pointer;
+            text-align: left;
+            transition: all 0.2s ease;
+        }
+
+        .role-btn:hover {
+            background: #3b82f6;
+            border-color: #3b82f6;
+            transform: translateY(-1px);
+        }
+
+        .role-btn .icon {
+            font-size: 22px;
+        }
+
+        .role-btn .desc {
+            font-size: 12.5px;
+            font-weight: 400;
+            color: #cbd5e1;
+            margin-top: 2px;
+        }
+
+        .role-btn:hover .desc {
+            color: #e0ecff;
+        }
+
+        .role-loading {
+            text-align: center;
+            color: #94a3b8;
+            font-size: 13px;
+            padding: 0 24px 24px;
+            display: none;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="top-header-panel" id="headerPanel">
+        <div class="logo-area">
+            <span class="logo-title">FinGeoRisk Portal</span>
+        </div>
+        <button class="btn-get-started" id="getStartedBtn" onclick="startOnboardingAnimation()">Get Started</button>
+    </div>
+
+    <div id="cesiumContainer"></div>
+
+    <div class="role-container" id="rolePopup">
+        <div class="role-header">Welcome to FinGeoRisk</div>
+        <div class="role-subtext">Tell us who you are so we can show you the right view.</div>
+        <div class="role-options">
+            <button class="role-btn" onclick="selectRole('homeowner')">
+                <span class="icon">🏠</span>
+                <span>
+                    Homeowner
+                    <div class="desc">Checking risk for a home I own or live in</div>
+                </span>
+            </button>
+            <button class="role-btn" onclick="selectRole('investor')">
+                <span class="icon">📈</span>
+                <span>
+                    Investor
+                    <div class="desc">Evaluating land or property for purchase</div>
+                </span>
+            </button>
+        </div>
+        <div class="role-loading" id="roleLoading">Loading your dashboard...</div>
+    </div>
+
+    <script>
+        Cesium.Ion.defaultAccessToken = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJqdGkiOiI3NWYzMmM1OS1lMzE5LTRmZTMtOWNlNi00OWZmMzkxMDhlNzgiLCJpZCI6NDUwNDgwLCJzdWIiOiJTaWRkaGFudF8xMjEzIiwiaXNzIjoiaHR0cHM6Ly9hcGkuY2VzaXVtLmNvbSIsImF1ZCI6IlVudGl0bGVkIiwiaWF0IjoxNzgyNzU0MTU2fQ.H6iNblLtKvy83srBaTEv1BJl_xO17vJE3hCZZ0x3M-4';
+
+        const viewer = new Cesium.Viewer('cesiumContainer', {
+            baseLayerPicker: false,
+            geocoder: false,
+            homeButton: false,
+            infoBox: false,
+            sceneModePicker: false,
+            selectionIndicator: false,
+            timeline: false,
+            navigationHelpButton: false,
+            animation: false,
+            scene3DOnly: true
+        });
+
+        viewer.camera.setView({
+            destination: Cesium.Cartesian3.fromDegrees(0.0, 15.0, 18500000.0)
+        });
+
+        let lastTime = Date.now();
+        let spinning = true;
+
+        const spinGlobe = (scene, time) => {
+            if (spinning) {
+                const now = Date.now();
+                const delta = (now - lastTime) / 1000;
+                lastTime = now;
+                viewer.camera.rotate(Cesium.Cartesian3.UNIT_Z, -0.04 * delta);
+            }
+        };
+        viewer.scene.postRender.addEventListener(spinGlobe);
+
+        function startOnboardingAnimation() {
+            spinning = false;
+
+            document.getElementById('getStartedBtn').style.opacity = '0';
+            document.getElementById('getStartedBtn').style.pointerEvents = 'none';
+            document.getElementById('headerPanel').style.top = '12px';
+            document.getElementById('headerPanel').style.background = 'rgba(230, 238, 248, 0.4)';
+
+            viewer.camera.flyTo({
+                destination: Cesium.Cartesian3.fromDegrees(-40.0, 23.0, 4000000.0),
+                duration: 2.8,
+                easingFunction: Cesium.EasingFunction.QUADRATIC_IN_OUT,
+                complete: function() {
+                    document.getElementById('rolePopup').classList.add('active');
+                }
+            });
+        }
+
+        // Simple, direct navigation - no AI parsing involved.
+        // If you want the server to remember the choice in session
+        // (e.g. for /api/analyze later), this posts to /api/set_role first.
+        async function selectRole(role) {
+            document.getElementById('roleLoading').style.display = 'block';
+
+            try {
+                await fetch('/api/set_role', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ role: role })
+                });
+            } catch (e) {
+                // Even if the session-save call fails, still navigate -
+                // the buttons should always work.
+                console.warn('Could not save role to session:', e);
+            }
+
+            window.location.href = role === 'investor' ? '/investor' : '/homeowner';
+        }
+    </script>
+</body>
+</html>

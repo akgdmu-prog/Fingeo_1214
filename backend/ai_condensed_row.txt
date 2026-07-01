@@ -1,0 +1,19 @@
+=== GEMINI DATA HARMONIZATION PIPELINE DUMP ===
+Processed Location Identifier: queried_location
+Resolved Boundaries -> City: N/A | County: Forsyth County
+==================================================
+
+{
+    "vegetation_index": 0.20528732240200043,
+    "flood_proximity_score": 3,
+    "extreme_wind_count": 0,
+    "infrastructure_hazard": 0,
+    "urbanization_index": 2.0,
+    "slope_gradient": 88.8844985961914,
+    "snowfall_risk": 0.0,
+    "soil_drainage_ratio": 0.92101549,
+    "crime_risk_index": 1.2,
+    "is_soil_fallback": 1,
+    "is_crime_fallback": 0,
+    "location_id": "queried_location"
+}

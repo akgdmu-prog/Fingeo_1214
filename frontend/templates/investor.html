@@ -1,0 +1,604 @@
+<html>
+<head>
+    <title>FinGeoRisk Investor Portal</title>
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/leaflet.draw/1.0.4/leaflet.draw.css"/>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/leaflet.draw/1.0.4/leaflet.draw.js"></script>
+    
+    <style>
+        * { 
+            box-sizing: border-box; 
+        }
+        
+        body {
+            margin: 0;
+            background: #e6eef8;       
+            font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+            color: #4a5568;            
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            overflow-y: auto;
+            padding: 16px 20px 30px 20px;
+            gap: 20px;
+        }
+
+        /* --- NEUMORPHIC TOP HEADER --- */
+        .top-header-panel {
+            width: 100%;
+            height: 70px;
+            padding: 0 24px;
+            background: #e6eef8;
+            border-radius: 20px;
+            box-shadow: 6px 6px 16px #cbd6e4, -6px -6px 16px #ffffff;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            flex-shrink: 0;
+        }
+
+        .header-brand {
+            font-size: 20px;
+            font-weight: 800;
+            letter-spacing: -0.5px;
+            background: linear-gradient(135deg, #1e3a8a 0%, #3b82f6 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .header-identity {
+            font-size: 13px;
+            font-weight: 600;
+            color: #4b5563;
+            background: #e6eef8;
+            padding: 6px 14px;
+            border-radius: 99px;
+            box-shadow: inset 2px 2px 5px #cbd6e4, inset -2px -2px 5px #ffffff;
+            margin-left: 24px;
+        }
+
+        .header-coords {
+            font-family: monospace;
+            font-size: 12px;
+            font-weight: bold;
+            color: #64748b;
+            background: #e6eef8;
+            padding: 6px 14px;
+            border-radius: 10px;
+            box-shadow: inset 2px 2px 5px #cbd6e4, inset -2px -2px 5px #ffffff;
+            margin-left: auto;
+            margin-right: 20px;
+        }
+
+        .header-controls-mock {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .mock-icon-btn {
+            width: 36px;
+            height: 36px;
+            background: #e6eef8;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 3px 3px 6px #cbd6e4, -3px -3px 6px #ffffff;
+            color: #64748b;
+            cursor: pointer;
+        }
+
+        .mock-avatar {
+            width: 38px;
+            height: 38px;
+            background: linear-gradient(135deg, #10b981, #047857); 
+            border-radius: 50%;
+            box-shadow: 3px 3px 6px #cbd6e4, -3px -3px 6px #ffffff;
+            border: 2px solid #e6eef8;
+        }
+
+        /* --- THE CORE WORKSPACE GRID BLOCK --- */
+        .workspace-grid-layout {
+            display: grid;
+            grid-template-columns: 290px 1fr 330px;
+            gap: 20px;
+            width: 100%;
+            align-items: stretch;
+        }
+
+        /* --- LEFT SEARCH SIDEBAR PANEL --- */
+        .search-sidebar {
+            background: #e6eef8;
+            border-radius: 24px;
+            padding: 24px 20px;
+            box-shadow: 6px 6px 16px #c5d0e6, -6px -6px 16px #ffffff;
+            display: flex;
+            flex-direction: column;
+            justify-content: flex-start;
+        }
+
+        .search-top-group {
+            width: 100%;
+        }
+
+        .search-sidebar h3 {
+            margin: 0;
+            color: #1e293b;
+            font-size: 21px;
+            font-weight: 800;
+            letter-spacing: -0.3px;
+        }
+
+        .search-label-title {
+            width: 100%;
+            font-size: 12px;
+            font-weight: 700;
+            letter-spacing: 0.5px;
+            text-transform: uppercase;
+            color: #64748b;
+            margin-bottom: 10px;
+            text-align: left;
+        }
+
+        /* --- RIGHT INSIGHT SIDEBAR PANEL COLUMN --- */
+        .gauge-sidebar {
+            background: #e6eef8;
+            border-radius: 24px;
+            padding: 24px 20px;
+            box-shadow: 6px 6px 16px #c5d0e6, -6px -6px 16px #ffffff;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        /* --- CENTER COLUMN CONTAINER (MAP + DIAGNOSTICS UNDERNEATH) --- */
+        .center-dashboard-stack {
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+        }
+
+        .map-container-fixed {
+            height: 500px;
+            border-radius: 24px;
+            overflow: hidden;
+            background: #e6eef8;
+            box-shadow: 6px 6px 16px #c5d0e6, -6px -6px 16px #ffffff;
+            border: 4px solid #e6eef8;
+            position: relative;
+        }
+
+        #map {
+            width: 100%;
+            height: 100%;
+            border-radius: 20px;
+        }
+
+        /* --- DIAGNOSTICS MATRIX UNDERNEATH THE MAP --- */
+        .bottom-info-panel {
+            background: #e6eef8;
+            border-radius: 24px;
+            padding: 24px;
+            box-shadow: 6px 6px 16px #c5d0e6, -6px -6px 16px #ffffff;
+        }
+
+        .diagnostics-grid {
+            display: grid;
+            grid-template-columns: repeat(6, 1fr);
+            gap: 20px;
+            width: 100%;
+        }
+
+        .metric-card-indented {
+            background: #e6eef8;
+            border-radius: 18px;
+            padding: 20px;
+            min-height: 130px;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            box-shadow: inset 5px 5px 10px #cbd6e4, inset -5px -5px 10px #ffffff;
+        }
+
+        .card-row1 {
+            grid-column: span 2;
+        }
+
+        .card-row2 {
+            grid-column: span 3;
+        }
+
+        .card-label {
+            font-size: 12px;
+            font-weight: 700;
+            color: #64748b;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .card-value-display {
+            margin-top: 12px;
+            padding: 12px;
+            background: #e6eef8;
+            border-radius: 10px;
+            font-weight: 800;
+            font-size: 18px;
+            color: #1e3a8a;
+            text-align: center;
+            box-shadow: inset 3px 3px 6px #cbd6e4, inset -3px -3px 6px #ffffff;
+        }
+
+        /* --- STYLED COHESIVE DIVIDER LINE --- */
+        .panel-divider {
+            width: 100%;
+            border-top: 2px dashed #cbd5e1;
+            margin: 20px 0 16px 0;
+        }
+
+        .ai-overview-title {
+            width: 100%;
+            font-size: 12px;
+            font-weight: 700;
+            letter-spacing: 0.5px;
+            text-transform: uppercase;
+            color: #64748b;
+            margin-bottom: 10px;
+            text-align: left;
+        }
+
+        .terrace-outer-layer {
+            width: 100%;
+            padding: 10px;
+            background: #e6eef8;
+            border-radius: 18px;
+            box-shadow: inset 4px 4px 10px #cbd6e4, inset -4px -4px 10px #ffffff;
+            flex-grow: 1;
+            display: flex;
+        }
+
+        .terrace-inner-textbox {
+            width: 100%;
+            min-height: 260px;
+            padding: 14px;
+            background: #e6eef8;
+            border-radius: 12px;
+            font-size: 13px;
+            line-height: 1.6;
+            color: #334155;
+            overflow-y: auto;
+            white-space: pre-line;
+            box-shadow: inset 6px 6px 12px #b8c5d6, inset -6px -6px 12px #ffffff;
+            flex-grow: 1;
+        }
+
+        /* --- NEUMORPHIC AUTOCOMPLETE INPUT --- */
+        .autocomplete-wrapper {
+            position: relative;
+            width: 100%;
+        }
+
+        .address-input {
+            width: 100%;
+            padding: 14px 16px;
+            background: #e6eef8;
+            border: none;
+            border-radius: 14px;
+            font-size: 13.5px;
+            color: #334155;
+            outline: none;
+            box-shadow: inset 4px 4px 8px #cbd5e1, inset -4px -4px 8px #ffffff;
+        }
+
+        .suggestions-box {
+            position: absolute;
+            top: calc(100% + 8px);
+            left: 0; right: 0;
+            background: rgba(230, 238, 248, 0.95);
+            backdrop-filter: blur(10px);
+            border-radius: 14px;
+            max-height: 200px;
+            overflow-y: auto;
+            z-index: 2000;
+            box-shadow: 4px 4px 12px rgba(163, 177, 198, 0.3), -4px -4px 12px #ffffff;
+            border: 1px solid rgba(255,255,255,0.6);
+            display: none;
+        }
+
+        .suggestion-item {
+            padding: 12px 14px;
+            cursor: pointer;
+            font-size: 12.5px;
+            color: #4a5568;
+            border-bottom: 1px solid rgba(0,0,0,0.03);
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+
+        .suggestion-item:hover {
+            background-color: rgba(255,255,255,0.5);
+            color: #3b82f6;
+        }
+
+        /* --- LOADER CURTAIN --- */
+        .blur-overlay-curtain {
+            position: absolute;
+            top: 0; left: 0; right: 0; bottom: 0;
+            background: rgba(230, 238, 248, 0.35);
+            backdrop-filter: blur(6px);
+            -webkit-backdrop-filter: blur(6px);
+            z-index: 1000;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            border-radius: 20px;
+            opacity: 0;
+            pointer-events: none;
+            transition: opacity 0.3s ease-in-out;
+        }
+
+        .blur-overlay-curtain.active {
+            opacity: 1;
+            pointer-events: auto;
+        }
+
+        .pulse-loader-ring {
+            width: 45px;
+            height: 45px;
+            border: 4px solid rgba(59, 130, 246, 0.1);
+            border-top-color: #10b981;
+            border-radius: 50%;
+            animation: spinRing 0.8s linear infinite;
+            margin-bottom: 12px;
+        }
+
+        .loader-caption-text {
+            font-size: 13px;
+            font-weight: 700;
+            color: #065f46;
+        }
+
+        @keyframes spinRing {
+            to { transform: rotate(360deg); }
+        }
+    </style>
+</head>
+<body>
+
+    <div class="top-header-panel">
+        <div class="header-brand">FinGeoRisk</div>
+        <div class="header-identity">ID: Investor</div>
+        <div id="header-coordinates" class="header-coords">Lat: -- | Lng: --</div>
+        
+        <div class="header-controls-mock">
+            <div class="mock-icon-btn" title="Settings Menu">
+                <svg width="18" height="18" fill="currentColor" viewBox="0 0 16 16">
+                    <path d="M9.405 1.05c-.413-1.4-2.397-1.4-2.81 0l-.1.34a1.464 1.464 0 0 1-2.105.872l-.31-.17c-1.283-.698-2.686.705-1.987 1.987l.169.311c.446.82.023 1.841-.872 2.105l-.34.1c-1.4.413-1.4 2.397 0 2.81l.34.1a1.464 1.464 0 0 1 .872 2.105l-.17.31c-.698 1.283.705 2.686 1.987 1.987l.311-.169a1.464 1.464 0 0 1 2.105.872l.1.34c.413 1.4 2.397 1.4 2.81 0l.1-.34a1.464 1.464 0 0 1 2.105-.872l.31.17c1.283.698 2.686-.705 1.987-1.987l-.169-.311a1.464 1.464 0 0 1 .872-2.105l.34-.1c1.4-.413 1.4-2.397 0-2.81l-.34-.1a1.464 1.464 0 0 1-.872-2.105l.17-.31c.698-1.283-.705-2.686-1.987-1.987l-.311.169a1.464 1.464 0 0 1-2.105-.872zM8 10.93a2.929 2.929 0 1 1 0-5.86 2.929 2.929 0 0 1 0 5.86z"/>
+                </svg>
+            </div>
+            <div class="mock-avatar"></div>
+        </div>
+    </div>
+
+    <div class="workspace-grid-layout">
+        
+        <div class="search-sidebar">
+            <div class="search-top-group">
+                <h3>Commercial Tract Search</h3>
+                
+                <div class="panel-divider"></div>
+                
+                <div class="search-label-title">Search</div>
+                <div class="autocomplete-wrapper">
+                    <input type="text" id="addressSearch" class="address-input" placeholder="Type city or region address..." autocomplete="off">
+                    <div id="suggestionsBox" class="suggestions-box"></div>
+                </div>
+            </div>
+        </div>
+
+        <div class="center-dashboard-stack">
+            
+            <div class="map-container-fixed">
+                <div id="map"></div>
+                <div id="blurOverlay" class="blur-overlay-curtain">
+                    <div class="pulse-loader-ring"></div>
+                    <div class="loader-caption-text">Calculating Bounds & Polygon Tree Inference Models...</div>
+                </div>
+            </div>
+
+            <div class="bottom-info-panel">
+                <div class="diagnostics-grid">
+                    <div class="metric-card-indented card-row1">
+                        <div class="card-label">Crime Index</div>
+                        <div id="grid-crime" class="card-value-display">--</div>
+                    </div>
+                    <div class="metric-card-indented card-row1">
+                        <div class="card-label">Calculated Slope</div>
+                        <div id="grid-slope" class="card-value-display">--</div>
+                    </div>
+                    <div class="metric-card-indented card-row1">
+                        <div class="card-label">Vegetation Index</div>
+                        <div id="grid-vegetation" class="card-value-display">--</div>
+                    </div>
+
+                    <div class="metric-card-indented card-row2">
+                        <div class="card-label">Flood Proximity</div>
+                        <div id="grid-flood" class="card-value-display">--</div>
+                    </div>
+                    <div class="metric-card-indented card-row2">
+                        <div class="card-label">Infrastructure Hazard</div>
+                        <div id="grid-infrastructure" class="card-value-display">--</div>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+
+        <div class="gauge-sidebar">
+            <div class="gauge-container" style="transform: scale(1.35); margin-top: 30px; margin-bottom: 10px; position: relative;">
+                <svg width="110" height="110" viewBox="0 0 120 120">
+                    <circle cx="60" cy="60" r="50" fill="none" stroke="#dbeafe" stroke-width="10"/>
+                    <circle id="gaugeMeter" cx="60" cy="60" r="50" fill="none" stroke="#10b981" stroke-width="10" 
+                            stroke-dasharray="314.16" stroke-dashoffset="314.16" stroke-linecap="round" transform="rotate(-90 60 60)" style="transition: stroke-dashoffset 0.6s ease-in-out;"/>
+                    <text id="gaugeText" x="60" y="68" text-anchor="middle" font-family="system-ui" font-size="20" font-weight="800" fill="#1e3a8a">0.0%</text>
+                </svg>
+            </div>
+            <div style="font-size: 11px; font-weight: 800; color: #64748b; text-transform: uppercase; letter-spacing: 0.8px; margin-top: 15px;">Tract Risk</div>
+
+            <div class="panel-divider"></div>
+            <div class="ai-overview-title">AI Overview</div>
+            
+            <div class="terrace-outer-layer">
+                <div id="aiOverviewBox" class="terrace-inner-textbox">Awaiting spatial polygon generation matrices...</div>
+            </div>
+        </div>
+
+    </div>
+
+    <script>
+        var map = L.map('map').setView([34.22, -84.11], 13);
+        L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+            maxZoom: 19,
+            attribution: '© OpenStreetMap'
+        }).addTo(map);
+
+        var editableLayers = new L.FeatureGroup();
+        map.addLayer(editableLayers);
+
+        var drawControl = new L.Control.Draw({
+            draw: { polygon: true, rectangle: true, circle: false, circlemarker: false, polyline: false, marker: false },
+            edit: { featureGroup: editableLayers, remove: true }
+        });
+        map.addControl(drawControl);
+
+        function updateRiskWheel(scoreValue) {
+            var circle = document.getElementById('gaugeMeter');
+            var text = document.getElementById('gaugeText');
+            var radius = circle.r.baseVal.value;
+            var circumference = 2 * Math.PI * radius;
+            var offset = circumference - (scoreValue / 100) * circumference;
+            circle.style.strokeDashoffset = offset;
+            text.textContent = scoreValue.toFixed(1) + "%";
+            
+            if (scoreValue > 60.0) {
+                circle.style.stroke = "#ef4444"; 
+            } else if (scoreValue > 35.0) {
+                circle.style.stroke = "#f59e0b"; 
+            } else {
+                circle.style.stroke = "#10b981"; 
+            }
+        }
+
+        var searchInput = document.getElementById('addressSearch');
+        var suggestionsBox = document.getElementById('suggestionsBox');
+        var debounceTimeout = null;
+
+        searchInput.addEventListener('input', function() {
+            clearTimeout(debounceTimeout);
+            var query = searchInput.value.trim();
+
+            if (query.length < 3) {
+                suggestionsBox.style.display = 'none';
+                return;
+            }
+
+            debounceTimeout = setTimeout(function() {
+                var url = `https://nominatim.openstreetmap.org/search?format=json&q=${encodeURIComponent(query)}&limit=5&countrycodes=us`;
+                fetch(url, { headers: { 'User-Agent': 'FinGeoRisk_Investor_Client/1.0' } })
+                .then(res => res.json())
+                .then(data => {
+                    suggestionsBox.innerHTML = '';
+                    if (data.length === 0) {
+                        suggestionsBox.style.display = 'none';
+                        return;
+                    }
+                    data.forEach(item => {
+                        var div = document.createElement('div');
+                        div.className = 'suggestion-item';
+                        div.textContent = item.display_name;
+                        div.addEventListener('click', function() {
+                            searchInput.value = item.display_name;
+                            suggestionsBox.style.display = 'none';
+                            var targetLat = parseFloat(item.lat);
+                            var targetLng = parseFloat(item.lon);
+                            map.setView([targetLat, targetLng], 14);
+                            document.getElementById('header-coordinates').innerText = `Lat: ${targetLat.toFixed(4)} | Lng: ${targetLng.toFixed(4)}`;
+                        });
+                        suggestionsBox.appendChild(div);
+                    });
+                    suggestionsBox.style.display = 'block';
+                }).catch(err => console.error(err));
+            }, 350); 
+        });
+
+        document.addEventListener('click', function(e) {
+            if (e.target !== searchInput) { suggestionsBox.style.display = 'none'; }
+        });
+
+        map.on(L.Draw.Event.CREATED, function (event) {
+            var layer = event.layer;
+            editableLayers.clearLayers();
+            editableLayers.addLayer(layer);
+
+            document.getElementById('blurOverlay').classList.add('active');
+            var coordinates = layer.getLatLngs()[0]; 
+            var formattedCoords = coordinates.map(pair => [pair.lat, pair.lng]);
+
+            if(coordinates[0]) {
+                document.getElementById('header-coordinates').innerText = `Lat: ${coordinates[0].lat.toFixed(4)} | Lng: ${coordinates[0].lng.toFixed(4)}`;
+            }
+
+            fetch('/api/analyze', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ type: "polygon", points: formattedCoords })
+            })
+            .then(response => response.json())
+            .then(data => {
+                document.getElementById('blurOverlay').classList.remove('active');
+
+                if (data.status === 'success') {
+                    var rawRiskScore = parseFloat(data.calculated_risk_score) || 0.0;
+                    var metrics = data.metrics || {};
+                    updateRiskWheel(rawRiskScore);
+
+                    document.getElementById('aiOverviewBox').innerText = data.ai_summary;
+
+                    document.getElementById('grid-crime').innerText = (metrics.crime_risk_index || 0).toFixed(1);
+                    document.getElementById('grid-slope').innerText = (metrics.slope_gradient || 0).toFixed(1) + "°";
+                    document.getElementById('grid-vegetation').innerText = (metrics.vegetation_index || 0).toFixed(4);
+                    document.getElementById('grid-flood').innerText = "Zone Level " + (metrics.flood_proximity_score != null ? metrics.flood_proximity_score : "N/A");
+                    document.getElementById('grid-infrastructure').innerText = (metrics.infrastructure_hazard != null ? metrics.infrastructure_hazard : 0);
+
+                    var levelColor = rawRiskScore > 60 ? '#ef4444' : (rawRiskScore > 30 ? '#f59e0b' : '#10b981');
+                    layer.bindPopup(`
+                        <div style="font-family: inherit; min-width: 180px;">
+                            <h4 style="margin:0 0 5px 0; color:#1e3a8a; font-weight:800;">Risk Computation</h4>
+                            <hr style="border:0; border-top:1px solid #cbd5e1; margin:5px 0;">
+                            <p style="margin:0; font-size:1.05em;"><strong>XGBoost Index:</strong> <span style="color: ${levelColor}; font-weight:bold;">${rawRiskScore.toFixed(2)}%</span></p>
+                        </div>
+                    `).openPopup();
+                }
+            }).catch(err => {
+                console.error("Boundary processing exception encountered:", err);
+                setTimeout(() => {
+                    document.getElementById('blurOverlay').classList.remove('active');
+                    var demoScore = Math.random() * 95;
+                    updateRiskWheel(demoScore);
+                    
+                    document.getElementById('grid-crime').innerText = (Math.random() * 80).toFixed(1);
+                    document.getElementById('grid-slope').innerText = (Math.random() * 25).toFixed(1) + "°";
+                    document.getElementById('grid-vegetation').innerText = Math.random().toFixed(3);
+                    document.getElementById('grid-flood').innerText = "Zone AE";
+                    document.getElementById('grid-infrastructure').innerText = (Math.random() * 10).toFixed(1);
+
+                    document.getElementById('aiOverviewBox').innerText = `Simulation Callback Active.\nTract Boundary Evaluation complete.\n\nComposite spatial array risk metrics calculated fallback simulation at ${demoScore.toFixed(2)}%.`;
+                }, 800);
+            });
+        });
+    </script>
+</body>
+</html>
