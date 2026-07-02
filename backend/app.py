@@ -367,6 +367,64 @@ def set_role():
 
     return jsonify({"status": "success", "role": session['occupation']})
     
+@app.route('/api/chat', methods=['POST'])
+def chat_assistant():
+    data = request.get_json()
+    message = data.get('message', '')
+    current_lat = data.get('currentLat')
+    current_lng = data.get('currentLng')
+    current_label = data.get('currentLabel', 'Unknown location')
+    risk_score = data.get('riskScore', 'N/A')
+    slope = data.get('slope', 'N/A')
+    vegetation = data.get('vegetation', 'N/A')
+    flood = data.get('flood', 'N/A')
+    
+    client = get_genai_client()
+    
+    context_info = f"""
+    Current Property Analysis Context:
+    - Location: {current_label}
+    - Coordinates: {current_lat}, {current_lng}
+    - Risk Score: {risk_score}
+    - Slope Gradient: {slope}
+    - Vegetation Index: {vegetation}
+    - Flood Zone: {flood}
+    """
+    
+    prompt = f"""
+    You are an expert geospatial risk advisor for the FinGeoRisk platform. A homeowner is asking you a question about property risks.
+    
+    {context_info}
+    
+    User Question: {message}
+    
+    Provide a helpful, concise, and professional response. Focus on actionable advice related to property risks, safety measures, and risk mitigation strategies. Keep your response under 150 words and avoid markdown formatting.
+    """
+    
+    try:
+        response = client.models.generate_content(
+            model='gemini-2.5-flash',
+            contents=prompt,
+        )
+        text = getattr(response, "text", "")
+        if text:
+            return jsonify({"status": "success", "response": text.strip()})
+    except Exception as e:
+        print(f"[CHAT] Gemini error: {e}")
+    
+    # Fallback responses based on common keywords
+    message_lower = message.lower()
+    if 'flood' in message_lower:
+        return jsonify({"status": "success", "response": f"Based on the flood zone data ({flood}), I recommend reviewing your property's elevation and considering flood insurance if you're in a high-risk zone. Ensure proper drainage around your foundation."})
+    elif 'slope' in message_lower or 'landslide' in message_lower:
+        return jsonify({"status": "success", "response": f"Your slope gradient is {slope}. For slopes over 15°, consider professional engineering assessment. Ensure proper drainage and avoid building additions that could increase load on downhill slopes."})
+    elif 'fire' in message_lower or 'wildfire' in message_lower:
+        return jsonify({"status": "success", "response": f"Vegetation index: {vegetation}. Create defensible space by clearing vegetation within 30 feet of structures. Use fire-resistant materials and maintain your roof and gutters."})
+    elif 'risk' in message_lower:
+        return jsonify({"status": "success", "response": f"Your overall risk score is {risk_score}. This composite score considers flood, slope, vegetation, and infrastructure factors. I recommend addressing the highest-risk factors first based on your analysis results."})
+    else:
+        return jsonify({"status": "success", "response": "I can help you understand property risks including flood zones, slope stability, wildfire hazards, and infrastructure risks. Please analyze a property first, then ask specific questions about the results."})
+
 @app.route('/api/analyze', methods=['POST'])
 def analyze_risk():
     data = request.get_json()

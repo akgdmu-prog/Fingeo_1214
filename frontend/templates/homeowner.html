@@ -8,15 +8,144 @@
     <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
     
     <style>
+        /* --- THEME TOKENS (same tonal structure, different hue per theme) --- */
+        :root,
+        :root[data-theme="ocean"] {
+            --bg: #e6eef8;
+            --shadow-d: #cbd6e4;
+            --shadow-d2: #c5d0e6;
+            --shadow-d3: #b3c2d8;
+            --shadow-d4: #b8c7dd;
+            --shadow-d5: #b8c5d6;
+            --shadow-l: #ffffff;
+            --border-dash: #cbd5e1;
+            --text-heading: #1e3a8a;
+            --text-heading2: #1e293b;
+            --text-muted: #64748b;
+            --text-muted2: #4b5563;
+            --text-body: #4a5568;
+            --text-slate: #334155;
+            --text-slate2: #475569;
+            --accent: #3b82f6;
+            --accent-deep: #1d4ed8;
+            --ring-bg: #dbeafe;
+            --avatar-a: #3b82f6;
+            --avatar-b: #1d4ed8;
+            --theme-swatch: linear-gradient(135deg, #93c5fd, #1e3a8a);
+        }
+
+        :root[data-theme="violet"] {
+            --bg: #ece6f8;
+            --shadow-d: #d3c9e8;
+            --shadow-d2: #cec2ea;
+            --shadow-d3: #bcabdd;
+            --shadow-d4: #c2b2e0;
+            --shadow-d5: #c0b0d9;
+            --shadow-l: #ffffff;
+            --border-dash: #d6cbe8;
+            --text-heading: #4c1d95;
+            --text-heading2: #312e5b;
+            --text-muted: #7c6f96;
+            --text-muted2: #5b4f78;
+            --text-body: #5b4f78;
+            --text-slate: #453a68;
+            --text-slate2: #584c7a;
+            --accent: #8b5cf6;
+            --accent-deep: #6d28d9;
+            --ring-bg: #ede9fe;
+            --avatar-a: #8b5cf6;
+            --avatar-b: #6d28d9;
+            --theme-swatch: linear-gradient(135deg, #c4b5fd, #4c1d95);
+        }
+
+        :root[data-theme="emerald"] {
+            --bg: #e3f5ec;
+            --shadow-d: #c7e2d4;
+            --shadow-d2: #c0dfd0;
+            --shadow-d3: #a9d0bd;
+            --shadow-d4: #b0d5c4;
+            --shadow-d5: #aed2c0;
+            --shadow-l: #ffffff;
+            --border-dash: #c9e0d5;
+            --text-heading: #065f46;
+            --text-heading2: #1c3b31;
+            --text-muted: #5f8776;
+            --text-muted2: #3f6353;
+            --text-body: #43695a;
+            --text-slate: #2e4d40;
+            --text-slate2: #3f6656;
+            --accent: #10b981;
+            --accent-deep: #059669;
+            --ring-bg: #d1fae5;
+            --avatar-a: #34d399;
+            --avatar-b: #059669;
+            --theme-swatch: linear-gradient(135deg, #6ee7b7, #065f46);
+        }
+
+        :root[data-theme="graphite"] {
+            --bg: #eceef1;
+            --shadow-d: #d2d6dc;
+            --shadow-d2: #cbd0d8;
+            --shadow-d3: #b7bec8;
+            --shadow-d4: #bdc3cd;
+            --shadow-d5: #bac0c9;
+            --shadow-l: #ffffff;
+            --border-dash: #d3d8de;
+            --text-heading: #1f2937;
+            --text-heading2: #111827;
+            --text-muted: #64748b;
+            --text-muted2: #4b5563;
+            --text-body: #475569;
+            --text-slate: #334155;
+            --text-slate2: #475569;
+            --accent: #64748b;
+            --accent-deep: #475569;
+            --ring-bg: #e2e8f0;
+            --avatar-a: #94a3b8;
+            --avatar-b: #334155;
+            --theme-swatch: linear-gradient(135deg, #cbd5e1, #1f2937);
+        }
+
+        :root[data-theme="sunset"] {
+            --bg: #faf0e6;
+            --shadow-d: #e8d6c2;
+            --shadow-d2: #e5d0b9;
+            --shadow-d3: #d9bc9d;
+            --shadow-d4: #ddc3a6;
+            --shadow-d5: #d9bfa1;
+            --shadow-l: #ffffff;
+            --border-dash: #e6d4bb;
+            --text-heading: #9a3412;
+            --text-heading2: #431407;
+            --text-muted: #a1795f;
+            --text-muted2: #7c4a2d;
+            --text-body: #7c4a2d;
+            --text-slate: #5c3a24;
+            --text-slate2: #78502f;
+            --accent: #f97316;
+            --accent-deep: #c2410c;
+            --ring-bg: #fed7aa;
+            --avatar-a: #fb923c;
+            --avatar-b: #c2410c;
+            --theme-swatch: linear-gradient(135deg, #fdba74, #9a3412);
+        }
+
+        /* Reduce Motion accessibility toggle */
+        body.reduce-motion, body.reduce-motion * {
+            transition-duration: 0.001ms !important;
+            animation-duration: 0.001ms !important;
+        }
+
         * { 
             box-sizing: border-box; 
+            transition: background-color 0.35s ease, box-shadow 0.35s ease, border-color 0.35s ease, color 0.35s ease;
         }
         
         body {
             margin: 0;
-            background: #e6eef8;       
+            background: var(--bg);       
             font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
-            color: #4a5568;            
+            color: var(--text-body);            
             min-height: 100vh;
             display: flex;
             flex-direction: column;
@@ -30,9 +159,9 @@
             width: 100%;
             height: 70px;
             padding: 0 24px;
-            background: #e6eef8;
+            background: var(--bg);
             border-radius: 20px;
-            box-shadow: 6px 6px 16px #cbd6e4, -6px -6px 16px #ffffff;
+            box-shadow: 6px 6px 16px var(--shadow-d), -6px -6px 16px var(--shadow-l);
             display: flex;
             align-items: center;
             justify-content: space-between;
@@ -43,7 +172,7 @@
             font-size: 20px;
             font-weight: 800;
             letter-spacing: -0.5px;
-            background: linear-gradient(135deg, #1e3a8a 0%, #3b82f6 100%);
+            background: linear-gradient(135deg, var(--text-heading) 0%, var(--accent) 100%);
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
         }
@@ -51,11 +180,11 @@
         .header-identity {
             font-size: 13px;
             font-weight: 600;
-            color: #4b5563;
-            background: #e6eef8;
+            color: var(--text-muted2);
+            background: var(--bg);
             padding: 6px 14px;
             border-radius: 99px;
-            box-shadow: inset 2px 2px 5px #cbd6e4, inset -2px -2px 5px #ffffff;
+            box-shadow: inset 2px 2px 5px var(--shadow-d), inset -2px -2px 5px var(--shadow-l);
             margin-left: 24px;
         }
 
@@ -63,11 +192,11 @@
             font-family: monospace;
             font-size: 12px;
             font-weight: bold;
-            color: #64748b;
-            background: #e6eef8;
+            color: var(--text-muted);
+            background: var(--bg);
             padding: 6px 14px;
             border-radius: 10px;
-            box-shadow: inset 2px 2px 5px #cbd6e4, inset -2px -2px 5px #ffffff;
+            box-shadow: inset 2px 2px 5px var(--shadow-d), inset -2px -2px 5px var(--shadow-l);
             margin-left: auto;
             margin-right: 20px;
         }
@@ -81,29 +210,450 @@
         .mock-icon-btn {
             width: 36px;
             height: 36px;
-            background: #e6eef8;
+            background: var(--bg);
             border-radius: 50%;
             display: flex;
             align-items: center;
             justify-content: center;
-            box-shadow: 3px 3px 6px #cbd6e4, -3px -3px 6px #ffffff;
-            color: #64748b;
+            box-shadow: 3px 3px 6px var(--shadow-d), -3px -3px 6px var(--shadow-l);
+            color: var(--text-muted);
             cursor: pointer;
+        }
+
+        .mock-icon-btn:active,
+        .mock-icon-btn.is-active {
+            box-shadow: inset 2px 2px 5px var(--shadow-d), inset -2px -2px 5px var(--shadow-l);
+            color: var(--accent);
+        }
+
+        /* Wrapper only adds positioning context; avatar circle keeps its original size/shadow/position */
+        .avatar-wrapper {
+            position: relative;
+            width: 38px;
+            height: 38px;
         }
 
         .mock-avatar {
             width: 38px;
             height: 38px;
-            background: linear-gradient(135deg, #3b82f6, #1d4ed8);
+            background: linear-gradient(135deg, var(--avatar-a), var(--avatar-b));
             border-radius: 50%;
-            box-shadow: 3px 3px 6px #cbd6e4, -3px -3px 6px #ffffff;
-            border: 2px solid #e6eef8;
+            box-shadow: 3px 3px 6px var(--shadow-d), -3px -3px 6px var(--shadow-l);
+            border: 2px solid var(--bg);
+            cursor: pointer;
+        }
+
+        .avatar-edit-badge {
+            position: absolute;
+            bottom: -3px;
+            right: -3px;
+            width: 17px;
+            height: 17px;
+            border-radius: 50%;
+            background: var(--bg);
+            box-shadow: 2px 2px 4px var(--shadow-d), -2px -2px 4px var(--shadow-l);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--accent);
+            cursor: pointer;
+            pointer-events: none;
+        }
+
+        .avatar-edit-badge svg { width: 9px; height: 9px; }
+
+        /* ============ SETTINGS PANEL: overlay + glassmorphic/neomorphic pop-up ============ */
+        .settings-overlay {
+            position: fixed;
+            inset: 0;
+            background: rgba(30, 41, 59, 0.28);
+            backdrop-filter: blur(3px);
+            display: flex;
+            align-items: flex-start;
+            justify-content: center;
+            padding-top: 100px;
+            z-index: 1000;
+            opacity: 0;
+            pointer-events: none;
+            transition: opacity 0.25s ease;
+        }
+
+        .settings-overlay.open {
+            opacity: 1;
+            pointer-events: auto;
+        }
+
+        .settings-panel {
+            width: 340px;
+            max-width: 90vw;
+            max-height: 78vh;
+            overflow-y: auto;
+            border-radius: 26px;
+            padding: 22px 22px 26px 22px;
+            background: rgba(255, 255, 255, 0.28);
+            -webkit-backdrop-filter: blur(22px) saturate(180%);
+            backdrop-filter: blur(22px) saturate(180%);
+            border: 1px solid rgba(255, 255, 255, 0.55);
+            box-shadow:
+                10px 10px 26px rgba(120, 138, 165, 0.35),
+                -8px -8px 20px rgba(255, 255, 255, 0.55),
+                inset 1px 1px 1px rgba(255, 255, 255, 0.4);
+            transform: scale(0.85) translateY(-14px);
+            opacity: 0;
+            transition: transform 0.32s cubic-bezier(0.34, 1.56, 0.64, 1), opacity 0.25s ease;
+        }
+
+        .settings-overlay.open .settings-panel {
+            transform: scale(1) translateY(0);
+            opacity: 1;
+        }
+
+        /* ============ FINANCIAL PANEL: overlay + glassmorphic/neomorphic pop-up ============ */
+        .financial-overlay {
+            position: fixed;
+            inset: 0;
+            background: rgba(30, 41, 59, 0.28);
+            backdrop-filter: blur(3px);
+            display: flex;
+            align-items: flex-start;
+            justify-content: center;
+            padding-top: 100px;
+            z-index: 1000;
+            opacity: 0;
+            pointer-events: none;
+            transition: opacity 0.25s ease;
+        }
+
+        .financial-overlay.open {
+            opacity: 1;
+            pointer-events: auto;
+        }
+
+        .financial-panel {
+            width: 380px;
+            max-width: 90vw;
+            max-height: 78vh;
+            overflow-y: auto;
+            border-radius: 26px;
+            padding: 22px 22px 26px 22px;
+            background: rgba(255, 255, 255, 0.28);
+            -webkit-backdrop-filter: blur(22px) saturate(180%);
+            backdrop-filter: blur(22px) saturate(180%);
+            border: 1px solid rgba(255, 255, 255, 0.55);
+            box-shadow:
+                10px 10px 26px rgba(120, 138, 165, 0.35),
+                -8px -8px 20px rgba(255, 255, 255, 0.55),
+                inset 1px 1px 1px rgba(255, 255, 255, 0.4);
+            transform: scale(0.85) translateY(-14px);
+            opacity: 0;
+            transition: transform 0.32s cubic-bezier(0.34, 1.56, 0.64, 1), opacity 0.25s ease;
+        }
+
+        .financial-overlay.open .financial-panel {
+            transform: scale(1) translateY(0);
+            opacity: 1;
+        }
+
+        .financial-panel-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 18px;
+        }
+
+        .financial-panel-title {
+            font-size: 14px;
+            font-weight: 800;
+            color: var(--text-heading);
+            text-transform: uppercase;
+            letter-spacing: 0.6px;
+        }
+
+        .financial-close-btn {
+            width: 26px;
+            height: 26px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: rgba(255, 255, 255, 0.4);
+            box-shadow: 2px 2px 5px rgba(120, 138, 165, 0.3), -2px -2px 5px rgba(255, 255, 255, 0.6);
+            color: var(--text-muted);
+            cursor: pointer;
+            font-size: 13px;
+            font-weight: 700;
+            border: none;
+        }
+
+        .financial-section {
+            margin-bottom: 20px;
+        }
+
+        .financial-section-label {
+            font-size: 10.5px;
+            font-weight: 800;
+            color: var(--text-muted);
+            text-transform: uppercase;
+            letter-spacing: 0.6px;
+            margin-bottom: 10px;
+        }
+
+        .financial-metric-row {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 12px 14px;
+            border-radius: 14px;
+            background: rgba(255, 255, 255, 0.32);
+            box-shadow: inset 1px 1px 3px rgba(120, 138, 165, 0.25), inset -1px -1px 3px rgba(255, 255, 255, 0.5);
+            margin-bottom: 8px;
+        }
+
+        .financial-metric-label {
+            font-size: 12.5px;
+            font-weight: 700;
+            color: var(--text-slate);
+        }
+
+        .financial-metric-value {
+            font-size: 13px;
+            font-weight: 800;
+            color: var(--accent);
+        }
+
+        .financial-metric-trend {
+            font-size: 10px;
+            font-weight: 600;
+            margin-left: 6px;
+        }
+
+        .trend-up {
+            color: #10b981;
+        }
+
+        .trend-down {
+            color: #ef4444;
+        }
+
+        .financial-assistant-btn {
+            width: 100%;
+            padding: 14px;
+            background: var(--bg);
+            border: none;
+            border-radius: 14px;
+            font-weight: 800;
+            font-size: 13px;
+            color: var(--text-heading);
+            text-transform: uppercase;
+            letter-spacing: 0.6px;
+            cursor: pointer;
+            box-shadow: 4px 4px 10px var(--shadow-d), -4px -4px 10px var(--shadow-l);
+            transition: all 0.2s ease;
+            margin-top: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+        }
+
+        .financial-assistant-btn:hover {
+            transform: translateY(-1px);
+            box-shadow: 5px 5px 12px var(--shadow-d), -5px -5px 12px var(--shadow-l);
+        }
+
+        .financial-assistant-btn:active {
+            transform: translateY(1px);
+            box-shadow: 2px 2px 5px var(--shadow-d), -2px -2px 5px var(--shadow-l);
+        }
+
+        .financial-assistant-btn:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+            transform: none;
+        }
+
+        .settings-panel-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 18px;
+        }
+
+        .settings-panel-title {
+            font-size: 14px;
+            font-weight: 800;
+            color: var(--text-heading);
+            text-transform: uppercase;
+            letter-spacing: 0.6px;
+        }
+
+        .settings-close-btn {
+            width: 26px;
+            height: 26px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: rgba(255, 255, 255, 0.4);
+            box-shadow: 2px 2px 5px rgba(120, 138, 165, 0.3), -2px -2px 5px rgba(255, 255, 255, 0.6);
+            color: var(--text-muted);
+            cursor: pointer;
+            font-size: 13px;
+            font-weight: 700;
+            border: none;
+        }
+
+        .settings-section {
+            margin-bottom: 20px;
+        }
+
+        .settings-section-label {
+            font-size: 10.5px;
+            font-weight: 800;
+            color: var(--text-muted);
+            text-transform: uppercase;
+            letter-spacing: 0.6px;
+            margin-bottom: 10px;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .theme-swatch-row {
+            display: flex;
+            gap: 10px;
+            flex-wrap: wrap;
+        }
+
+        .theme-swatch-btn {
+            width: 34px;
+            height: 34px;
+            border-radius: 50%;
+            border: 2px solid rgba(255, 255, 255, 0.7);
+            cursor: pointer;
+            box-shadow: 2px 2px 6px rgba(120, 138, 165, 0.35), -2px -2px 6px rgba(255, 255, 255, 0.55);
+            position: relative;
+            padding: 0;
+        }
+
+        .theme-swatch-btn.is-selected::after {
+            content: '';
+            position: absolute;
+            inset: -4px;
+            border-radius: 50%;
+            border: 2px solid var(--text-heading);
+        }
+
+        .avatar-swatch-row {
+            display: flex;
+            gap: 10px;
+            flex-wrap: wrap;
+        }
+
+        .avatar-swatch-btn {
+            width: 30px;
+            height: 30px;
+            border-radius: 50%;
+            border: 2px solid rgba(255, 255, 255, 0.7);
+            cursor: pointer;
+            box-shadow: 2px 2px 5px rgba(120, 138, 165, 0.3), -2px -2px 5px rgba(255, 255, 255, 0.55);
+            padding: 0;
+            position: relative;
+        }
+
+        .avatar-swatch-btn.is-selected::after {
+            content: '';
+            position: absolute;
+            inset: -4px;
+            border-radius: 50%;
+            border: 2px solid var(--text-heading);
+        }
+
+        .settings-row {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 10px 12px;
+            border-radius: 14px;
+            background: rgba(255, 255, 255, 0.32);
+            box-shadow: inset 1px 1px 3px rgba(120, 138, 165, 0.25), inset -1px -1px 3px rgba(255, 255, 255, 0.5);
+            margin-bottom: 8px;
+        }
+
+        .settings-row-label {
+            font-size: 12.5px;
+            font-weight: 700;
+            color: var(--text-slate);
+        }
+
+        .settings-row-sub {
+            font-size: 10.5px;
+            color: var(--text-muted);
+            font-weight: 500;
+            margin-top: 1px;
+        }
+
+        .toggle-switch {
+            width: 40px;
+            height: 22px;
+            border-radius: 99px;
+            background: rgba(120, 138, 165, 0.3);
+            position: relative;
+            cursor: pointer;
+            flex-shrink: 0;
+            transition: background 0.25s ease;
+        }
+
+        .toggle-switch.is-on {
+            background: linear-gradient(135deg, var(--accent), var(--accent-deep));
+        }
+
+        .toggle-switch-knob {
+            position: absolute;
+            top: 2px;
+            left: 2px;
+            width: 18px;
+            height: 18px;
+            border-radius: 50%;
+            background: #ffffff;
+            box-shadow: 1px 1px 3px rgba(0,0,0,0.25);
+            transition: left 0.25s cubic-bezier(0.34, 1.56, 0.64, 1);
+        }
+
+        .toggle-switch.is-on .toggle-switch-knob {
+            left: 20px;
+        }
+
+        .segmented-control {
+            display: flex;
+            border-radius: 12px;
+            background: rgba(120, 138, 165, 0.18);
+            padding: 3px;
+            gap: 3px;
+        }
+
+        .segmented-option {
+            flex: 1;
+            text-align: center;
+            padding: 6px 4px;
+            font-size: 11px;
+            font-weight: 700;
+            color: var(--text-muted);
+            border-radius: 9px;
+            cursor: pointer;
+            transition: background 0.2s ease, color 0.2s ease;
+        }
+
+        .segmented-option.is-selected {
+            background: rgba(255, 255, 255, 0.7);
+            color: var(--text-heading);
+            box-shadow: 1px 1px 4px rgba(120, 138, 165, 0.3);
         }
 
         /* --- THE CORE WORKSPACE GRID BLOCK --- */
         .workspace-grid-layout {
             display: grid;
-            grid-template-columns: 290px 1fr 330px;
+            grid-template-columns: 330px 1fr 330px;
             gap: 20px;
             width: 100%;
             align-items: stretch;
@@ -111,10 +661,10 @@
 
         /* --- LEFT SEARCH SIDEBAR PANEL --- */
         .search-sidebar {
-            background: #e6eef8;
+            background: var(--bg);
             border-radius: 24px;
             padding: 24px 20px;
-            box-shadow: 6px 6px 16px #c5d0e6, -6px -6px 16px #ffffff;
+            box-shadow: 6px 6px 16px var(--shadow-d2), -6px -6px 16px var(--shadow-l);
             display: flex;
             flex-direction: column;
             justify-content: flex-start;
@@ -126,7 +676,7 @@
 
         .search-sidebar h3 {
             margin: 0;
-            color: #1e293b;
+            color: var(--text-heading2);
             font-size: 21px;
             font-weight: 800;
             letter-spacing: -0.3px;
@@ -138,17 +688,17 @@
             font-weight: 700;
             letter-spacing: 0.5px;
             text-transform: uppercase;
-            color: #64748b;
+            color: var(--text-muted);
             margin-bottom: 10px;
             text-align: left;
         }
 
         /* --- RIGHT INSIGHT SIDEBAR PANEL COLUMN --- */
         .gauge-sidebar {
-            background: #e6eef8;
+            background: var(--bg);
             border-radius: 24px;
             padding: 24px 20px;
-            box-shadow: 6px 6px 16px #c5d0e6, -6px -6px 16px #ffffff;
+            box-shadow: 6px 6px 16px var(--shadow-d2), -6px -6px 16px var(--shadow-l);
             display: flex;
             flex-direction: column;
             align-items: center;
@@ -165,9 +715,9 @@
             height: 500px;
             border-radius: 24px;
             overflow: hidden;
-            background: #e6eef8;
-            box-shadow: 6px 6px 16px #c5d0e6, -6px -6px 16px #ffffff;
-            border: 4px solid #e6eef8;
+            background: var(--bg);
+            box-shadow: 6px 6px 16px var(--shadow-d2), -6px -6px 16px var(--shadow-l);
+            border: 4px solid var(--bg);
             position: relative;
         }
 
@@ -179,10 +729,10 @@
 
         /* --- DIAGNOSTICS MATRIX UNDERNEATH THE MAP --- */
         .bottom-info-panel {
-            background: #e6eef8;
+            background: var(--bg);
             border-radius: 24px;
             padding: 24px;
-            box-shadow: 6px 6px 16px #c5d0e6, -6px -6px 16px #ffffff;
+            box-shadow: 6px 6px 16px var(--shadow-d2), -6px -6px 16px var(--shadow-l);
         }
 
         .diagnostics-grid {
@@ -193,14 +743,14 @@
         }
 
         .metric-card-indented {
-            background: #e6eef8;
+            background: var(--bg);
             border-radius: 18px;
             padding: 20px;
             min-height: 130px;
             display: flex;
             flex-direction: column;
             justify-content: space-between;
-            box-shadow: inset 5px 5px 10px #cbd6e4, inset -5px -5px 10px #ffffff;
+            box-shadow: inset 5px 5px 10px var(--shadow-d), inset -5px -5px 10px var(--shadow-l);
         }
 
         .card-row1 {
@@ -214,7 +764,7 @@
         .card-label {
             font-size: 12px;
             font-weight: 700;
-            color: #64748b;
+            color: var(--text-muted);
             text-transform: uppercase;
             letter-spacing: 0.5px;
         }
@@ -222,18 +772,18 @@
         .card-value-display {
             margin-top: 12px;
             padding: 12px;
-            background: #e6eef8;
+            background: var(--bg);
             border-radius: 10px;
             font-weight: 800;
             font-size: 18px;
-            color: #1e3a8a;
+            color: var(--text-heading);
             text-align: center;
-            box-shadow: inset 3px 3px 6px #cbd6e4, inset -3px -3px 6px #ffffff;
+            box-shadow: inset 3px 3px 6px var(--shadow-d), inset -3px -3px 6px var(--shadow-l);
         }
 
         .panel-divider {
             width: 100%;
-            border-top: 2px dashed #cbd5e1;
+            border-top: 2px dashed var(--border-dash);
             margin: 20px 0 16px 0;
         }
 
@@ -243,7 +793,7 @@
             font-weight: 700;
             letter-spacing: 0.5px;
             text-transform: uppercase;
-            color: #64748b;
+            color: var(--text-muted);
             margin-bottom: 10px;
             text-align: left;
         }
@@ -251,9 +801,9 @@
         .terrace-outer-layer {
             width: 100%;
             padding: 10px;
-            background: #e6eef8;
+            background: var(--bg);
             border-radius: 18px;
-            box-shadow: inset 4px 4px 10px #cbd6e4, inset -4px -4px 10px #ffffff;
+            box-shadow: inset 4px 4px 10px var(--shadow-d), inset -4px -4px 10px var(--shadow-l);
             flex-grow: 1;
             display: flex;
         }
@@ -262,15 +812,159 @@
             width: 100%;
             min-height: 260px;
             padding: 14px;
-            background: #e6eef8;
+            background: var(--bg);
             border-radius: 12px;
             font-size: 13px;
             line-height: 1.6;
-            color: #334155;
+            color: var(--text-slate);
             overflow-y: auto;
             white-space: pre-line;
-            box-shadow: inset 6px 6px 12px #b8c5d6, inset -6px -6px 12px #ffffff;
+            box-shadow: inset 6px 6px 12px var(--shadow-d5), inset -6px -6px 12px var(--shadow-l);
             flex-grow: 1;
+        }
+
+        /* --- AI CHATBOT TRIPLE-INDENTED DESIGN --- */
+        .chatbot-section {
+            margin-top: 24px;
+            width: 100%;
+        }
+
+        .chatbot-outer-layer {
+            width: 100%;
+            padding: 12px;
+            background: var(--bg);
+            border-radius: 18px;
+            box-shadow: inset 4px 4px 10px var(--shadow-d), inset -4px -4px 10px var(--shadow-l);
+        }
+
+        .chatbot-middle-layer {
+            width: 100%;
+            padding: 10px;
+            background: var(--bg);
+            border-radius: 14px;
+            box-shadow: inset 3px 3px 8px var(--shadow-d), inset -3px -3px 8px var(--shadow-l);
+        }
+
+        .chatbot-inner-layer {
+            width: 100%;
+            min-height: 280px;
+            max-height: 400px;
+            padding: 12px;
+            background: var(--bg);
+            border-radius: 10px;
+            font-size: 12px;
+            line-height: 1.5;
+            color: var(--text-slate);
+            overflow-y: auto;
+            box-shadow: inset 6px 6px 12px var(--shadow-d5), inset -6px -6px 12px var(--shadow-l);
+            display: flex;
+            flex-direction: column;
+        }
+
+        .chat-messages {
+            flex: 1;
+            overflow-y: auto;
+            margin-bottom: 10px;
+            padding-right: 4px;
+        }
+
+        .chat-message {
+            margin-bottom: 10px;
+            padding: 8px 12px;
+            border-radius: 10px;
+            max-width: 85%;
+            word-wrap: break-word;
+        }
+
+        .chat-message.user {
+            background: var(--accent);
+            color: white;
+            margin-left: auto;
+            box-shadow: 2px 2px 6px var(--shadow-d), -2px -2px 6px var(--shadow-l);
+        }
+
+        .chat-message.ai {
+            background: var(--shadow-d2);
+            color: var(--text-slate);
+            margin-right: auto;
+            box-shadow: 2px 2px 6px var(--shadow-d), -2px -2px 6px var(--shadow-l);
+        }
+
+        .chat-input-wrapper {
+            display: flex;
+            gap: 8px;
+            margin-top: 8px;
+        }
+
+        .chat-input {
+            flex: 1;
+            padding: 10px 12px;
+            background: var(--bg);
+            border: none;
+            border-radius: 10px;
+            font-size: 12px;
+            color: var(--text-slate);
+            outline: none;
+            box-shadow: inset 3px 3px 6px var(--shadow-d), inset -3px -3px 6px var(--shadow-l);
+        }
+
+        .chat-send-btn {
+            width: 36px;
+            height: 36px;
+            background: var(--accent);
+            border: none;
+            border-radius: 10px;
+            color: white;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 3px 3px 6px var(--shadow-d), -3px -3px 6px var(--shadow-l);
+            transition: all 0.2s ease;
+        }
+
+        .chat-send-btn:hover {
+            transform: translateY(-1px);
+            box-shadow: 4px 4px 8px var(--shadow-d), -4px -4px 8px var(--shadow-l);
+        }
+
+        .chat-send-btn:active {
+            transform: translateY(1px);
+            box-shadow: 1px 1px 3px var(--shadow-d), -1px -1px 3px var(--shadow-l);
+        }
+
+        .chat-send-btn svg {
+            width: 16px;
+            height: 16px;
+        }
+
+        .chat-loading {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            font-size: 11px;
+            color: var(--text-muted);
+        }
+
+        .chat-loading-dot {
+            width: 6px;
+            height: 6px;
+            background: var(--accent);
+            border-radius: 50%;
+            animation: pulse 1.4s ease-in-out infinite;
+        }
+
+        .chat-loading-dot:nth-child(2) {
+            animation-delay: 0.2s;
+        }
+
+        .chat-loading-dot:nth-child(3) {
+            animation-delay: 0.4s;
+        }
+
+        @keyframes pulse {
+            0%, 80%, 100% { opacity: 0.3; transform: scale(0.8); }
+            40% { opacity: 1; transform: scale(1); }
         }
 
         .autocomplete-wrapper {
@@ -281,13 +975,13 @@
         .address-input {
             width: 100%;
             padding: 14px 16px;
-            background: #e6eef8;
+            background: var(--bg);
             border: none;
             border-radius: 14px;
             font-size: 13.5px;
-            color: #334155;
+            color: var(--text-slate);
             outline: none;
-            box-shadow: inset 4px 4px 8px #cbd5e1, inset -4px -4px 8px #ffffff;
+            box-shadow: inset 4px 4px 8px var(--border-dash), inset -4px -4px 8px var(--shadow-l);
         }
 
         .suggestions-box {
@@ -300,7 +994,7 @@
             max-height: 200px;
             overflow-y: auto;
             z-index: 2000;
-            box-shadow: 4px 4px 12px rgba(163, 177, 198, 0.3), -4px -4px 12px #ffffff;
+            box-shadow: 4px 4px 12px rgba(163, 177, 198, 0.3), -4px -4px 12px var(--shadow-l);
             border: 1px solid rgba(255,255,255,0.6);
             display: none;
         }
@@ -309,7 +1003,7 @@
             padding: 12px 14px;
             cursor: pointer;
             font-size: 12.5px;
-            color: #4a5568;
+            color: var(--text-body);
             border-bottom: 1px solid rgba(0,0,0,0.03);
             white-space: nowrap;
             overflow: hidden;
@@ -318,23 +1012,23 @@
 
         .suggestion-item:hover {
             background-color: rgba(255,255,255,0.5);
-            color: #3b82f6;
+            color: var(--accent);
         }
 
         .extruded-search-btn {
             width: 100%;
             padding: 15px;
-            background: #e6eef8;
+            background: var(--bg);
             border: none;
             border-radius: 16px;
             font-weight: 800;
             font-size: 14px;
-            color: #1e3a8a;
+            color: var(--text-heading);
             text-transform: uppercase;
             letter-spacing: 0.8px;
             cursor: pointer;
-            box-shadow: 6px 6px 14px #b3c2d8, -6px -6px 14px #ffffff,
-                        0px 4px 0px #b8c7dd; 
+            box-shadow: 6px 6px 14px var(--shadow-d3), -6px -6px 14px var(--shadow-l),
+                        0px 4px 0px var(--shadow-d4); 
             transition: all 0.1s ease-in-out;
             outline: none;
             margin-top: 20px;
@@ -342,14 +1036,14 @@
 
         .extruded-search-btn:hover {
             transform: translateY(-2px);
-            box-shadow: 7px 9px 18px #b3c2d8, -7px -9px 18px #ffffff,
-                        0px 6px 0px #b8c7dd;
+            box-shadow: 7px 9px 18px var(--shadow-d3), -7px -9px 18px var(--shadow-l),
+                        0px 6px 0px var(--shadow-d4);
         }
 
         .extruded-search-btn:active {
             transform: translateY(4px);
-            box-shadow: 2px 2px 5px #b3c2d8, -2px -2px 5px #ffffff,
-                        0px 0px 0px #b8c7dd;
+            box-shadow: 2px 2px 5px var(--shadow-d3), -2px -2px 5px var(--shadow-l),
+                        0px 0px 0px var(--shadow-d4);
         }
 
         .blur-overlay-curtain {
@@ -378,7 +1072,7 @@
             width: 45px;
             height: 45px;
             border: 4px solid rgba(59, 130, 246, 0.1);
-            border-top-color: #3b82f6;
+            border-top-color: var(--accent);
             border-radius: 50%;
             animation: spinRing 0.8s linear infinite;
             margin-bottom: 12px;
@@ -387,28 +1081,68 @@
         .loader-caption-text {
             font-size: 13px;
             font-weight: 700;
-            color: #1e3a8a;
+            color: var(--text-heading);
         }
 
         @keyframes spinRing {
             to { transform: rotate(360deg); }
         }
 
-        #grid-vegetation-card {
+        #grid-vegetation-card,
+        #grid-slope-card,
+        #grid-flood-card {
             cursor: pointer;
             transition: transform 0.2s ease, box-shadow 0.2s ease;
         }
         
-        #grid-vegetation-card:hover {
+        #grid-vegetation-card:hover,
+        #grid-slope-card:hover,
+        #grid-flood-card:hover {
             transform: translateY(-2px);
-            box-shadow: 6px 6px 14px #cbd6e4, -6px -6px 14px #ffffff;
+            box-shadow: 6px 6px 14px var(--shadow-d), -6px -6px 14px var(--shadow-l);
+        }
+
+        /* Compact top-section breakdown panels (title + value + small color key) for Flood Proximity and Slope Gradient */
+        .mini-breakdown-panel {
+            background: var(--bg);
+            border-radius: 24px;
+            padding: 20px 24px;
+            box-shadow: 6px 6px 16px var(--shadow-d2), -6px -6px 16px var(--shadow-l);
+            margin-top: 20px;
+            display: none;
+            width: 100%;
+        }
+
+        .mini-key-row {
+            display: flex;
+            align-items: center;
+            gap: 18px;
+            margin-top: 14px;
+            flex-wrap: wrap;
+        }
+
+        .mini-key-item {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            font-size: 11.5px;
+            font-weight: 700;
+            color: var(--text-slate);
+        }
+
+        .mini-key-dot {
+            width: 9px;
+            height: 9px;
+            border-radius: 50%;
+            display: inline-block;
+            flex-shrink: 0;
         }
 
         .vegetation-breakdown-panel {
-            background: #e6eef8;
+            background: var(--bg);
             border-radius: 24px;
             padding: 24px;
-            box-shadow: 6px 6px 16px #c5d0e6, -6px -6px 16px #ffffff;
+            box-shadow: 6px 6px 16px var(--shadow-d2), -6px -6px 16px var(--shadow-l);
             margin-top: 20px;
             display: none; 
             width: 100%;
@@ -424,27 +1158,27 @@
         .breakdown-title {
             font-size: 13px;
             font-weight: 800;
-            color: #1e3a8a;
+            color: var(--text-heading);
             text-transform: uppercase;
             letter-spacing: 0.5px;
         }
 
         .breakdown-value-extruded {
             padding: 10px 24px;
-            background: #e6eef8;
+            background: var(--bg);
             border-radius: 12px;
             font-size: 18px;
             font-weight: 900;
             font-family: monospace;
             text-align: center;
-            box-shadow: 3px 3px 6px #cbd6e4, -3px -3px 6px #ffffff,
-                        0px 3px 0px #cbd6e4;
+            box-shadow: 3px 3px 6px var(--shadow-d), -3px -3px 6px var(--shadow-l),
+                        0px 3px 0px var(--shadow-d);
             transition: color 0.3s ease;
         }
 
         .breakdown-divider {
             width: 100%;
-            border-top: 2px dashed #cbd5e1;
+            border-top: 2px dashed var(--border-dash);
             margin: 18px 0;
         }
 
@@ -457,10 +1191,10 @@
         }
 
         .legend-indicator-card {
-            background: #e6eef8;
+            background: var(--bg);
             border-radius: 14px;
             padding: 14px;
-            box-shadow: inset 3px 3px 6px #cbd6e4, inset -5px -5px 10px #ffffff;
+            box-shadow: inset 3px 3px 6px var(--shadow-d), inset -5px -5px 10px var(--shadow-l);
             display: flex;
             flex-direction: column;
             gap: 4px;
@@ -495,7 +1229,7 @@
 
         .legend-desc {
             font-size: 11.5px;
-            color: #64748b;
+            color: var(--text-muted);
             line-height: 1.4;
         }
 
@@ -508,14 +1242,13 @@
             margin-top: 15px;
         }
 
-        /* Expanded from 320px to 480px for high definition focus cropping layout */
         .sim-map-wrapper {
             position: relative;
-            height: 480px; 
+            height: 560px; 
             border-radius: 18px;
             overflow: hidden;
-            border: 3px solid #e6eef8;
-            box-shadow: 4px 4px 10px #cbd6e4, -4px -4px 10px #ffffff;
+            border: 3px solid var(--bg);
+            box-shadow: 4px 4px 10px var(--shadow-d), -4px -4px 10px var(--shadow-l);
         }
 
         #simMap {
@@ -537,10 +1270,10 @@
         }
 
         .sim-controls-panel {
-            background: #e6eef8;
+            background: var(--bg);
             border-radius: 18px;
             padding: 16px;
-            box-shadow: inset 3px 3px 6px #cbd6e4, inset -3px -3px 6px #ffffff;
+            box-shadow: inset 3px 3px 6px var(--shadow-d), inset -3px -3px 6px var(--shadow-l);
             display: flex;
             flex-direction: column;
             justify-content: space-between;
@@ -549,7 +1282,7 @@
         .sim-meta-heading {
             font-size: 11px;
             font-weight: 800;
-            color: #64748b;
+            color: var(--text-muted);
             text-transform: uppercase;
             letter-spacing: 0.5px;
             margin-bottom: 8px;
@@ -557,11 +1290,11 @@
 
         .sim-status-box {
             padding: 10px;
-            background: #e6eef8;
+            background: var(--bg);
             border-radius: 10px;
             font-size: 12px;
-            color: #334155;
-            box-shadow: inset 2px 2px 5px #cbd6e4, inset -2px -2px 5px #ffffff;
+            color: var(--text-slate);
+            box-shadow: inset 2px 2px 5px var(--shadow-d), inset -2px -2px 5px var(--shadow-l);
             min-height: 120px;
             font-family: inherit;
             line-height: 1.4;
@@ -570,17 +1303,17 @@
         .sim-action-btn {
             width: 100%;
             padding: 12px;
-            background: #e6eef8;
+            background: var(--bg);
             border: none;
             border-radius: 12px;
             font-weight: 800;
             font-size: 11px;
-            color: #1e3a8a;
+            color: var(--text-heading);
             text-transform: uppercase;
             letter-spacing: 0.5px;
             cursor: pointer;
-            box-shadow: 4px 4px 10px #cbd6e4, -4px -4px 10px #ffffff,
-                        0px 3px 0px #cbd6e4;
+            box-shadow: 4px 4px 10px var(--shadow-d), -4px -4px 10px var(--shadow-l),
+                        0px 3px 0px var(--shadow-d);
             transition: all 0.1s ease;
             outline: none;
             margin-top: 10px;
@@ -588,14 +1321,47 @@
 
         .sim-action-btn:hover {
             transform: translateY(-1px);
-            box-shadow: 5px 6px 12px #cbd6e4, -5px -6px 12px #ffffff,
-                        0px 4px 0px #cbd6e4;
+            box-shadow: 5px 6px 12px var(--shadow-d), -5px -6px 12px var(--shadow-l),
+                        0px 4px 0px var(--shadow-d);
         }
 
         .sim-action-btn:active {
             transform: translateY(3px);
-            box-shadow: 1px 1px 3px #cbd6e4, -1px -1px 3px #ffffff,
-                        0px 0px 0px #cbd6e4;
+            box-shadow: 1px 1px 3px var(--shadow-d), -1px -1px 3px var(--shadow-l),
+                        0px 0px 0px var(--shadow-d);
+        }
+
+        .slope-sim-panel,
+        .flood-sim-panel {
+            display: grid;
+            grid-template-columns: 1.2fr 240px;
+            gap: 16px;
+            margin-top: 16px;
+            align-items: stretch;
+        }
+
+        .slope-sim-stage,
+        .flood-sim-stage {
+            position: relative;
+            min-height: 280px;
+            border-radius: 18px;
+            overflow: hidden;
+            background: linear-gradient(180deg, #e8f5ff 0%, #f7fbff 100%);
+            box-shadow: inset 4px 4px 8px var(--shadow-d), inset -4px -4px 8px var(--shadow-l);
+        }
+
+        .slope-sim-stage canvas,
+        .flood-sim-stage canvas {
+            width: 100%;
+            height: 100%;
+            display: block;
+        }
+
+        .slope-sim-controls,
+        .flood-sim-controls {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
         }
     </style>
 </head>
@@ -607,12 +1373,164 @@
         <div id="header-coordinates" class="header-coords">Lat: -- | Lng: --</div>
         
         <div class="header-controls-mock">
-            <div class="mock-icon-btn" title="Settings Menu">
+            <div class="mock-icon-btn" id="settingsTriggerBtn" title="Settings Menu">
                 <svg width="18" height="18" fill="currentColor" viewBox="0 0 16 16">
                     <path d="M9.405 1.05c-.413-1.4-2.397-1.4-2.81 0l-.1.34a1.464 1.464 0 0 1-2.105.872l-.31-.17c-1.283-.698-2.686.705-1.987 1.987l.169.311c.446.82.023 1.841-.872 2.105l-.34.1c-1.4.413-1.4 2.397 0 2.81l.34.1a1.464 1.464 0 0 1 .872 2.105l-.17.31c-.698 1.283.705 2.686 1.987 1.987l.311-.169a1.464 1.464 0 0 1 2.105.872l.1.34c.413 1.4 2.397 1.4 2.81 0l.1-.34a1.464 1.464 0 0 1 2.105-.872l.31.17c1.283.698 2.686-.705 1.987-1.987l-.169-.311a1.464 1.464 0 0 1 .872-2.105l.34-.1c1.4-.413 1.4-2.397 0-2.81l-.34-.1a1.464 1.464 0 0 1-.872-2.105l.17-.31c.698-1.283-.705-2.686-1.987-1.987l-.311.169a1.464 1.464 0 0 1-2.105-.872zM8 10.93a2.929 2.929 0 1 1 0-5.86 2.929 2.929 0 0 1 0 5.86z"/>
                 </svg>
             </div>
-            <div class="mock-avatar"></div>
+            <div class="avatar-wrapper">
+                <div class="mock-avatar" id="headerAvatar" title="Click the settings icon to change your avatar color"></div>
+                <div class="avatar-edit-badge">
+                    <svg fill="currentColor" viewBox="0 0 16 16"><path d="M12.146.146a.5.5 0 0 1 .708 0l3 3a.5.5 0 0 1 0 .708l-10 10a.5.5 0 0 1-.168.11l-5 2a.5.5 0 0 1-.65-.65l2-5a.5.5 0 0 1 .11-.168l10-10zM11.207 2.5 13.5 4.793 14.793 3.5 12.5 1.207 11.207 2.5zm1.586 3L10.5 3.207 4 9.707V10h.5a.5.5 0 0 1 .5.5v.5h.5a.5.5 0 0 1 .5.5v.5h.293l6.5-6.5zm-9.761 5.175-.106.106-1.528 3.821 3.821-1.528.106-.106A.5.5 0 0 1 5 12.5V12h-.5a.5.5 0 0 1-.5-.5V11h-.5a.5.5 0 0 1-.468-.325z"/></svg>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- ============ SETTINGS PANEL OVERLAY ============ -->
+    <div class="settings-overlay" id="settingsOverlay">
+        <div class="settings-panel" id="settingsPanel">
+            <div class="settings-panel-header">
+                <div class="settings-panel-title">Settings</div>
+                <button type="button" class="settings-close-btn" id="settingsCloseBtn">✕</button>
+            </div>
+
+            <div class="settings-section">
+                <div class="settings-section-label">Theme</div>
+                <div class="theme-swatch-row" id="themeSwatchRow">
+                    <button type="button" class="theme-swatch-btn is-selected" data-theme="ocean" style="background: linear-gradient(135deg, #93c5fd, #1e3a8a);" title="Ocean"></button>
+                    <button type="button" class="theme-swatch-btn" data-theme="violet" style="background: linear-gradient(135deg, #c4b5fd, #4c1d95);" title="Violet"></button>
+                    <button type="button" class="theme-swatch-btn" data-theme="emerald" style="background: linear-gradient(135deg, #6ee7b7, #065f46);" title="Emerald"></button>
+                    <button type="button" class="theme-swatch-btn" data-theme="graphite" style="background: linear-gradient(135deg, #cbd5e1, #1f2937);" title="Graphite"></button>
+                    <button type="button" class="theme-swatch-btn" data-theme="sunset" style="background: linear-gradient(135deg, #fdba74, #9a3412);" title="Sunset"></button>
+                </div>
+            </div>
+
+            <div class="settings-section">
+                <div class="settings-section-label">
+                    <svg width="11" height="11" fill="currentColor" viewBox="0 0 16 16"><path d="M12.146.146a.5.5 0 0 1 .708 0l3 3a.5.5 0 0 1 0 .708l-10 10a.5.5 0 0 1-.168.11l-5 2a.5.5 0 0 1-.65-.65l2-5a.5.5 0 0 1 .11-.168l10-10z"/></svg>
+                    Profile Picture Color
+                </div>
+                <div class="avatar-swatch-row" id="avatarSwatchRow">
+                    <button type="button" class="avatar-swatch-btn is-selected" data-a="#3b82f6" data-b="#1d4ed8" style="background: linear-gradient(135deg, #3b82f6, #1d4ed8);" title="Blue"></button>
+                    <button type="button" class="avatar-swatch-btn" data-a="#8b5cf6" data-b="#6d28d9" style="background: linear-gradient(135deg, #8b5cf6, #6d28d9);" title="Violet"></button>
+                    <button type="button" class="avatar-swatch-btn" data-a="#10b981" data-b="#059669" style="background: linear-gradient(135deg, #10b981, #059669);" title="Emerald"></button>
+                    <button type="button" class="avatar-swatch-btn" data-a="#f97316" data-b="#c2410c" style="background: linear-gradient(135deg, #f97316, #c2410c);" title="Sunset"></button>
+                    <button type="button" class="avatar-swatch-btn" data-a="#f43f5e" data-b="#be123c" style="background: linear-gradient(135deg, #f43f5e, #be123c);" title="Rose"></button>
+                    <button type="button" class="avatar-swatch-btn" data-a="#64748b" data-b="#334155" style="background: linear-gradient(135deg, #64748b, #334155);" title="Graphite"></button>
+                </div>
+            </div>
+
+            <div class="settings-section">
+                <div class="settings-section-label">Basemap Style</div>
+                <div class="segmented-control" id="basemapControl">
+                    <div class="segmented-option is-selected" data-basemap="streets">Streets</div>
+                    <div class="segmented-option" data-basemap="satellite">Satellite</div>
+                </div>
+            </div>
+
+            <div class="settings-section" style="margin-bottom: 4px;">
+                <div class="settings-section-label">Accessibility</div>
+                <div class="settings-row">
+                    <div>
+                        <div class="settings-row-label">Reduce Motion</div>
+                        <div class="settings-row-sub">Minimizes animations &amp; transitions</div>
+                    </div>
+                    <div class="toggle-switch" id="reduceMotionToggle"><div class="toggle-switch-knob"></div></div>
+                </div>
+                <div class="settings-row">
+                    <div>
+                        <div class="settings-row-label">Units</div>
+                        <div class="settings-row-sub">Slope gradient display format</div>
+                    </div>
+                    <div class="segmented-control" style="width: 120px;" id="unitsControl">
+                        <div class="segmented-option is-selected" data-units="deg">Degrees</div>
+                        <div class="segmented-option" data-units="pct">Percent</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- ============ FINANCIAL PANEL OVERLAY ============ -->
+    <div class="financial-overlay" id="financialOverlay">
+        <div class="financial-panel" id="financialPanel">
+            <div class="financial-panel-header">
+                <div class="financial-panel-title">Area Financial Insights</div>
+                <button type="button" class="financial-close-btn" id="financialCloseBtn">✕</button>
+            </div>
+
+            <div class="financial-section">
+                <div class="financial-section-label">Property Market</div>
+                <div class="financial-metric-row">
+                    <div class="financial-metric-label">Median Home Value</div>
+                    <div>
+                        <span class="financial-metric-value" id="finMedianValue">--</span>
+                        <span class="financial-metric-trend trend-up" id="finMedianTrend"></span>
+                    </div>
+                </div>
+                <div class="financial-metric-row">
+                    <div class="financial-metric-label">Price per Sq Ft</div>
+                    <div>
+                        <span class="financial-metric-value" id="finPricePerSqFt">--</span>
+                        <span class="financial-metric-trend" id="finPriceTrend"></span>
+                    </div>
+                </div>
+                <div class="financial-metric-row">
+                    <div class="financial-metric-label">Market Trend</div>
+                    <div>
+                        <span class="financial-metric-value" id="finMarketTrend">--</span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="financial-section">
+                <div class="financial-section-label">Economic Indicators</div>
+                <div class="financial-metric-row">
+                    <div class="financial-metric-label">Area Income Level</div>
+                    <div class="financial-metric-value" id="finIncomeLevel">--</div>
+                </div>
+                <div class="financial-metric-row">
+                    <div class="financial-metric-label">Employment Rate</div>
+                    <div>
+                        <span class="financial-metric-value" id="finEmployment">--</span>
+                        <span class="financial-metric-trend" id="finEmploymentTrend"></span>
+                    </div>
+                </div>
+                <div class="financial-metric-row">
+                    <div class="financial-metric-label">Business Growth</div>
+                    <div>
+                        <span class="financial-metric-value" id="finBusinessGrowth">--</span>
+                        <span class="financial-metric-trend" id="finBusinessTrend"></span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="financial-section">
+                <div class="financial-section-label">Investment Outlook</div>
+                <div class="financial-metric-row">
+                    <div class="financial-metric-label">Rental Yield</div>
+                    <div class="financial-metric-value" id="finRentalYield">--</div>
+                </div>
+                <div class="financial-metric-row">
+                    <div class="financial-metric-label">Appreciation Rate</div>
+                    <div>
+                        <span class="financial-metric-value" id="finAppreciation">--</span>
+                        <span class="financial-metric-trend" id="finAppreciationTrend"></span>
+                    </div>
+                </div>
+                <div class="financial-metric-row">
+                    <div class="financial-metric-label">Risk Score</div>
+                    <div class="financial-metric-value" id="finRiskScore">--</div>
+                </div>
+            </div>
+
+            <div class="financial-section" style="margin-bottom: 4px;">
+                <div class="financial-section-label">AI Financial Assessment</div>
+                <div class="terrace-outer-layer" style="margin-top: 10px;">
+                    <div id="financialAIBox" class="terrace-inner-textbox" style="min-height: 120px;">Analyze a property to receive AI-powered financial insights about the area.</div>
+                </div>
+            </div>
         </div>
     </div>
 
@@ -630,7 +1548,28 @@
                     <div id="suggestionsBox" class="suggestions-box"></div>
                 </div>
 
-                <button type="button" id="triggerSearchBtn" class="extruded-search-btn">Search Matrix</button>
+                <button type="button" id="triggerSearchBtn" class="extruded-search-btn">Search</button>
+            </div>
+
+            <div class="chatbot-section">
+                <div class="search-label-title">AI Risk Assistant</div>
+                <div class="chatbot-outer-layer">
+                    <div class="chatbot-middle-layer">
+                        <div class="chatbot-inner-layer">
+                            <div id="chatMessages" class="chat-messages">
+                                <div class="chat-message ai">Hello! I'm your AI Risk Assistant. Ask me anything about property risks, flood zones, wildfire hazards, or slope analysis.</div>
+                            </div>
+                            <div class="chat-input-wrapper">
+                                <input type="text" id="chatInput" class="chat-input" placeholder="Ask about property risks...">
+                                <button id="chatSendBtn" class="chat-send-btn">
+                                    <svg fill="currentColor" viewBox="0 0 16 16">
+                                        <path d="M15.854.146a.5.5 0 0 1 .11.54l-5.819 14.547a.75.75 0 0 1-1.329.124l-3.178-4.995L.643 7.184a.75.75 0 0 1 .124-1.33L15.314.037a.5.5 0 0 1 .54.11ZM6.636 10.07l2.761 4.338L14.13 2.576 6.636 10.07Zm6.787-8.201L1.591 6.602l4.339 2.76 7.494-7.493Z"/>
+                                    </svg>
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
             </div>
         </div>
 
@@ -650,7 +1589,7 @@
                         <div class="card-label">Crime Risk</div>
                         <div id="grid-crime" class="card-value-display">--</div>
                     </div>
-                    <div class="metric-card-indented card-row1">
+                    <div id="grid-slope-card" class="metric-card-indented card-row1">
                         <div class="card-label">Slope Gradient</div>
                         <div id="grid-slope" class="card-value-display">--°</div>
                     </div>
@@ -659,7 +1598,7 @@
                         <div id="grid-vegetation" class="card-value-display">--</div>
                     </div>
 
-                    <div class="metric-card-indented card-row2">
+                    <div id="grid-flood-card" class="metric-card-indented card-row2">
                         <div class="card-label">Flood Proximity</div>
                         <div id="grid-flood" class="card-value-display">--</div>
                     </div>
@@ -706,9 +1645,77 @@
                             <div id="simStatus" class="sim-status-box">Awaiting coordinate parameters... Click on the map grid to choose an ignition point.</div>
                         </div>
                         <div>
-                            <button id="btnStartSim" class="sim-action-btn">Run Wildfire Simulation</button>
-                            <button id="btnResetSim" class="sim-action-btn" style="background:#f1f5f9; color:#475569;">Reset Tree Canopy</button>
+                            <div class="sim-meta-heading" style="margin-top: 12px;">Wind Direction</div>
+                            <div style="display: flex; gap: 8px; margin-top: 6px;">
+                                <button class="wind-dir-btn" data-dir="N" style="flex: 1; padding: 8px; background: var(--bg); border: 1px solid var(--shadow-d); border-radius: 8px; cursor: pointer; font-size: 11px; font-weight: 700;">N</button>
+                                <button class="wind-dir-btn" data-dir="NE" style="flex: 1; padding: 8px; background: var(--bg); border: 1px solid var(--shadow-d); border-radius: 8px; cursor: pointer; font-size: 11px; font-weight: 700;">NE</button>
+                                <button class="wind-dir-btn" data-dir="E" style="flex: 1; padding: 8px; background: var(--bg); border: 1px solid var(--shadow-d); border-radius: 8px; cursor: pointer; font-size: 11px; font-weight: 700;">E</button>
+                                <button class="wind-dir-btn" data-dir="SE" style="flex: 1; padding: 8px; background: var(--bg); border: 1px solid var(--shadow-d); border-radius: 8px; cursor: pointer; font-size: 11px; font-weight: 700;">SE</button>
+                            </div>
+                            <div style="display: flex; gap: 8px; margin-top: 4px;">
+                                <button class="wind-dir-btn" data-dir="NW" style="flex: 1; padding: 8px; background: var(--bg); border: 1px solid var(--shadow-d); border-radius: 8px; cursor: pointer; font-size: 11px; font-weight: 700;">NW</button>
+                                <button class="wind-dir-btn" data-dir="W" style="flex: 1; padding: 8px; background: var(--bg); border: 1px solid var(--shadow-d); border-radius: 8px; cursor: pointer; font-size: 11px; font-weight: 700;">W</button>
+                                <button class="wind-dir-btn" data-dir="SW" style="flex: 1; padding: 8px; background: var(--bg); border: 1px solid var(--shadow-d); border-radius: 8px; cursor: pointer; font-size: 11px; font-weight: 700;">SW</button>
+                                <button class="wind-dir-btn is-selected" data-dir="S" style="flex: 1; padding: 8px; background: var(--accent); color: white; border: 1px solid var(--accent); border-radius: 8px; cursor: pointer; font-size: 11px; font-weight: 700;">S</button>
+                            </div>
                         </div>
+                        <div>
+                            <div class="sim-meta-heading" style="margin-top: 12px;">Wind Speed</div>
+                            <input type="range" id="windSpeedSlider" min="0" max="100" value="30" style="width: 100%; margin-top: 6px;">
+                            <div id="windSpeedDisplay" style="font-size: 11px; color: var(--text-muted); margin-top: 4px;">30 km/h</div>
+                        </div>
+                        <div>
+                            <div class="sim-meta-heading" style="margin-top: 12px;">Fire Statistics</div>
+                            <div id="fireStats" class="sim-status-box" style="min-height: 60px;">Ignition: Not started</div>
+                        </div>
+                        <div>
+                            <button id="btnStartSim" class="sim-action-btn">Run Wildfire Simulation</button>
+                            <button id="btnResetSim" class="sim-action-btn" style="background: var(--shadow-d2); color: var(--text-slate2);">Reset Tree Canopy</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div id="slopeBreakdown" class="mini-breakdown-panel">
+                <div class="breakdown-header-row">
+                    <div class="breakdown-title">Slope Gradient Signature</div>
+                    <div id="breakdownSlopeValue" class="breakdown-value-extruded">--</div>
+                </div>
+                <div class="mini-key-row">
+                    <span class="mini-key-item"><span class="mini-key-dot" style="background:#10b981;"></span>Low Risk (&lt; 10°)</span>
+                    <span class="mini-key-item"><span class="mini-key-dot" style="background:#f59e0b;"></span>Moderate (10° - 20°)</span>
+                    <span class="mini-key-item"><span class="mini-key-dot" style="background:#ef4444;"></span>High Risk (&gt; 20°)</span>
+                </div>
+                <div class="slope-sim-panel">
+                    <div class="slope-sim-stage">
+                        <canvas id="slopeSimCanvas" width="520" height="280"></canvas>
+                    </div>
+                    <div class="slope-sim-controls">
+                        <div class="sim-meta-heading">Foundation Settlement</div>
+                        <div id="slopeSimStatus" class="sim-status-box">Awaiting slope data. Once a property is analyzed, this simulator will estimate how quickly a home could begin to shift or settle on the terrain.</div>
+                        <button id="btnRunSlopeSim" class="sim-action-btn">Simulate Settlement</button>
+                    </div>
+                </div>
+            </div>
+
+            <div id="floodBreakdown" class="mini-breakdown-panel">
+                <div class="breakdown-header-row">
+                    <div class="breakdown-title">Flood Proximity Signature</div>
+                    <div id="breakdownFloodValue" class="breakdown-value-extruded">--</div>
+                </div>
+                <div class="mini-key-row">
+                    <span class="mini-key-item"><span class="mini-key-dot" style="background:#10b981;"></span>Low Risk (&lt; 0.3)</span>
+                    <span class="mini-key-item"><span class="mini-key-dot" style="background:#f59e0b;"></span>Moderate (0.3 - 0.6)</span>
+                    <span class="mini-key-item"><span class="mini-key-dot" style="background:#ef4444;"></span>High Risk (&gt; 0.6)</span>
+                </div>
+                <div class="flood-sim-panel">
+                    <div class="flood-sim-stage">
+                        <canvas id="floodSimCanvas" width="520" height="280"></canvas>
+                    </div>
+                    <div class="flood-sim-controls">
+                        <div class="sim-meta-heading">Flood Inundation</div>
+                        <div id="floodSimStatus" class="sim-status-box">Awaiting flood data. This view visualizes how quickly a property could become water-affected based on the local flood signal.</div>
+                        <button id="btnRunFloodSim" class="sim-action-btn">Run Flood Simulation</button>
                     </div>
                 </div>
             </div>
@@ -718,13 +1725,13 @@
         <div class="gauge-sidebar">
             <div class="gauge-container" style="transform: scale(1.35); margin-top: 30px; margin-bottom: 10px; position: relative;">
                 <svg width="110" height="110" viewBox="0 0 120 120">
-                    <circle cx="60" cy="60" r="50" fill="none" stroke="#dbeafe" stroke-width="10"/>
+                    <circle cx="60" cy="60" r="50" fill="none" stroke="var(--ring-bg)" stroke-width="10"/>
                     <circle id="gaugeMeter" cx="60" cy="60" r="50" fill="none" stroke="#10b981" stroke-width="10" 
                             stroke-dasharray="314.16" stroke-dashoffset="314.16" stroke-linecap="round" transform="rotate(-90 60 60)" style="transition: stroke-dashoffset 0.6s ease-in-out;"/>
-                    <text id="gaugeText" x="60" y="68" text-anchor="middle" font-family="system-ui" font-size="20" font-weight="800" fill="#1e3a8a">0.0%</text>
+                    <text id="gaugeText" x="60" y="68" text-anchor="middle" font-family="system-ui" font-size="20" font-weight="800" fill="var(--text-heading)">0.0%</text>
                 </svg>
             </div>
-            <div style="font-size: 11px; font-weight: 800; color: #64748b; text-transform: uppercase; letter-spacing: 0.8px; margin-top: 15px;">Risk Index</div>
+            <div style="font-size: 11px; font-weight: 800; color: var(--text-muted); text-transform: uppercase; letter-spacing: 0.8px; margin-top: 15px;">Risk Index</div>
 
             <div class="panel-divider"></div>
             <div class="ai-overview-title">AI Overview</div>
@@ -732,16 +1739,38 @@
             <div class="terrace-outer-layer">
                 <div id="aiOverviewBox" class="terrace-inner-textbox">Awaiting geospatial execution matrices...</div>
             </div>
+            
+            <button id="financialAssistantBtn" class="financial-assistant-btn" disabled>
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <line x1="12" y1="1" x2="12" y2="23"></line>
+                    <path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"></path>
+                </svg>
+                AI Risk Assistant
+            </button>
         </div>
 
     </div>
 
     <script>
+        // Basemap tile source definitions (used by the Settings > Basemap Style toggle)
+        var BASEMAP_SOURCES = {
+            streets: {
+                url: 'https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',
+                attribution: '© OpenStreetMap',
+                maxZoom: 19
+            },
+            satellite: {
+                url: 'https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}',
+                attribution: 'Tiles © Esri',
+                maxZoom: 19
+            }
+        };
+
         // Primary overview map standard initiation layout
         var map = L.map('map', { zoomAnimation: true }).setView([0, 0], 2);
-        L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-            maxZoom: 19,
-            attribution: '© OpenStreetMap'
+        var mainTileLayer = L.tileLayer(BASEMAP_SOURCES.streets.url, {
+            maxZoom: BASEMAP_SOURCES.streets.maxZoom,
+            attribution: BASEMAP_SOURCES.streets.attribution
         }).addTo(map);
 
         var currentLat = null;
@@ -759,8 +1788,20 @@
             attributionControl: false
         }).setView([0, 0], 12);
         
-        L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png').addTo(simMap);
+        var simTileLayer = L.tileLayer(BASEMAP_SOURCES.streets.url).addTo(simMap);
         var simMaskLayer = null;
+        var simBoundsLayer = null;
+
+        function setBasemapStyle(styleKey) {
+            var src = BASEMAP_SOURCES[styleKey] || BASEMAP_SOURCES.streets;
+            map.removeLayer(mainTileLayer);
+            mainTileLayer = L.tileLayer(src.url, { maxZoom: src.maxZoom, attribution: src.attribution }).addTo(map);
+            mainTileLayer.bringToBack();
+
+            simMap.removeLayer(simTileLayer);
+            simTileLayer = L.tileLayer(src.url, { maxZoom: src.maxZoom }).addTo(simMap);
+            simTileLayer.bringToBack();
+        }
 
         var canvas = document.getElementById('simCanvas');
         var ctx = canvas.getContext('2d');
@@ -770,6 +1811,19 @@
         var currentVegDensity = 0.4; 
         var fuelBurnProbability = 0.45; 
         var selectedIgnitionCell = null;
+        var windDirection = 'S';
+        var windSpeed = 30;
+        var totalTreesBurned = 0;
+        var simulationStartTime = null;
+        var slopeSimCanvas = document.getElementById('slopeSimCanvas');
+        var slopeSimCtx = slopeSimCanvas.getContext('2d');
+        var floodSimCanvas = document.getElementById('floodSimCanvas');
+        var floodSimCtx = floodSimCanvas.getContext('2d');
+        var lastSlopeDegrees = 0;
+        var lastSlopePercent = 0;
+        var lastFloodScore = 0;
+        var lastFloodZone = 'N/A';
+        var lastFloodSubtype = '';
         
         var geoLimits = { minX: 0, maxX: 0, minY: 0, maxY: 0 };
 
@@ -845,6 +1899,16 @@
             if (e.target !== searchInput) { suggestionsBox.style.display = 'none'; }
         });
 
+        // Generic reusable version of the risk color assignment, driven by configurable thresholds.
+        function assignRiskColor(val, elementId, moderateFloor, highFloor) {
+            var target = document.getElementById(elementId);
+            var num = parseFloat(val);
+            if (isNaN(num)) return;
+            if (num > highFloor) target.style.color = '#ef4444';
+            else if (num >= moderateFloor) target.style.color = '#f59e0b';
+            else target.style.color = '#10b981';
+        }
+
         function assignVegetationColor(val, elementId) {
             var target = document.getElementById(elementId);
             var num = parseFloat(val);
@@ -855,8 +1919,9 @@
         }
 
         // Custom inverse boundary polygon matrix filter mask layer
-        function applyNegativeCroppingMask(targetMap, currentMask, sw, ne) {
+        function applyNegativeCroppingMask(targetMap, currentMask, currentBoundsLayer, sw, ne) {
             if (currentMask) { targetMap.removeLayer(currentMask); }
+            if (currentBoundsLayer) { targetMap.removeLayer(currentBoundsLayer); }
 
             var outerRing = [
                 L.latLng(-90, -180), L.latLng(90, -180), L.latLng(90, 180), L.latLng(-90, 180)
@@ -866,22 +1931,25 @@
                 L.latLng(sw.lat, sw.lng), L.latLng(ne.lat, sw.lng), L.latLng(ne.lat, ne.lng), L.latLng(sw.lat, ne.lng)
             ];
 
+            var themeBg = getComputedStyle(document.documentElement).getPropertyValue('--bg').trim() || '#e6eef8';
+            var themeHeading = getComputedStyle(document.documentElement).getPropertyValue('--text-heading').trim() || '#1e3a8a';
+
             var maskLayer = L.polygon([outerRing, innerHole], {
-                color: '#e6eef8',
+                color: themeBg,
                 weight: 0,
-                fillColor: '#e6eef8',
+                fillColor: themeBg,
                 fillOpacity: 1.0, 
                 interactive: false
             }).addTo(targetMap);
 
-            L.rectangle(L.latLngBounds(sw, ne), {
-                color: '#1e3a8a',
+            var boundsLayer = L.rectangle(L.latLngBounds(sw, ne), {
+                color: themeHeading,
                 weight: 3,
                 fillOpacity: 0,
                 interactive: false
             }).addTo(targetMap);
 
-            return maskLayer;
+            return { maskLayer: maskLayer, boundsLayer: boundsLayer };
         }
 
         function updateSimulationMapLayers(lat, lng, vegIndexValue) {
@@ -895,8 +1963,9 @@
             var neCorner = L.latLng(lat + latOffset, lng + lngOffset);
             var bounds = L.latLngBounds(swCorner, neCorner);
 
-            // Apply inverse crop exclusively to lower wildfire simulator map container layout
-            simMaskLayer = applyNegativeCroppingMask(simMap, simMaskLayer, swCorner, neCorner);
+            var maskResult = applyNegativeCroppingMask(simMap, simMaskLayer, simBoundsLayer, swCorner, neCorner);
+            simMaskLayer = maskResult.maskLayer;
+            simBoundsLayer = maskResult.boundsLayer;
             simMap.fitBounds(bounds, { padding: [0, 0], animate: false });
 
             simMap.once('moveend', function() {
@@ -923,7 +1992,10 @@
         function initializeSimulationGrid() {
             if (simInterval) { clearInterval(simInterval); }
             selectedIgnitionCell = null;
+            totalTreesBurned = 0;
+            simulationStartTime = null;
             document.getElementById('simStatus').innerText = `Click inside the 5x5 mile grid mask box to choose a start spark ignition point.`;
+            document.getElementById('fireStats').innerText = 'Ignition: Not started';
 
             canvas.width = canvas.offsetWidth;
             canvas.height = canvas.offsetHeight;
@@ -1025,13 +2097,20 @@
             if (!selectedIgnitionCell) return;
             if (simInterval) { clearInterval(simInterval); }
             
+            simulationStartTime = Date.now();
+            totalTreesBurned = 0;
+            
             simInterval = setInterval(function() {
                 var nextGrid = [];
                 var activeFires = 0;
+                var newlyIgnited = 0;
 
                 for (var x = 0; x < simGridSize; x++) {
                     nextGrid[x] = [...simGrid[x]];
                 }
+
+                var windBias = getWindBias(windDirection);
+                var speedMultiplier = 0.3 + (windSpeed / 100) * 0.7;
 
                 for (var x = 0; x < simGridSize; x++) {
                     for (var y = 0; y < simGridSize; y++) {
@@ -1046,11 +2125,21 @@
                             neighbors.forEach(n => {
                                 var nx = n[0], ny = n[1];
                                 if (nx >= 0 && nx < simGridSize && ny >= 0 && ny < simGridSize) {
-                                    if (simGrid[nx][ny] === 1 && Math.random() < fuelBurnProbability) {
+                                    var bias = 1.0;
+                                    if (nx > x && windBias.east) bias *= 1.5;
+                                    if (nx < x && windBias.west) bias *= 1.5;
+                                    if (ny > y && windBias.south) bias *= 1.5;
+                                    if (ny < y && windBias.north) bias *= 1.5;
+                                    
+                                    var burnChance = fuelBurnProbability * bias * speedMultiplier;
+                                    if (simGrid[nx][ny] === 1 && Math.random() < burnChance) {
                                         nextGrid[nx][ny] = 2;
+                                        newlyIgnited++;
                                     }
                                 }
                             });
+                        } else if (simGrid[x][y] === 3) {
+                            totalTreesBurned++;
                         }
                     }
                 }
@@ -1064,6 +2153,13 @@
                 simGrid = nextGrid;
                 drawSimulationGrid();
 
+                var elapsed = ((Date.now() - simulationStartTime) / 1000).toFixed(1);
+                document.getElementById('fireStats').innerHTML = 
+                    'Active Fires: ' + activeFires + '<br>' +
+                    'Trees Burned: ' + totalTreesBurned + '<br>' +
+                    'New Ignitions: ' + newlyIgnited + '<br>' +
+                    'Elapsed: ' + elapsed + 's';
+
                 if (activeFires === 0) {
                     clearInterval(simInterval);
                     document.getElementById('simStatus').innerText = "Simulation complete. Fire matrix limits reached.";
@@ -1072,6 +2168,112 @@
         });
 
         document.getElementById('btnResetSim').addEventListener('click', initializeSimulationGrid);
+
+        function getWindBias(direction) {
+            var biases = {
+                'N': { north: true, south: false, east: false, west: false },
+                'NE': { north: true, south: false, east: true, west: false },
+                'E': { north: false, south: false, east: true, west: false },
+                'SE': { north: false, south: true, east: true, west: false },
+                'S': { north: false, south: true, east: false, west: false },
+                'SW': { north: false, south: true, east: false, west: true },
+                'W': { north: false, south: false, east: false, west: true },
+                'NW': { north: true, south: false, east: false, west: true }
+            };
+            return biases[direction] || biases['S'];
+        }
+
+        document.querySelectorAll('.wind-dir-btn').forEach(function(btn) {
+            btn.addEventListener('click', function() {
+                document.querySelectorAll('.wind-dir-btn').forEach(function(b) {
+                    b.classList.remove('is-selected');
+                    b.style.background = 'var(--bg)';
+                    b.style.color = 'var(--text-slate)';
+                    b.style.borderColor = 'var(--shadow-d)';
+                });
+                btn.classList.add('is-selected');
+                btn.style.background = 'var(--accent)';
+                btn.style.color = 'white';
+                btn.style.borderColor = 'var(--accent)';
+                windDirection = btn.getAttribute('data-dir');
+            });
+        });
+
+        document.getElementById('windSpeedSlider').addEventListener('input', function() {
+            windSpeed = parseInt(this.value);
+            document.getElementById('windSpeedDisplay').innerText = windSpeed + ' km/h';
+        });
+
+        // --- AI CHATBOT FUNCTIONALITY ---
+        var chatInput = document.getElementById('chatInput');
+        var chatSendBtn = document.getElementById('chatSendBtn');
+        var chatMessages = document.getElementById('chatMessages');
+
+        function addChatMessage(message, isUser) {
+            var msgDiv = document.createElement('div');
+            msgDiv.className = 'chat-message ' + (isUser ? 'user' : 'ai');
+            msgDiv.textContent = message;
+            chatMessages.appendChild(msgDiv);
+            chatMessages.scrollTop = chatMessages.scrollHeight;
+        }
+
+        function showLoadingIndicator() {
+            var loadingDiv = document.createElement('div');
+            loadingDiv.id = 'chatLoading';
+            loadingDiv.className = 'chat-message ai';
+            loadingDiv.innerHTML = '<div class="chat-loading"><div class="chat-loading-dot"></div><div class="chat-loading-dot"></div><div class="chat-loading-dot"></div></div>';
+            chatMessages.appendChild(loadingDiv);
+            chatMessages.scrollTop = chatMessages.scrollHeight;
+        }
+
+        function removeLoadingIndicator() {
+            var loading = document.getElementById('chatLoading');
+            if (loading) loading.remove();
+        }
+
+        function sendChatMessage() {
+            var message = chatInput.value.trim();
+            if (!message) return;
+
+            addChatMessage(message, true);
+            chatInput.value = '';
+            showLoadingIndicator();
+
+            var contextData = {
+                message: message,
+                currentLat: currentLat,
+                currentLng: currentLng,
+                currentLabel: currentLabel,
+                riskScore: document.getElementById('gaugeText').textContent,
+                slope: document.getElementById('grid-slope').textContent,
+                vegetation: document.getElementById('grid-vegetation').textContent,
+                flood: document.getElementById('grid-flood').textContent
+            };
+
+            fetch('/api/chat', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(contextData)
+            })
+            .then(response => response.json())
+            .then(data => {
+                removeLoadingIndicator();
+                if (data.status === 'success') {
+                    addChatMessage(data.response, false);
+                } else {
+                    addChatMessage('Sorry, I encountered an error. Please try again.', false);
+                }
+            })
+            .catch(err => {
+                removeLoadingIndicator();
+                addChatMessage('Sorry, I could not connect to the AI service. Please try again.', false);
+            });
+        }
+
+        chatSendBtn.addEventListener('click', sendChatMessage);
+        chatInput.addEventListener('keypress', function(e) {
+            if (e.key === 'Enter') sendChatMessage();
+        });
 
         function executeAnalysis(lat, lng, addressLabel) {
             document.getElementById('header-coordinates').innerText = `Lat: ${lat.toFixed(4)} | Lng: ${lng.toFixed(4)}`;
@@ -1090,29 +2292,58 @@
                     var rawRiskScore = parseFloat(data.calculated_risk_score) || 0.0;
                     var metrics = data.metrics || {};
                     var vegValue = (metrics.vegetation_index || 0).toFixed(4);
+                    var elevationData = data.elevation_raster || {};
+                    var slopeDegrees = parseFloat(elevationData.slope_mean_deg) || parseFloat(metrics.slope_gradient) || 0;
+                    var slopePercent = calculateSlopePercent(slopeDegrees);
+                    var floodData = data.flood || {};
+                    var floodScore = floodData.flood_proximity_score != null ? parseFloat(floodData.flood_proximity_score) : (metrics.flood_proximity_score != null ? parseFloat(metrics.flood_proximity_score) : null);
+                    var floodZone = floodData.flood_zone || (floodScore != null ? 'Zone ' + floodScore : 'N/A');
+                    var floodSubtype = floodData.zone_subtype || '';
 
                     updateRiskWheel(rawRiskScore);
                     document.getElementById('aiOverviewBox').innerText = data.ai_summary;
 
                     document.getElementById('grid-crime').innerText = (metrics.crime_risk_index || 0).toFixed(1) + " / 5.0";
-                    document.getElementById('grid-slope').innerText = (metrics.slope_gradient || 0).toFixed(1) + "°";
+                    lastSlopeDegrees = slopeDegrees;
+                    lastSlopePercent = slopePercent;
+                    renderSlopeDisplay();
+                    renderSlopeSimulation(slopeDegrees, slopePercent, 0);
                     document.getElementById('grid-vegetation').innerText = vegValue;
-                    document.getElementById('grid-flood').innerText = "Zone Index " + (metrics.flood_proximity_score != null ? metrics.flood_proximity_score : "N/A");
+                    document.getElementById('grid-flood').innerText = floodZone;
                     document.getElementById('grid-infrastructure').innerText = (metrics.infrastructure_hazard != null ? metrics.infrastructure_hazard : 0) + " Found";
 
                     document.getElementById('breakdownVegValue').innerText = vegValue;
                     assignVegetationColor(vegValue, 'breakdownVegValue');
                     updateSimulationMapLayers(lat, lng, vegValue);
+
+                    document.getElementById('breakdownSlopeValue').innerText = slopeDegrees.toFixed(1) + "°";
+                    assignRiskColor(slopeDegrees, 'breakdownSlopeValue', 10, 20);
+
+                    lastFloodScore = floodScore != null ? floodScore : 0;
+                    lastFloodZone = floodZone || 'N/A';
+                    lastFloodSubtype = floodSubtype;
+                    var floodDisplayVal = floodScore != null ? floodScore : 0;
+                    document.getElementById('breakdownFloodValue').innerText = floodZone || (floodScore != null ? floodScore : "N/A");
+                    assignRiskColor(floodDisplayVal, 'breakdownFloodValue', 1.5, 2.5);
+                    renderFloodSimulation(lastFloodScore, lastFloodZone, lastFloodSubtype, 0);
+                    
+                    // Generate financial data
+                    generateFinancialData(lat, lng);
                 }
             }).catch(err => {
                 setTimeout(() => {
                     document.getElementById('diagnosticsOverlay').classList.remove('active');
                     var demoScore = Math.random() * 95;
                     var mockVegValue = Math.random().toFixed(4);
+                    var mockSlopeDegrees = Math.random() * 25;
+                    var mockFloodScore = Math.random().toFixed(2);
                     updateRiskWheel(demoScore);
                     
                     document.getElementById('grid-crime').innerText = (Math.random() * 4).toFixed(1);
-                    document.getElementById('grid-slope').innerText = (Math.random() * 25).toFixed(1) + "°";
+                    lastSlopeDegrees = mockSlopeDegrees;
+                    lastSlopePercent = calculateSlopePercent(mockSlopeDegrees);
+                    renderSlopeDisplay();
+                    renderSlopeSimulation(lastSlopeDegrees, lastSlopePercent, 0);
                     document.getElementById('grid-vegetation').innerText = mockVegValue;
                     document.getElementById('grid-flood').innerText = "Zone AE";
                     document.getElementById('grid-infrastructure').innerText = Math.floor(Math.random() * 5);
@@ -1120,6 +2351,19 @@
                     document.getElementById('breakdownVegValue').innerText = mockVegValue;
                     assignVegetationColor(mockVegValue, 'breakdownVegValue');
                     updateSimulationMapLayers(lat, lng, mockVegValue);
+
+                    document.getElementById('breakdownSlopeValue').innerText = mockSlopeDegrees.toFixed(1) + "°";
+                    assignRiskColor(mockSlopeDegrees, 'breakdownSlopeValue', 10, 20);
+
+                    lastFloodScore = parseFloat(mockFloodScore) || 0;
+                    lastFloodZone = 'Zone AE';
+                    lastFloodSubtype = 'Approximate floodplain band';
+                    document.getElementById('breakdownFloodValue').innerText = lastFloodZone;
+                    assignRiskColor(lastFloodScore, 'breakdownFloodValue', 1.5, 2.5);
+                    
+                    // Generate financial data
+                    generateFinancialData(lat, lng);
+                    renderFloodSimulation(lastFloodScore, lastFloodZone, lastFloodSubtype, 0);
 
                     document.getElementById('aiOverviewBox').innerText = `Geospatial point loaded.\nCoordinates: ${lat.toFixed(4)}, ${lng.toFixed(4)}.`;
                 }, 800);
@@ -1157,6 +2401,490 @@
             currentLng = e.latlng.lng;
             currentLabel = "Selected Coordinate Point Location";
             executeAnalysis(currentLat, currentLng, currentLabel);
+        });
+
+        // ============ Simple show/hide toggles for the compact Slope & Flood key panels ============
+        function bindSimpleBreakdownToggle(cardId, panelId, valueId, renderCallback) {
+            document.getElementById(cardId).addEventListener('click', function() {
+                var panel = document.getElementById(panelId);
+                var currentVal = document.getElementById(valueId).innerText;
+                if (currentVal === "--" || currentVal === "--°") return;
+                if (panel.style.display === "none" || panel.style.display === "") {
+                    panel.style.display = "block";
+                    if (renderCallback) renderCallback();
+                    panel.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+                } else {
+                    panel.style.display = "none";
+                }
+            });
+        }
+        bindSimpleBreakdownToggle('grid-slope-card', 'slopeBreakdown', 'grid-slope', function() {
+            renderSlopeSimulation(lastSlopeDegrees, lastSlopePercent, 0);
+        });
+        bindSimpleBreakdownToggle('grid-flood-card', 'floodBreakdown', 'grid-flood', function() {
+            renderFloodSimulation(lastFloodScore, lastFloodZone, lastFloodSubtype, 0);
+        });
+
+        // ============ Units-aware slope gradient rendering (Settings > Units) ============
+        var currentUnits = 'deg';
+
+        function renderSlopeDisplay() {
+            var el = document.getElementById('grid-slope');
+            if (currentUnits === 'pct') {
+                el.innerText = lastSlopePercent.toFixed(1) + "%";
+            } else {
+                el.innerText = lastSlopeDegrees.toFixed(1) + "°";
+            }
+        }
+
+        function calculateSlopePercent(degrees) {
+            return Math.tan(degrees * Math.PI / 180) * 100;
+        }
+
+        function renderSlopeSimulation(degrees, percent, progress) {
+            var ctx = slopeSimCtx;
+            var canvas = slopeSimCanvas;
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+            var width = canvas.width;
+            var height = canvas.height;
+            var baseY = height - 48;
+            var rise = Math.max(22, Math.min(120, Math.abs(percent) * 1.5));
+            var severity = Math.min(1, Math.max(0, Math.abs(percent) / 40));
+            var movement = 10 + severity * 28;
+            var years = Math.max(4, Math.min(30, 4 + severity * 10 + Math.abs(percent) / 6));
+            // House slides DOWN the slope (right and down)
+            var offsetX = progress * movement;
+            var offsetY = progress * (10 + severity * 18);
+
+            ctx.fillStyle = '#f7fbff';
+            ctx.fillRect(0, 0, width, height);
+
+            ctx.fillStyle = '#d9f2ff';
+            ctx.fillRect(0, 0, width, height * 0.5);
+
+            ctx.beginPath();
+            ctx.moveTo(24, baseY);
+            ctx.lineTo(width * 0.28, baseY - rise * 0.45);
+            ctx.lineTo(width * 0.58, baseY - rise * 0.7);
+            ctx.lineTo(width * 0.88, baseY - rise * 1.05);
+            ctx.lineTo(width - 24, baseY - rise * 0.9);
+            ctx.lineTo(width - 24, height - 8);
+            ctx.lineTo(24, height - 8);
+            ctx.closePath();
+            ctx.fillStyle = '#8fd19a';
+            ctx.fill();
+
+            ctx.strokeStyle = '#5f8f65';
+            ctx.lineWidth = 3;
+            ctx.beginPath();
+            ctx.moveTo(24, baseY);
+            ctx.lineTo(width * 0.28, baseY - rise * 0.45);
+            ctx.lineTo(width * 0.58, baseY - rise * 0.7);
+            ctx.lineTo(width * 0.88, baseY - rise * 1.05);
+            ctx.lineTo(width - 24, baseY - rise * 0.9);
+            ctx.stroke();
+
+            // Calculate ground Y at house position based on slope
+            var houseBaseX = width * 0.62;
+            var groundYAtHouse;
+            if (houseBaseX < width * 0.28) {
+                groundYAtHouse = baseY - rise * 0.45 * ((houseBaseX - 24) / (width * 0.28 - 24));
+            } else if (houseBaseX < width * 0.58) {
+                groundYAtHouse = baseY - rise * 0.45 - rise * 0.25 * ((houseBaseX - width * 0.28) / (width * 0.58 - width * 0.28));
+            } else if (houseBaseX < width * 0.88) {
+                groundYAtHouse = baseY - rise * 0.7 - rise * 0.35 * ((houseBaseX - width * 0.58) / (width * 0.88 - width * 0.58));
+            } else {
+                groundYAtHouse = baseY - rise * 1.05 + rise * 0.15 * ((houseBaseX - width * 0.88) / (width - 24 - width * 0.88));
+            }
+            
+            var houseX = width * 0.62 + offsetX;
+            var houseY = groundYAtHouse - 36 + offsetY;
+            ctx.save();
+            ctx.translate(houseX, houseY);
+            
+            // House body
+            ctx.fillStyle = '#f8fafc';
+            ctx.fillRect(-36, -20, 72, 48);
+            ctx.strokeStyle = '#94a3b8';
+            ctx.lineWidth = 2;
+            ctx.strokeRect(-36, -20, 72, 48);
+            
+            // Roof
+            ctx.fillStyle = '#dc2626';
+            ctx.beginPath();
+            ctx.moveTo(-42, -20);
+            ctx.lineTo(0, -48);
+            ctx.lineTo(42, -20);
+            ctx.closePath();
+            ctx.fill();
+            ctx.strokeStyle = '#991b1b';
+            ctx.lineWidth = 2;
+            ctx.stroke();
+            
+            // Chimney
+            ctx.fillStyle = '#78716c';
+            ctx.fillRect(18, -42, 12, 20);
+            ctx.strokeStyle = '#57534e';
+            ctx.strokeRect(18, -42, 12, 20);
+            
+            // Windows
+            ctx.fillStyle = '#bfdbfe';
+            ctx.fillRect(-28, -12, 16, 16);
+            ctx.strokeStyle = '#3b82f6';
+            ctx.lineWidth = 2;
+            ctx.strokeRect(-28, -12, 16, 16);
+            ctx.beginPath();
+            ctx.moveTo(-20, -12);
+            ctx.lineTo(-20, 4);
+            ctx.moveTo(-28, -4);
+            ctx.lineTo(-12, -4);
+            ctx.stroke();
+            
+            ctx.fillStyle = '#bfdbfe';
+            ctx.fillRect(12, -12, 16, 16);
+            ctx.strokeStyle = '#3b82f6';
+            ctx.strokeRect(12, -12, 16, 16);
+            ctx.beginPath();
+            ctx.moveTo(20, -12);
+            ctx.lineTo(20, 4);
+            ctx.moveTo(12, -4);
+            ctx.lineTo(28, -4);
+            ctx.stroke();
+            
+            // Door
+            ctx.fillStyle = '#92400e';
+            ctx.fillRect(-8, 8, 16, 20);
+            ctx.strokeStyle = '#78350f';
+            ctx.strokeRect(-8, 8, 16, 20);
+            ctx.fillStyle = '#fcd34d';
+            ctx.beginPath();
+            ctx.arc(4, 18, 2, 0, Math.PI * 2);
+            ctx.fill();
+            
+            // Foundation - dark gray for visibility
+            ctx.fillStyle = '#374151';
+            ctx.fillRect(-40, 28, 80, 8);
+            ctx.restore();
+
+            ctx.strokeStyle = '#ef4444';
+            ctx.lineWidth = 2.5;
+            ctx.beginPath();
+            ctx.moveTo(width * 0.58, baseY - 48);
+            ctx.lineTo(width * 0.58 + offsetX * 0.6, baseY - 48 + offsetY * 0.85);
+            ctx.stroke();
+
+            ctx.fillStyle = '#0f172a';
+            ctx.font = 'bold 14px sans-serif';
+            ctx.fillText('Percent slope: ' + percent.toFixed(1) + '%', 22, 28);
+            ctx.font = '12px sans-serif';
+            ctx.fillStyle = '#334155';
+            ctx.fillText('Projected time to visible movement: ' + years.toFixed(0) + ' years', 22, 52);
+            ctx.fillText('Estimated foundation shift: ' + (movement * progress).toFixed(1) + ' cm', 22, 72);
+            ctx.fillText('Terrain feedback: ' + (severity > 0.65 ? 'High susceptibility' : severity > 0.3 ? 'Moderate susceptibility' : 'Low susceptibility'), 22, 92);
+
+            document.getElementById('slopeSimStatus').innerText = 'Slope grade ' + percent.toFixed(1) + '% is driving a simplified settlement model. A home on this grade may begin to show subtle displacement over roughly ' + years.toFixed(0) + ' years.';
+        }
+
+        function runSlopeSimulation() {
+            if (lastSlopeDegrees === 0 && lastSlopePercent === 0) {
+                document.getElementById('slopeSimStatus').innerText = 'No slope data available yet. Analyze a property to generate a settlement simulation.';
+                return;
+            }
+
+            var steps = 18;
+            var step = 0;
+            var interval = setInterval(function() {
+                renderSlopeSimulation(lastSlopeDegrees, lastSlopePercent, step / steps);
+                step += 1;
+                if (step > steps) {
+                    clearInterval(interval);
+                }
+            }, 100);
+        }
+
+        function renderFloodSimulation(score, zone, subtype, progress) {
+            var ctx = floodSimCtx;
+            var canvas = floodSimCanvas;
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+            var width = canvas.width;
+            var height = canvas.height;
+            var baseY = height - 42;
+            var severity = Math.min(1, Math.max(0, (score || 0) / 3));
+            // Water rises from bottom towards the house foundation
+            var maxWaterHeight = baseY - 10; // Stop at foundation level
+            var startWaterHeight = height - 20;
+            var waterHeight = startWaterHeight - (progress * (startWaterHeight - maxWaterHeight));
+            var waterLevel = 0.2 + (score / 3) * 0.6;
+
+            ctx.fillStyle = '#f7fbff';
+            ctx.fillRect(0, 0, width, height);
+
+            ctx.fillStyle = '#8fd19a';
+            ctx.fillRect(0, baseY + 2, width, height - baseY - 2);
+
+            ctx.fillStyle = '#4ea3ff';
+            ctx.fillRect(0, waterHeight, width, height - waterHeight);
+
+            ctx.fillStyle = '#ffffff';
+            ctx.globalAlpha = 0.75;
+            ctx.fillRect(0, waterHeight - 10, width, 8);
+            ctx.globalAlpha = 1;
+
+            var houseX = width * 0.63;
+            var houseY = baseY - 64;
+            
+            // House body
+            ctx.fillStyle = '#f8fafc';
+            ctx.fillRect(houseX - 38, houseY - 16, 76, 52);
+            ctx.strokeStyle = '#94a3b8';
+            ctx.lineWidth = 2;
+            ctx.strokeRect(houseX - 38, houseY - 16, 76, 52);
+            
+            // Roof
+            ctx.fillStyle = '#dc2626';
+            ctx.beginPath();
+            ctx.moveTo(houseX - 44, houseY - 16);
+            ctx.lineTo(houseX, houseY - 44);
+            ctx.lineTo(houseX + 44, houseY - 16);
+            ctx.closePath();
+            ctx.fill();
+            ctx.strokeStyle = '#991b1b';
+            ctx.lineWidth = 2;
+            ctx.stroke();
+            
+            // Chimney
+            ctx.fillStyle = '#78716c';
+            ctx.fillRect(houseX + 20, houseY - 38, 14, 22);
+            ctx.strokeStyle = '#57534e';
+            ctx.strokeRect(houseX + 20, houseY - 38, 14, 22);
+            
+            // Windows
+            ctx.fillStyle = '#bfdbfe';
+            ctx.fillRect(houseX - 30, houseY - 8, 18, 18);
+            ctx.strokeStyle = '#3b82f6';
+            ctx.lineWidth = 2;
+            ctx.strokeRect(houseX - 30, houseY - 8, 18, 18);
+            ctx.beginPath();
+            ctx.moveTo(houseX - 21, houseY - 8);
+            ctx.lineTo(houseX - 21, houseY + 10);
+            ctx.moveTo(houseX - 30, houseY + 1);
+            ctx.lineTo(houseX - 12, houseY + 1);
+            ctx.stroke();
+            
+            ctx.fillStyle = '#bfdbfe';
+            ctx.fillRect(houseX + 12, houseY - 8, 18, 18);
+            ctx.strokeStyle = '#3b82f6';
+            ctx.strokeRect(houseX + 12, houseY - 8, 18, 18);
+            ctx.beginPath();
+            ctx.moveTo(houseX + 21, houseY - 8);
+            ctx.lineTo(houseX + 21, houseY + 10);
+            ctx.moveTo(houseX + 12, houseY + 1);
+            ctx.lineTo(houseX + 30, houseY + 1);
+            ctx.stroke();
+            
+            // Door
+            ctx.fillStyle = '#92400e';
+            ctx.fillRect(houseX - 8, houseY + 12, 16, 24);
+            ctx.strokeStyle = '#78350f';
+            ctx.strokeRect(houseX - 8, houseY + 12, 16, 24);
+            ctx.fillStyle = '#fcd34d';
+            ctx.beginPath();
+            ctx.arc(houseX + 4, houseY + 24, 2, 0, Math.PI * 2);
+            ctx.fill();
+            
+            // Foundation - dark gray for visibility
+            ctx.fillStyle = '#374151';
+            ctx.fillRect(houseX - 42, houseY + 36, 84, 10);
+
+            ctx.fillStyle = '#0f172a';
+            ctx.font = 'bold 14px sans-serif';
+            ctx.fillText('Flood zone: ' + zone, 22, 28);
+            ctx.font = '12px sans-serif';
+            ctx.fillStyle = '#334155';
+            ctx.fillText('Waterline rise estimate: ' + (Math.round((waterLevel + progress * 0.08) * 100)) + '%', 22, 52);
+            ctx.fillText('Subtype: ' + (subtype || 'Surface water influence'), 22, 72);
+            ctx.fillText('Time to meaningful inundation: ' + (4 + severity * 10).toFixed(0) + ' hours', 22, 92);
+
+            document.getElementById('floodSimStatus').innerText = 'The local flood signal suggests ' + zone + '. With a waterline rise of roughly ' + (Math.round((waterLevel + progress * 0.08) * 100)) + '%, the property could start showing water intrusion within ' + (4 + severity * 10).toFixed(0) + ' hours.';
+        }
+
+        function runFloodSimulation() {
+            var steps = 16;
+            var step = 0;
+            var interval = setInterval(function() {
+                renderFloodSimulation(lastFloodScore, lastFloodZone, lastFloodSubtype, step / steps);
+                step += 1;
+                if (step > steps) {
+                    clearInterval(interval);
+                }
+            }, 110);
+        }
+
+        document.getElementById('btnRunSlopeSim').addEventListener('click', runSlopeSimulation);
+        document.getElementById('btnRunFloodSim').addEventListener('click', runFloodSimulation);
+
+        renderSlopeSimulation(0, 0, 0);
+        renderFloodSimulation(0, 'N/A', '', 0);
+
+        // ============ SETTINGS PANEL ============
+        var settingsTriggerBtn = document.getElementById('settingsTriggerBtn');
+        var settingsOverlay = document.getElementById('settingsOverlay');
+        var settingsCloseBtn = document.getElementById('settingsCloseBtn');
+
+        function openSettingsPanel() {
+            settingsOverlay.classList.add('open');
+            settingsTriggerBtn.classList.add('is-active');
+        }
+        function closeSettingsPanel() {
+            settingsOverlay.classList.remove('open');
+            settingsTriggerBtn.classList.remove('is-active');
+        }
+
+        settingsTriggerBtn.addEventListener('click', function(e) {
+            e.stopPropagation();
+            openSettingsPanel();
+        });
+        settingsCloseBtn.addEventListener('click', closeSettingsPanel);
+        settingsOverlay.addEventListener('click', function(e) {
+            if (e.target === settingsOverlay) closeSettingsPanel();
+        });
+
+        // ============ FINANCIAL PANEL ============
+        var financialAssistantBtn = document.getElementById('financialAssistantBtn');
+        var financialOverlay = document.getElementById('financialOverlay');
+        var financialCloseBtn = document.getElementById('financialCloseBtn');
+
+        function openFinancialPanel() {
+            financialOverlay.classList.add('open');
+            financialAssistantBtn.classList.add('is-active');
+        }
+        function closeFinancialPanel() {
+            financialOverlay.classList.remove('open');
+            financialAssistantBtn.classList.remove('is-active');
+        }
+
+        financialAssistantBtn.addEventListener('click', function(e) {
+            e.stopPropagation();
+            openFinancialPanel();
+        });
+        financialCloseBtn.addEventListener('click', closeFinancialPanel);
+        financialOverlay.addEventListener('click', function(e) {
+            if (e.target === financialOverlay) closeFinancialPanel();
+        });
+
+        // Generate mock financial data when property is analyzed
+        function generateFinancialData(lat, lng) {
+            // Generate realistic mock data based on location
+            var baseValue = 250000 + Math.random() * 500000;
+            var pricePerSqFt = 150 + Math.random() * 350;
+            var incomeLevel = 45000 + Math.random() * 80000;
+            var employmentRate = 85 + Math.random() * 12;
+            var businessGrowth = 2 + Math.random() * 6;
+            var rentalYield = 3 + Math.random() * 5;
+            var appreciationRate = 1 + Math.random() * 8;
+            var riskScore = 1 + Math.random() * 4;
+
+            // Update UI
+            document.getElementById('finMedianValue').textContent = '$' + Math.round(baseValue).toLocaleString();
+            document.getElementById('finPricePerSqFt').textContent = '$' + Math.round(pricePerSqFt);
+            document.getElementById('finIncomeLevel').textContent = '$' + Math.round(incomeLevel).toLocaleString();
+            document.getElementById('finEmployment').textContent = employmentRate.toFixed(1) + '%';
+            document.getElementById('finBusinessGrowth').textContent = businessGrowth.toFixed(1) + '%';
+            document.getElementById('finRentalYield').textContent = rentalYield.toFixed(1) + '%';
+            document.getElementById('finAppreciation').textContent = appreciationRate.toFixed(1) + '%';
+            document.getElementById('finRiskScore').textContent = riskScore.toFixed(1) + '/5';
+
+            // Trends
+            var medianTrend = (Math.random() - 0.4) * 10;
+            document.getElementById('finMedianTrend').textContent = (medianTrend >= 0 ? '+' : '') + medianTrend.toFixed(1) + '%';
+            document.getElementById('finMedianTrend').className = 'financial-metric-trend ' + (medianTrend >= 0 ? 'trend-up' : 'trend-down');
+
+            var priceTrend = (Math.random() - 0.4) * 8;
+            document.getElementById('finPriceTrend').textContent = (priceTrend >= 0 ? '+' : '') + priceTrend.toFixed(1) + '%';
+            document.getElementById('finPriceTrend').className = 'financial-metric-trend ' + (priceTrend >= 0 ? 'trend-up' : 'trend-down');
+
+            var marketTrendText = Math.random() > 0.5 ? 'Bullish' : 'Bearish';
+            document.getElementById('finMarketTrend').textContent = marketTrendText;
+
+            var employmentTrend = (Math.random() - 0.3) * 3;
+            document.getElementById('finEmploymentTrend').textContent = (employmentTrend >= 0 ? '+' : '') + employmentTrend.toFixed(1) + '%';
+            document.getElementById('finEmploymentTrend').className = 'financial-metric-trend ' + (employmentTrend >= 0 ? 'trend-up' : 'trend-down');
+
+            var businessTrend = (Math.random() - 0.3) * 2;
+            document.getElementById('finBusinessTrend').textContent = (businessTrend >= 0 ? '+' : '') + businessTrend.toFixed(1) + '%';
+            document.getElementById('finBusinessTrend').className = 'financial-metric-trend ' + (businessTrend >= 0 ? 'trend-up' : 'trend-down');
+
+            var appreciationTrend = (Math.random() - 0.4) * 4;
+            document.getElementById('finAppreciationTrend').textContent = (appreciationTrend >= 0 ? '+' : '') + appreciationTrend.toFixed(1) + '%';
+            document.getElementById('finAppreciationTrend').className = 'financial-metric-trend ' + (appreciationTrend >= 0 ? 'trend-up' : 'trend-down');
+
+            // AI Financial Assessment
+            var assessment = 'Based on the analyzed location at ' + lat.toFixed(4) + ', ' + lng.toFixed(4) + ':\n\n';
+            assessment += '• Property Market: The area shows ' + (marketTrendText === 'Bullish' ? 'strong' : 'moderate') + ' market conditions with median values around $' + Math.round(baseValue).toLocaleString() + '.\n';
+            assessment += '• Economic Health: Employment rate of ' + employmentRate.toFixed(1) + '% indicates a ' + (employmentRate > 92 ? 'robust' : employmentRate > 88 ? 'stable' : 'developing') + ' local economy.\n';
+            assessment += '• Investment Potential: Rental yield of ' + rentalYield.toFixed(1) + '% combined with ' + appreciationRate.toFixed(1) + '% appreciation suggests ' + (rentalYield > 5 && appreciationRate > 4 ? 'excellent' : rentalYield > 4 || appreciationRate > 3 ? 'good' : 'moderate') + ' investment prospects.\n';
+            assessment += '• Risk Profile: Overall risk score of ' + riskScore.toFixed(1) + '/5 indicates ' + (riskScore < 2.5 ? 'low' : riskScore < 3.5 ? 'moderate' : 'elevated') + ' investment risk.\n\n';
+            assessment += 'Recommendation: ' + (riskScore < 2.5 && appreciationRate > 3 ? 'Strong buy candidate with favorable risk-reward profile.' : riskScore < 3.5 ? 'Consider with due diligence on local market conditions.' : 'Proceed with caution; higher risk area requiring thorough analysis.');
+
+            document.getElementById('financialAIBox').textContent = assessment;
+
+            // Enable button
+            financialAssistantBtn.disabled = false;
+        }
+
+        // --- Theme selector ---
+        var themeSwatchRow = document.getElementById('themeSwatchRow');
+        themeSwatchRow.querySelectorAll('.theme-swatch-btn').forEach(function(btn) {
+            btn.addEventListener('click', function() {
+                var theme = btn.getAttribute('data-theme');
+                document.documentElement.setAttribute('data-theme', theme);
+                themeSwatchRow.querySelectorAll('.theme-swatch-btn').forEach(function(b) { b.classList.remove('is-selected'); });
+                btn.classList.add('is-selected');
+            });
+        });
+
+        // --- Profile picture color selector ---
+        var avatarSwatchRow = document.getElementById('avatarSwatchRow');
+        var headerAvatar = document.getElementById('headerAvatar');
+        avatarSwatchRow.querySelectorAll('.avatar-swatch-btn').forEach(function(btn) {
+            btn.addEventListener('click', function() {
+                var a = btn.getAttribute('data-a');
+                var b = btn.getAttribute('data-b');
+                document.documentElement.style.setProperty('--avatar-a', a);
+                document.documentElement.style.setProperty('--avatar-b', b);
+                avatarSwatchRow.querySelectorAll('.avatar-swatch-btn').forEach(function(x) { x.classList.remove('is-selected'); });
+                btn.classList.add('is-selected');
+            });
+        });
+
+        // --- Basemap style (surprise addition #1) ---
+        var basemapControl = document.getElementById('basemapControl');
+        basemapControl.querySelectorAll('.segmented-option').forEach(function(opt) {
+            opt.addEventListener('click', function() {
+                basemapControl.querySelectorAll('.segmented-option').forEach(function(o) { o.classList.remove('is-selected'); });
+                opt.classList.add('is-selected');
+                setBasemapStyle(opt.getAttribute('data-basemap'));
+            });
+        });
+
+        // --- Reduce Motion accessibility toggle (surprise addition #2) ---
+        var reduceMotionToggle = document.getElementById('reduceMotionToggle');
+        reduceMotionToggle.addEventListener('click', function() {
+            var isOn = reduceMotionToggle.classList.toggle('is-on');
+            document.body.classList.toggle('reduce-motion', isOn);
+        });
+
+        // --- Units toggle (Slope Gradient degrees vs percent) ---
+        var unitsControl = document.getElementById('unitsControl');
+        unitsControl.querySelectorAll('.segmented-option').forEach(function(opt) {
+            opt.addEventListener('click', function() {
+                unitsControl.querySelectorAll('.segmented-option').forEach(function(o) { o.classList.remove('is-selected'); });
+                opt.classList.add('is-selected');
+                currentUnits = opt.getAttribute('data-units');
+                renderSlopeDisplay();
+            });
         });
     </script>
 </body>
