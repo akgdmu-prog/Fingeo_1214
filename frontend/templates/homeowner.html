@@ -308,16 +308,15 @@
             opacity: 1;
         }
 
-        /* ============ FINANCIAL PANEL: overlay + glassmorphic/neomorphic pop-up ============ */
+        /* ============ FINANCIAL PANEL: neomorphic finance + insurance hub ============ */
         .financial-overlay {
             position: fixed;
             inset: 0;
-            background: rgba(30, 41, 59, 0.28);
-            backdrop-filter: blur(3px);
+            background: rgba(30, 41, 59, 0.32);
             display: flex;
             align-items: flex-start;
             justify-content: center;
-            padding-top: 100px;
+            padding-top: 72px;
             z-index: 1000;
             opacity: 0;
             pointer-events: none;
@@ -330,21 +329,15 @@
         }
 
         .financial-panel {
-            width: 380px;
-            max-width: 90vw;
-            max-height: 78vh;
+            width: 520px;
+            max-width: 94vw;
+            max-height: 82vh;
             overflow-y: auto;
-            border-radius: 26px;
-            padding: 22px 22px 26px 22px;
-            background: rgba(255, 255, 255, 0.28);
-            -webkit-backdrop-filter: blur(22px) saturate(180%);
-            backdrop-filter: blur(22px) saturate(180%);
-            border: 1px solid rgba(255, 255, 255, 0.55);
-            box-shadow:
-                10px 10px 26px rgba(120, 138, 165, 0.35),
-                -8px -8px 20px rgba(255, 255, 255, 0.55),
-                inset 1px 1px 1px rgba(255, 255, 255, 0.4);
-            transform: scale(0.85) translateY(-14px);
+            border-radius: 28px;
+            padding: 22px 22px 24px;
+            background: var(--bg);
+            box-shadow: 10px 10px 24px var(--shadow-d2), -10px -10px 24px var(--shadow-l);
+            transform: scale(0.88) translateY(-16px);
             opacity: 0;
             transition: transform 0.32s cubic-bezier(0.34, 1.56, 0.64, 1), opacity 0.25s ease;
         }
@@ -358,31 +351,224 @@
             display: flex;
             align-items: center;
             justify-content: space-between;
-            margin-bottom: 18px;
+            margin-bottom: 14px;
+        }
+
+        .fin-brand-row {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .fin-brand-icon {
+            width: 32px;
+            height: 32px;
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: var(--bg);
+            box-shadow: 3px 3px 7px var(--shadow-d), -3px -3px 7px var(--shadow-l);
+            font-size: 16px;
         }
 
         .financial-panel-title {
-            font-size: 14px;
+            font-size: 13px;
             font-weight: 800;
             color: var(--text-heading);
             text-transform: uppercase;
-            letter-spacing: 0.6px;
+            letter-spacing: 0.5px;
+            line-height: 1.2;
+        }
+
+        .fin-location-sub {
+            font-size: 10px;
+            font-weight: 600;
+            color: var(--text-muted);
+            margin-top: 2px;
+            text-transform: none;
+            letter-spacing: 0;
         }
 
         .financial-close-btn {
-            width: 26px;
-            height: 26px;
+            width: 28px;
+            height: 28px;
             border-radius: 50%;
             display: flex;
             align-items: center;
             justify-content: center;
-            background: rgba(255, 255, 255, 0.4);
-            box-shadow: 2px 2px 5px rgba(120, 138, 165, 0.3), -2px -2px 5px rgba(255, 255, 255, 0.6);
+            background: var(--bg);
+            box-shadow: 2px 2px 5px var(--shadow-d), -2px -2px 5px var(--shadow-l);
             color: var(--text-muted);
             cursor: pointer;
             font-size: 13px;
             font-weight: 700;
             border: none;
+        }
+
+        .fin-nav-tabs {
+            display: flex;
+            gap: 6px;
+            margin-bottom: 14px;
+        }
+
+        .fin-tab {
+            flex: 1;
+            text-align: center;
+            font-size: 9px;
+            font-weight: 800;
+            letter-spacing: 0.6px;
+            text-transform: uppercase;
+            color: var(--text-muted);
+            padding: 8px 4px;
+            border-radius: 10px;
+            background: var(--bg);
+            box-shadow: inset 1px 1px 3px var(--shadow-d);
+        }
+
+        .fin-tab.active {
+            color: var(--accent-deep);
+            background: var(--bg);
+            box-shadow: 3px 3px 8px var(--shadow-d), -2px -2px 6px var(--shadow-l);
+        }
+
+        .fin-metrics-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 10px;
+            margin-bottom: 12px;
+        }
+
+        .fin-metric-card {
+            padding: 14px 14px 12px;
+            border-radius: 16px;
+            background: var(--bg);
+            box-shadow: inset 2px 2px 5px var(--shadow-d), inset -2px -2px 5px var(--shadow-l);
+        }
+
+        .fin-metric-card-label {
+            font-size: 9px;
+            font-weight: 800;
+            color: var(--text-muted);
+            text-transform: uppercase;
+            letter-spacing: 0.55px;
+            margin-bottom: 6px;
+        }
+
+        .fin-metric-card-value {
+            font-size: 17px;
+            font-weight: 800;
+            color: var(--text-heading);
+            letter-spacing: -0.3px;
+        }
+
+        .fin-metric-card-value.accent-teal { color: #0d9488; }
+        .fin-metric-card-value.accent-orange { color: #ea580c; }
+
+        .fin-insurance-row {
+            display: grid;
+            grid-template-columns: 1.1fr 0.9fr 0.9fr;
+            gap: 10px;
+            margin-bottom: 12px;
+        }
+
+        .fin-ins-card {
+            padding: 12px;
+            border-radius: 16px;
+            background: var(--bg);
+            box-shadow: inset 2px 2px 5px var(--shadow-d), inset -2px -2px 5px var(--shadow-l);
+            min-height: 108px;
+        }
+
+        .fin-ins-card-title {
+            font-size: 9px;
+            font-weight: 800;
+            color: var(--text-muted);
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            margin-bottom: 8px;
+        }
+
+        .fin-premium-value {
+            font-size: 20px;
+            font-weight: 800;
+            color: #0d9488;
+            line-height: 1.1;
+        }
+
+        .fin-premium-sub {
+            font-size: 10px;
+            color: var(--text-muted);
+            margin-top: 6px;
+            line-height: 1.35;
+        }
+
+        .fin-gauge-wrap {
+            position: relative;
+            width: 100%;
+            height: 64px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .fin-gauge-value {
+            position: absolute;
+            font-size: 18px;
+            font-weight: 800;
+            color: var(--text-heading);
+            bottom: 2px;
+        }
+
+        .fin-donut-legend {
+            display: flex;
+            flex-direction: column;
+            gap: 4px;
+            margin-top: 4px;
+        }
+
+        .fin-legend-item {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            font-size: 9px;
+            font-weight: 700;
+            color: var(--text-slate);
+        }
+
+        .fin-legend-dot {
+            width: 8px;
+            height: 8px;
+            border-radius: 2px;
+            flex-shrink: 0;
+        }
+
+        .fin-outlook-card {
+            padding: 14px 16px;
+            border-radius: 16px;
+            background: var(--bg);
+            box-shadow: inset 2px 2px 5px var(--shadow-d), inset -2px -2px 5px var(--shadow-l);
+            margin-bottom: 10px;
+        }
+
+        .fin-outlook-headline {
+            font-size: 14px;
+            font-weight: 800;
+            color: var(--text-heading);
+            margin-bottom: 8px;
+        }
+
+        .fin-outlook-body {
+            font-size: 11.5px;
+            line-height: 1.55;
+            color: var(--text-slate);
+        }
+
+        .fin-source-footer {
+            font-size: 9px;
+            color: var(--text-muted);
+            line-height: 1.5;
+            margin-top: 8px;
         }
 
         .financial-section {
@@ -404,8 +590,8 @@
             align-items: center;
             padding: 12px 14px;
             border-radius: 14px;
-            background: rgba(255, 255, 255, 0.32);
-            box-shadow: inset 1px 1px 3px rgba(120, 138, 165, 0.25), inset -1px -1px 3px rgba(255, 255, 255, 0.5);
+            background: var(--bg);
+            box-shadow: inset 1px 1px 3px var(--shadow-d), inset -1px -1px 3px var(--shadow-l);
             margin-bottom: 8px;
         }
 
@@ -427,13 +613,8 @@
             margin-left: 6px;
         }
 
-        .trend-up {
-            color: #10b981;
-        }
-
-        .trend-down {
-            color: #ef4444;
-        }
+        .trend-up { color: #10b981; }
+        .trend-down { color: #ef4444; }
 
         .financial-assistant-btn {
             width: 100%;
@@ -442,10 +623,10 @@
             border: none;
             border-radius: 14px;
             font-weight: 800;
-            font-size: 13px;
+            font-size: 12px;
             color: var(--text-heading);
             text-transform: uppercase;
-            letter-spacing: 0.6px;
+            letter-spacing: 0.5px;
             cursor: pointer;
             box-shadow: 4px 4px 10px var(--shadow-d), -4px -4px 10px var(--shadow-l);
             transition: all 0.2s ease;
@@ -470,6 +651,11 @@
             opacity: 0.5;
             cursor: not-allowed;
             transform: none;
+        }
+
+        .financial-assistant-btn.is-active {
+            box-shadow: inset 3px 3px 7px var(--shadow-d), inset -3px -3px 7px var(--shadow-l);
+            color: var(--accent-deep);
         }
 
         .settings-panel-header {
@@ -1346,8 +1532,9 @@
             min-height: 280px;
             border-radius: 18px;
             overflow: hidden;
-            background: linear-gradient(180deg, #e8f5ff 0%, #f7fbff 100%);
-            box-shadow: inset 4px 4px 8px var(--shadow-d), inset -4px -4px 8px var(--shadow-l);
+            background: linear-gradient(165deg, #1a1228 0%, #2d1f3d 45%, #1e1529 100%);
+            box-shadow: inset 5px 5px 12px rgba(0,0,0,0.45), inset -3px -3px 10px rgba(255,255,255,0.04), 4px 4px 14px var(--shadow-d);
+            border: 1px solid rgba(255,255,255,0.06);
         }
 
         .slope-sim-stage canvas,
@@ -1456,79 +1643,93 @@
     <div class="financial-overlay" id="financialOverlay">
         <div class="financial-panel" id="financialPanel">
             <div class="financial-panel-header">
-                <div class="financial-panel-title">Area Financial Insights</div>
+                <div class="fin-brand-row">
+                    <div class="fin-brand-icon">🏠</div>
+                    <div>
+                        <div class="financial-panel-title">Property Finance Predictor</div>
+                        <div class="fin-location-sub" id="finLocationLabel">Analyze a property to load location data</div>
+                    </div>
+                </div>
                 <button type="button" class="financial-close-btn" id="financialCloseBtn">✕</button>
             </div>
 
-            <div class="financial-section">
-                <div class="financial-section-label">Property Market</div>
-                <div class="financial-metric-row">
-                    <div class="financial-metric-label">Median Home Value</div>
-                    <div>
-                        <span class="financial-metric-value" id="finMedianValue">--</span>
-                        <span class="financial-metric-trend trend-up" id="finMedianTrend"></span>
+            <div class="fin-nav-tabs">
+                <span class="fin-tab active">Appreciation</span>
+                <span class="fin-tab">Rental</span>
+                <span class="fin-tab">Insurance</span>
+            </div>
+
+            <div class="fin-metrics-grid">
+                <div class="fin-metric-card">
+                    <div class="fin-metric-card-label">Estimated Value</div>
+                    <div class="fin-metric-card-value" id="finMedianValue">--</div>
+                </div>
+                <div class="fin-metric-card">
+                    <div class="fin-metric-card-label">5-Year Projected Value</div>
+                    <div class="fin-metric-card-value accent-teal" id="finProjected5yr">--</div>
+                </div>
+                <div class="fin-metric-card">
+                    <div class="fin-metric-card-label">Appreciation Rate</div>
+                    <div class="fin-metric-card-value" id="finAppreciation">--</div>
+                </div>
+                <div class="fin-metric-card">
+                    <div class="fin-metric-card-label">Est. Monthly Rent</div>
+                    <div class="fin-metric-card-value accent-orange" id="finMonthlyRent">--</div>
+                </div>
+            </div>
+
+            <div class="fin-insurance-row">
+                <div class="fin-ins-card">
+                    <div class="fin-ins-card-title">Annual Underwriting Target</div>
+                    <div class="fin-premium-value" id="finAnnualPremium">--</div>
+                    <div class="fin-premium-sub" id="finPremiumSub">Hazard-adjusted premium from live risk signals</div>
+                </div>
+                <div class="fin-ins-card">
+                    <div class="fin-ins-card-title">Estimated Max Loss</div>
+                    <div class="fin-gauge-wrap">
+                        <canvas id="finEmlGauge" width="120" height="70"></canvas>
+                        <div class="fin-gauge-value" id="finEmlValue">--</div>
                     </div>
                 </div>
-                <div class="financial-metric-row">
-                    <div class="financial-metric-label">Price per Sq Ft</div>
-                    <div>
-                        <span class="financial-metric-value" id="finPricePerSqFt">--</span>
-                        <span class="financial-metric-trend" id="finPriceTrend"></span>
-                    </div>
-                </div>
-                <div class="financial-metric-row">
-                    <div class="financial-metric-label">Market Trend</div>
-                    <div>
-                        <span class="financial-metric-value" id="finMarketTrend">--</span>
+                <div class="fin-ins-card">
+                    <div class="fin-ins-card-title">Risk Pool Allocation</div>
+                    <canvas id="finRiskDonut" width="90" height="90" style="display:block;margin:0 auto;"></canvas>
+                    <div class="fin-donut-legend">
+                        <div class="fin-legend-item"><span class="fin-legend-dot" style="background:#14b8a6;"></span><span id="finPoolFlood">Flood --</span></div>
+                        <div class="fin-legend-item"><span class="fin-legend-dot" style="background:#f97316;"></span><span id="finPoolWildfire">Wildfire --</span></div>
+                        <div class="fin-legend-item"><span class="fin-legend-dot" style="background:#ef4444;"></span><span id="finPoolWind">Wind --</span></div>
                     </div>
                 </div>
             </div>
 
-            <div class="financial-section">
-                <div class="financial-section-label">Economic Indicators</div>
+            <div class="fin-outlook-card">
+                <div class="fin-metric-card-label">Rental &amp; Market Outlook</div>
+                <div class="fin-outlook-headline" id="finOutlookHeadline">Awaiting analysis</div>
+                <div class="fin-outlook-body" id="financialAIBox">Analyze a property to receive location-grounded financial and insurance insights.</div>
+                <div class="fin-source-footer" id="finSourceFooter"></div>
+            </div>
+
+            <div class="financial-section" style="margin-bottom: 0;">
+                <div class="financial-section-label">Area Economics</div>
+                <div class="financial-metric-row">
+                    <div class="financial-metric-label">Price per Sq Ft</div>
+                    <div><span class="financial-metric-value" id="finPricePerSqFt">--</span><span class="financial-metric-trend" id="finPriceTrend"></span></div>
+                </div>
+                <div class="financial-metric-row">
+                    <div class="financial-metric-label">Rental Yield</div>
+                    <div class="financial-metric-value" id="finRentalYield">--</div>
+                </div>
                 <div class="financial-metric-row">
                     <div class="financial-metric-label">Area Income Level</div>
                     <div class="financial-metric-value" id="finIncomeLevel">--</div>
                 </div>
                 <div class="financial-metric-row">
                     <div class="financial-metric-label">Employment Rate</div>
-                    <div>
-                        <span class="financial-metric-value" id="finEmployment">--</span>
-                        <span class="financial-metric-trend" id="finEmploymentTrend"></span>
-                    </div>
+                    <div><span class="financial-metric-value" id="finEmployment">--</span><span class="financial-metric-trend" id="finEmploymentTrend"></span></div>
                 </div>
                 <div class="financial-metric-row">
-                    <div class="financial-metric-label">Business Growth</div>
-                    <div>
-                        <span class="financial-metric-value" id="finBusinessGrowth">--</span>
-                        <span class="financial-metric-trend" id="finBusinessTrend"></span>
-                    </div>
-                </div>
-            </div>
-
-            <div class="financial-section">
-                <div class="financial-section-label">Investment Outlook</div>
-                <div class="financial-metric-row">
-                    <div class="financial-metric-label">Rental Yield</div>
-                    <div class="financial-metric-value" id="finRentalYield">--</div>
-                </div>
-                <div class="financial-metric-row">
-                    <div class="financial-metric-label">Appreciation Rate</div>
-                    <div>
-                        <span class="financial-metric-value" id="finAppreciation">--</span>
-                        <span class="financial-metric-trend" id="finAppreciationTrend"></span>
-                    </div>
-                </div>
-                <div class="financial-metric-row">
-                    <div class="financial-metric-label">Risk Score</div>
+                    <div class="financial-metric-label">Investment Risk</div>
                     <div class="financial-metric-value" id="finRiskScore">--</div>
-                </div>
-            </div>
-
-            <div class="financial-section" style="margin-bottom: 4px;">
-                <div class="financial-section-label">AI Financial Assessment</div>
-                <div class="terrace-outer-layer" style="margin-top: 10px;">
-                    <div id="financialAIBox" class="terrace-inner-textbox" style="min-height: 120px;">Analyze a property to receive AI-powered financial insights about the area.</div>
                 </div>
             </div>
         </div>
@@ -1742,10 +1943,10 @@
             
             <button id="financialAssistantBtn" class="financial-assistant-btn" disabled>
                 <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                    <line x1="12" y1="1" x2="12" y2="23"></line>
-                    <path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"></path>
+                    <path d="M3 3v18h18"></path>
+                    <path d="M7 16l4-8 4 5 4-9"></path>
                 </svg>
-                AI Risk Assistant
+                Finance &amp; Insurance Intel
             </button>
         </div>
 
@@ -1824,6 +2025,13 @@
         var lastFloodScore = 0;
         var lastFloodZone = 'N/A';
         var lastFloodSubtype = '';
+        var lastAnalysisPayload = null;
+        var simFuelLoad = [];
+        var simIntensity = [];
+        var simBurnAge = [];
+        var fireParticles = [];
+        var simAnimFrame = null;
+        var currentNriFactor = 0.3;
         
         var geoLimits = { minX: 0, maxX: 0, minY: 0, maxY: 0 };
 
@@ -1953,8 +2161,10 @@
         }
 
         function updateSimulationMapLayers(lat, lng, vegIndexValue) {
-            currentVegDensity = Math.min(Math.max(parseFloat(vegIndexValue) || 0.3, 0.05), 0.95);
-            fuelBurnProbability = 0.22 + (currentVegDensity * 0.38);
+            currentNriFactor = Math.min(Math.max(parseFloat(vegIndexValue) || 0.3, 0.05), 0.95);
+            currentVegDensity = currentNriFactor;
+            // Rothermel-inspired fuel probability: higher NDVI = denser fuel bed + faster spread
+            fuelBurnProbability = 0.12 + (currentNriFactor * 0.55);
 
             var latOffset = 2.5 * (1 / 69.0);
             var lngOffset = 2.5 * (1 / (69.0 * Math.cos(lat * Math.PI / 180)));
@@ -1990,11 +2200,13 @@
         }
 
         function initializeSimulationGrid() {
-            if (simInterval) { clearInterval(simInterval); }
+            if (simInterval) { clearInterval(simInterval); simInterval = null; }
+            if (simAnimFrame) { cancelAnimationFrame(simAnimFrame); simAnimFrame = null; }
+            fireParticles = [];
             selectedIgnitionCell = null;
             totalTreesBurned = 0;
             simulationStartTime = null;
-            document.getElementById('simStatus').innerText = `Click inside the 5x5 mile grid mask box to choose a start spark ignition point.`;
+            document.getElementById('simStatus').innerText = 'Click inside the 5×5 mile grid to place an ignition point. Fuel load driven by NDVI ' + currentNriFactor.toFixed(3) + '.';
             document.getElementById('fireStats').innerText = 'Ignition: Not started';
 
             canvas.width = canvas.offsetWidth;
@@ -2004,21 +2216,54 @@
             var cellH = canvas.height / simGridSize;
 
             simGrid = [];
+            simFuelLoad = [];
+            simIntensity = [];
+            simBurnAge = [];
             for (var x = 0; x < simGridSize; x++) {
                 simGrid[x] = [];
+                simFuelLoad[x] = [];
+                simIntensity[x] = [];
+                simBurnAge[x] = [];
                 for (var y = 0; y < simGridSize; y++) {
                     var cellPixelX = x * cellW + cellW / 2;
                     var cellPixelY = y * cellH + cellH / 2;
+                    var inBounds = cellPixelX >= geoLimits.minX && cellPixelX <= geoLimits.maxX &&
+                        cellPixelY >= geoLimits.minY && cellPixelY <= geoLimits.maxY;
 
-                    if (cellPixelX >= geoLimits.minX && cellPixelX <= geoLimits.maxX &&
-                        cellPixelY >= geoLimits.minY && cellPixelY <= geoLimits.maxY) {
-                        simGrid[x][y] = (Math.random() < currentVegDensity) ? 1 : 0;
+                    if (inBounds) {
+                        var nx = x / simGridSize, ny = y / simGridSize;
+                        var cluster = Math.sin(nx * 11 + ny * 7) * 0.22 + Math.sin(nx * 17 - ny * 9) * 0.14;
+                        var fuel = Math.min(1, Math.max(0, currentNriFactor + cluster + (Math.random() - 0.5) * 0.12));
+                        if (fuel > 0.22) {
+                            simGrid[x][y] = 1;
+                            simFuelLoad[x][y] = fuel;
+                        } else {
+                            simGrid[x][y] = 0;
+                            simFuelLoad[x][y] = 0;
+                        }
                     } else {
-                        simGrid[x][y] = 0; 
+                        simGrid[x][y] = 0;
+                        simFuelLoad[x][y] = 0;
                     }
+                    simIntensity[x][y] = 0;
+                    simBurnAge[x][y] = 0;
                 }
             }
             drawSimulationGrid();
+        }
+
+        function spawnFireParticles(cx, cy, count, intensity) {
+            for (var i = 0; i < count; i++) {
+                fireParticles.push({
+                    x: cx + (Math.random() - 0.5) * 8,
+                    y: cy + (Math.random() - 0.5) * 8,
+                    vx: (Math.random() - 0.5) * 2.2,
+                    vy: -1.2 - Math.random() * 2.5 * intensity,
+                    life: 0.6 + Math.random() * 0.5,
+                    age: 0,
+                    size: 1.5 + Math.random() * 2.5 * intensity
+                });
+            }
         }
 
         function drawSimulationGrid() {
@@ -2032,43 +2277,75 @@
                     var posY = Math.floor(y * cellH);
                     var exactW = Math.floor((x + 1) * cellW) - posX;
                     var exactH = Math.floor((y + 1) * cellH) - posY;
-
                     var centerX = posX + exactW / 2;
                     var centerY = posY + exactH / 2;
+                    var state = simGrid[x][y];
+                    var fuel = simFuelLoad[x][y] || 0;
+                    var intensity = simIntensity[x][y] || 0;
 
-                    if (simGrid[x][y] === 1) {
-                        var radius = Math.min(exactW, exactH) * 0.44;
+                    if (state === 1) {
+                        var g = 80 + fuel * 100;
+                        var r = 20 + fuel * 40;
                         ctx.beginPath();
-                        ctx.arc(centerX, centerY, radius, 0, 2 * Math.PI);
-                        ctx.fillStyle = "rgba(16, 185, 129, 0.85)"; 
+                        ctx.arc(centerX, centerY, Math.min(exactW, exactH) * (0.38 + fuel * 0.12), 0, 2 * Math.PI);
+                        var grad = ctx.createRadialGradient(centerX, centerY, 0, centerX, centerY, Math.min(exactW, exactH) * 0.5);
+                        grad.addColorStop(0, 'rgba(' + r + ',' + g + ',45,0.95)');
+                        grad.addColorStop(1, 'rgba(15,60,25,0.75)');
+                        ctx.fillStyle = grad;
                         ctx.fill();
-                    } else if (simGrid[x][y] === 2) {
-                        var radius = Math.min(exactW, exactH) * 0.52;
+                    } else if (state === 2) {
+                        var radius = Math.min(exactW, exactH) * (0.48 + intensity * 0.08);
+                        var fireGrad = ctx.createRadialGradient(centerX, centerY - radius * 0.2, 0, centerX, centerY, radius);
+                        fireGrad.addColorStop(0, 'rgba(255,240,120,0.98)');
+                        fireGrad.addColorStop(0.35, 'rgba(255,120,30,0.95)');
+                        fireGrad.addColorStop(0.7, 'rgba(220,40,20,0.9)');
+                        fireGrad.addColorStop(1, 'rgba(80,10,5,0.6)');
                         ctx.beginPath();
                         ctx.arc(centerX, centerY, radius, 0, 2 * Math.PI);
-                        ctx.fillStyle = "rgba(239, 68, 68, 0.95)"; 
+                        ctx.fillStyle = fireGrad;
                         ctx.fill();
-                    } else if (simGrid[x][y] === 3) {
-                        var radius = Math.min(exactW, exactH) * 0.3;
+                        ctx.shadowColor = 'rgba(255,100,0,0.8)';
+                        ctx.shadowBlur = 12 * intensity;
                         ctx.beginPath();
-                        ctx.arc(centerX, centerY, radius, 0, 2 * Math.PI);
-                        ctx.fillStyle = "rgba(71, 85, 105, 0.7)"; 
+                        ctx.arc(centerX, centerY, radius * 0.55, 0, 2 * Math.PI);
+                        ctx.fillStyle = 'rgba(255,220,80,0.85)';
+                        ctx.fill();
+                        ctx.shadowBlur = 0;
+                    } else if (state === 3) {
+                        ctx.beginPath();
+                        ctx.arc(centerX, centerY, Math.min(exactW, exactH) * 0.36, 0, 2 * Math.PI);
+                        ctx.fillStyle = 'rgba(45,35,30,0.85)';
+                        ctx.fill();
+                        ctx.beginPath();
+                        ctx.arc(centerX, centerY, Math.min(exactW, exactH) * 0.2, 0, 2 * Math.PI);
+                        ctx.fillStyle = 'rgba(25,20,18,0.9)';
                         ctx.fill();
                     }
                 }
             }
 
-            if (selectedIgnitionCell) {
-                var cellW = canvas.width / simGridSize;
-                var cellH = canvas.height / simGridSize;
-                var centerX = Math.floor(selectedIgnitionCell.x * cellW) + cellW / 2;
-                var centerY = Math.floor(selectedIgnitionCell.y * cellH) + cellH / 2;
-
+            fireParticles.forEach(function(p) {
+                var alpha = Math.max(0, 1 - p.age / p.life);
                 ctx.beginPath();
-                ctx.arc(centerX, centerY, Math.max(cellW, cellH) * 1.6, 0, 2 * Math.PI);
-                ctx.strokeStyle = "#ff0055"; 
-                ctx.lineWidth = 2.5;
+                ctx.arc(p.x, p.y, p.size * alpha, 0, 2 * Math.PI);
+                ctx.fillStyle = 'rgba(255,' + Math.floor(140 + 80 * alpha) + ',40,' + (alpha * 0.7) + ')';
+                ctx.fill();
+            });
+
+            if (selectedIgnitionCell) {
+                var ix = Math.floor(selectedIgnitionCell.x * cellW) + cellW / 2;
+                var iy = Math.floor(selectedIgnitionCell.y * cellH) + cellH / 2;
+                ctx.beginPath();
+                ctx.arc(ix, iy, Math.max(cellW, cellH) * 1.8, 0, 2 * Math.PI);
+                ctx.strokeStyle = '#ff3366';
+                ctx.lineWidth = 2;
+                ctx.setLineDash([4, 4]);
                 ctx.stroke();
+                ctx.setLineDash([]);
+                ctx.beginPath();
+                ctx.arc(ix, iy, 4, 0, 2 * Math.PI);
+                ctx.fillStyle = '#ff3366';
+                ctx.fill();
             }
         }
 
@@ -2093,78 +2370,134 @@
             }
         });
 
-        document.getElementById('btnStartSim').addEventListener('click', function() {
-            if (!selectedIgnitionCell) return;
-            if (simInterval) { clearInterval(simInterval); }
-            
-            simulationStartTime = Date.now();
-            totalTreesBurned = 0;
-            
-            simInterval = setInterval(function() {
-                var nextGrid = [];
-                var activeFires = 0;
-                var newlyIgnited = 0;
+        function getWindVector(direction) {
+            var map = {
+                'N': { dx: 0, dy: -1 }, 'NE': { dx: 1, dy: -1 }, 'E': { dx: 1, dy: 0 }, 'SE': { dx: 1, dy: 1 },
+                'S': { dx: 0, dy: 1 }, 'SW': { dx: -1, dy: 1 }, 'W': { dx: -1, dy: 0 }, 'NW': { dx: -1, dy: -1 }
+            };
+            return map[direction] || map['S'];
+        }
 
-                for (var x = 0; x < simGridSize; x++) {
-                    nextGrid[x] = [...simGrid[x]];
-                }
+        function runFireSimulationStep() {
+            var nextGrid = [];
+            var nextIntensity = [];
+            var activeFires = 0;
+            var newlyIgnited = 0;
+            var wind = getWindVector(windDirection);
+            var speedFactor = 0.25 + (windSpeed / 100) * 0.85;
+            var moisture = Math.max(0.15, 0.55 - currentNriFactor * 0.35);
 
-                var windBias = getWindBias(windDirection);
-                var speedMultiplier = 0.3 + (windSpeed / 100) * 0.7;
+            for (var x = 0; x < simGridSize; x++) {
+                nextGrid[x] = simGrid[x].slice();
+                nextIntensity[x] = simIntensity[x].slice();
+            }
 
-                for (var x = 0; x < simGridSize; x++) {
-                    for (var y = 0; y < simGridSize; y++) {
-                        if (simGrid[x][y] === 2) {
-                            nextGrid[x][y] = 3; 
-                            
+            for (var x = 0; x < simGridSize; x++) {
+                for (var y = 0; y < simGridSize; y++) {
+                    if (simGrid[x][y] === 2) {
+                        var fuel = simFuelLoad[x][y] || 0.5;
+                        var inten = simIntensity[x][y] || 0.6;
+                        simBurnAge[x][y] = (simBurnAge[x][y] || 0) + 1;
+
+                        if (simBurnAge[x][y] > 8 + fuel * 10) {
+                            nextGrid[x][y] = 3;
+                            nextIntensity[x][y] = 0;
+                            totalTreesBurned++;
+                        } else {
+                            nextIntensity[x][y] = Math.min(1, inten + 0.04);
                             var neighbors = [
-                                [x-1, y], [x+1, y], [x, y-1], [x, y+1],
-                                [x-1, y-1], [x+1, y-1], [x-1, y+1], [x+1, y+1]
+                                [x-1,y,0,0], [x+1,y,0,0], [x,y-1,0,0], [x,y+1,0,0],
+                                [x-1,y-1,-1,-1], [x+1,y-1,1,-1], [x-1,y+1,-1,1], [x+1,y+1,1,1]
                             ];
-
-                            neighbors.forEach(n => {
+                            neighbors.forEach(function(n) {
                                 var nx = n[0], ny = n[1];
-                                if (nx >= 0 && nx < simGridSize && ny >= 0 && ny < simGridSize) {
-                                    var bias = 1.0;
-                                    if (nx > x && windBias.east) bias *= 1.5;
-                                    if (nx < x && windBias.west) bias *= 1.5;
-                                    if (ny > y && windBias.south) bias *= 1.5;
-                                    if (ny < y && windBias.north) bias *= 1.5;
-                                    
-                                    var burnChance = fuelBurnProbability * bias * speedMultiplier;
-                                    if (simGrid[nx][ny] === 1 && Math.random() < burnChance) {
-                                        nextGrid[nx][ny] = 2;
-                                        newlyIgnited++;
-                                    }
+                                if (nx < 0 || nx >= simGridSize || ny < 0 || ny >= simGridSize) return;
+                                if (simGrid[nx][ny] !== 1) return;
+                                var dot = (n[2] * wind.dx + n[3] * wind.dy);
+                                var windBoost = 1 + Math.max(0, dot) * 0.85;
+                                var distPenalty = (n[2] !== 0 && n[3] !== 0) ? 0.72 : 1;
+                                var nfuel = simFuelLoad[nx][ny] || 0.3;
+                                var spreadProb = fuelBurnProbability * windBoost * speedFactor * distPenalty * (1 - moisture) * nfuel;
+                                if (Math.random() < spreadProb) {
+                                    nextGrid[nx][ny] = 2;
+                                    nextIntensity[nx][ny] = 0.35 + nfuel * 0.4;
+                                    newlyIgnited++;
                                 }
                             });
-                        } else if (simGrid[x][y] === 3) {
-                            totalTreesBurned++;
+                            if (Math.random() < 0.008 * speedFactor * currentNriFactor) {
+                                var sx = x + Math.round(wind.dx * (2 + Math.random() * 3));
+                                var sy = y + Math.round(wind.dy * (2 + Math.random() * 3));
+                                if (sx >= 0 && sx < simGridSize && sy >= 0 && sy < simGridSize && simGrid[sx][sy] === 1) {
+                                    nextGrid[sx][sy] = 2;
+                                    nextIntensity[sx][sy] = 0.5;
+                                    newlyIgnited++;
+                                }
+                            }
                         }
                     }
                 }
+            }
 
-                for (var x = 0; x < simGridSize; x++) {
-                    for (var y = 0; y < simGridSize; y++) {
-                        if (nextGrid[x][y] === 2) activeFires++;
+            simGrid = nextGrid;
+            simIntensity = nextIntensity;
+
+            var cellW = canvas.width / simGridSize;
+            var cellH = canvas.height / simGridSize;
+            for (var x = 0; x < simGridSize; x++) {
+                for (var y = 0; y < simGridSize; y++) {
+                    if (simGrid[x][y] === 2) {
+                        activeFires++;
+                        if (Math.random() < 0.35) {
+                            spawnFireParticles(
+                                Math.floor(x * cellW) + cellW / 2,
+                                Math.floor(y * cellH) + cellH / 2,
+                                1, simIntensity[x][y]
+                            );
+                        }
                     }
                 }
+            }
 
-                simGrid = nextGrid;
-                drawSimulationGrid();
+            fireParticles = fireParticles.filter(function(p) {
+                p.age += 0.04;
+                p.x += p.vx + wind.dx * 0.3;
+                p.y += p.vy;
+                return p.age < p.life;
+            });
 
-                var elapsed = ((Date.now() - simulationStartTime) / 1000).toFixed(1);
-                document.getElementById('fireStats').innerHTML = 
-                    'Active Fires: ' + activeFires + '<br>' +
-                    'Trees Burned: ' + totalTreesBurned + '<br>' +
-                    'New Ignitions: ' + newlyIgnited + '<br>' +
-                    'Elapsed: ' + elapsed + 's';
+            drawSimulationGrid();
 
-                if (activeFires === 0) {
-                    clearInterval(simInterval);
-                    document.getElementById('simStatus').innerText = "Simulation complete. Fire matrix limits reached.";
-                }
-            }, 90);
+            var elapsed = ((Date.now() - simulationStartTime) / 1000).toFixed(1);
+            var acresEst = (totalTreesBurned * 0.08).toFixed(1);
+            document.getElementById('fireStats').innerHTML =
+                'Active Fronts: ' + activeFires + '<br>' +
+                'Cells Consumed: ' + totalTreesBurned + '<br>' +
+                'New Ignitions: ' + newlyIgnited + '<br>' +
+                'Est. Burn Area: ~' + acresEst + ' ac<br>' +
+                'Elapsed: ' + elapsed + 's';
+
+            if (activeFires === 0) {
+                simAnimFrame = null;
+                document.getElementById('simStatus').innerText = 'Simulation complete. Wildfire spread halted at fuel boundary.';
+                return;
+            }
+            simAnimFrame = requestAnimationFrame(runFireSimulationStep);
+        }
+
+        document.getElementById('btnStartSim').addEventListener('click', function() {
+            if (!selectedIgnitionCell) return;
+            if (simInterval) { clearInterval(simInterval); simInterval = null; }
+            if (simAnimFrame) { cancelAnimationFrame(simAnimFrame); }
+
+            simulationStartTime = Date.now();
+            totalTreesBurned = 0;
+            fireParticles = [];
+            var ix = selectedIgnitionCell.x, iy = selectedIgnitionCell.y;
+            simGrid[ix][iy] = 2;
+            simIntensity[ix][iy] = 0.85;
+            simBurnAge[ix][iy] = 0;
+            document.getElementById('simStatus').innerText = 'Wildfire simulation running — NDVI fuel load ' + currentNriFactor.toFixed(3) + ', wind ' + windDirection + ' @ ' + windSpeed + ' km/h.';
+            simAnimFrame = requestAnimationFrame(runFireSimulationStep);
         });
 
         document.getElementById('btnResetSim').addEventListener('click', initializeSimulationGrid);
@@ -2293,7 +2626,7 @@
                     var metrics = data.metrics || {};
                     var vegValue = (metrics.vegetation_index || 0).toFixed(4);
                     var elevationData = data.elevation_raster || {};
-                    var slopeDegrees = parseFloat(elevationData.slope_mean_deg) || parseFloat(metrics.slope_gradient) || 0;
+                    var slopeDegrees = parseFloat(metrics.slope_gradient) || parseFloat(metrics.elevation_raster_slope_mean_deg) || parseFloat(elevationData.slope_mean_deg) || 0;
                     var slopePercent = calculateSlopePercent(slopeDegrees);
                     var floodData = data.flood || {};
                     var floodScore = floodData.flood_proximity_score != null ? parseFloat(floodData.flood_proximity_score) : (metrics.flood_proximity_score != null ? parseFloat(metrics.flood_proximity_score) : null);
@@ -2327,8 +2660,8 @@
                     assignRiskColor(floodDisplayVal, 'breakdownFloodValue', 1.5, 2.5);
                     renderFloodSimulation(lastFloodScore, lastFloodZone, lastFloodSubtype, 0);
                     
-                    // Generate financial data
-                    generateFinancialData(lat, lng);
+                    lastAnalysisPayload = Object.assign({}, data, { lat: lat, lng: lng });
+                    generateFinancialData(lastAnalysisPayload);
                 }
             }).catch(err => {
                 setTimeout(() => {
@@ -2361,9 +2694,10 @@
                     document.getElementById('breakdownFloodValue').innerText = lastFloodZone;
                     assignRiskColor(lastFloodScore, 'breakdownFloodValue', 1.5, 2.5);
                     
-                    // Generate financial data
-                    generateFinancialData(lat, lng);
                     renderFloodSimulation(lastFloodScore, lastFloodZone, lastFloodSubtype, 0);
+
+                    lastAnalysisPayload = { lat: lat, lng: lng, calculated_risk_score: demoScore, metrics: {}, flood: { flood_proximity_score: lastFloodScore }, demographics: {} };
+                    generateFinancialData(lastAnalysisPayload);
 
                     document.getElementById('aiOverviewBox').innerText = `Geospatial point loaded.\nCoordinates: ${lat.toFixed(4)}, ${lng.toFixed(4)}.`;
                 }, 800);
@@ -2441,149 +2775,110 @@
             return Math.tan(degrees * Math.PI / 180) * 100;
         }
 
+        function drawNeumorphicHouse(ctx, x, y, tilt, submerged) {
+            ctx.save();
+            ctx.translate(x, y);
+            ctx.rotate(tilt || 0);
+            var bodyColor = submerged ? '#94a3b8' : '#e8ecf4';
+            ctx.fillStyle = bodyColor;
+            ctx.fillRect(-34, -18, 68, 44);
+            ctx.strokeStyle = submerged ? '#64748b' : '#a8b4c8';
+            ctx.lineWidth = 1.5;
+            ctx.strokeRect(-34, -18, 68, 44);
+            ctx.fillStyle = submerged ? '#78716c' : '#c2410c';
+            ctx.beginPath();
+            ctx.moveTo(-40, -18);
+            ctx.lineTo(0, -44);
+            ctx.lineTo(40, -18);
+            ctx.closePath();
+            ctx.fill();
+            ctx.fillStyle = submerged ? 'rgba(56,189,248,0.5)' : 'rgba(147,197,253,0.9)';
+            ctx.fillRect(-24, -10, 14, 14);
+            ctx.fillRect(10, -10, 14, 14);
+            ctx.fillStyle = '#475569';
+            ctx.fillRect(-38, 26, 76, 7);
+            ctx.restore();
+        }
+
         function renderSlopeSimulation(degrees, percent, progress) {
             var ctx = slopeSimCtx;
             var canvas = slopeSimCanvas;
-            ctx.clearRect(0, 0, canvas.width, canvas.height);
+            var w = canvas.width, h = canvas.height;
+            ctx.clearRect(0, 0, w, h);
 
-            var width = canvas.width;
-            var height = canvas.height;
-            var baseY = height - 48;
-            var rise = Math.max(22, Math.min(120, Math.abs(percent) * 1.5));
-            var severity = Math.min(1, Math.max(0, Math.abs(percent) / 40));
-            var movement = 10 + severity * 28;
-            var years = Math.max(4, Math.min(30, 4 + severity * 10 + Math.abs(percent) / 6));
-            // House slides DOWN the slope (right and down)
-            var offsetX = progress * movement;
-            var offsetY = progress * (10 + severity * 18);
+            var skyGrad = ctx.createLinearGradient(0, 0, 0, h * 0.55);
+            skyGrad.addColorStop(0, '#2a1f45');
+            skyGrad.addColorStop(1, '#1a1228');
+            ctx.fillStyle = skyGrad;
+            ctx.fillRect(0, 0, w, h);
 
-            ctx.fillStyle = '#f7fbff';
-            ctx.fillRect(0, 0, width, height);
-
-            ctx.fillStyle = '#d9f2ff';
-            ctx.fillRect(0, 0, width, height * 0.5);
+            var severity = Math.min(1, Math.max(0, Math.abs(degrees) / 25));
+            var run = w * 0.72;
+            var rise = Math.tan(Math.abs(degrees) * Math.PI / 180) * run;
+            rise = Math.max(18, Math.min(130, rise));
+            var baseY = h - 36;
+            var slopeAngleRad = Math.atan2(-rise, run);
 
             ctx.beginPath();
-            ctx.moveTo(24, baseY);
-            ctx.lineTo(width * 0.28, baseY - rise * 0.45);
-            ctx.lineTo(width * 0.58, baseY - rise * 0.7);
-            ctx.lineTo(width * 0.88, baseY - rise * 1.05);
-            ctx.lineTo(width - 24, baseY - rise * 0.9);
-            ctx.lineTo(width - 24, height - 8);
-            ctx.lineTo(24, height - 8);
+            ctx.moveTo(20, baseY);
+            ctx.lineTo(w - 20, baseY - rise);
+            ctx.lineTo(w - 20, h);
+            ctx.lineTo(20, h);
             ctx.closePath();
-            ctx.fillStyle = '#8fd19a';
+            var soilGrad = ctx.createLinearGradient(0, baseY - rise, 0, h);
+            soilGrad.addColorStop(0, '#4ade80');
+            soilGrad.addColorStop(0.15, '#3d6b42');
+            soilGrad.addColorStop(0.4, '#5c4033');
+            soilGrad.addColorStop(1, '#2d1810');
+            ctx.fillStyle = soilGrad;
             ctx.fill();
 
-            ctx.strokeStyle = '#5f8f65';
-            ctx.lineWidth = 3;
-            ctx.beginPath();
-            ctx.moveTo(24, baseY);
-            ctx.lineTo(width * 0.28, baseY - rise * 0.45);
-            ctx.lineTo(width * 0.58, baseY - rise * 0.7);
-            ctx.lineTo(width * 0.88, baseY - rise * 1.05);
-            ctx.lineTo(width - 24, baseY - rise * 0.9);
-            ctx.stroke();
-
-            // Calculate ground Y at house position based on slope
-            var houseBaseX = width * 0.62;
-            var groundYAtHouse;
-            if (houseBaseX < width * 0.28) {
-                groundYAtHouse = baseY - rise * 0.45 * ((houseBaseX - 24) / (width * 0.28 - 24));
-            } else if (houseBaseX < width * 0.58) {
-                groundYAtHouse = baseY - rise * 0.45 - rise * 0.25 * ((houseBaseX - width * 0.28) / (width * 0.58 - width * 0.28));
-            } else if (houseBaseX < width * 0.88) {
-                groundYAtHouse = baseY - rise * 0.7 - rise * 0.35 * ((houseBaseX - width * 0.58) / (width * 0.88 - width * 0.58));
-            } else {
-                groundYAtHouse = baseY - rise * 1.05 + rise * 0.15 * ((houseBaseX - width * 0.88) / (width - 24 - width * 0.88));
+            for (var layer = 0; layer < 4; layer++) {
+                ctx.strokeStyle = 'rgba(255,255,255,0.06)';
+                ctx.lineWidth = 1;
+                ctx.beginPath();
+                var ly = baseY - 20 - layer * 22 + progress * (8 + severity * 14);
+                ctx.moveTo(30, ly);
+                ctx.lineTo(w - 30, ly - rise * 0.85);
+                ctx.stroke();
             }
-            
-            var houseX = width * 0.62 + offsetX;
-            var houseY = groundYAtHouse - 36 + offsetY;
-            ctx.save();
-            ctx.translate(houseX, houseY);
-            
-            // House body
-            ctx.fillStyle = '#f8fafc';
-            ctx.fillRect(-36, -20, 72, 48);
-            ctx.strokeStyle = '#94a3b8';
-            ctx.lineWidth = 2;
-            ctx.strokeRect(-36, -20, 72, 48);
-            
-            // Roof
-            ctx.fillStyle = '#dc2626';
-            ctx.beginPath();
-            ctx.moveTo(-42, -20);
-            ctx.lineTo(0, -48);
-            ctx.lineTo(42, -20);
-            ctx.closePath();
-            ctx.fill();
-            ctx.strokeStyle = '#991b1b';
-            ctx.lineWidth = 2;
-            ctx.stroke();
-            
-            // Chimney
-            ctx.fillStyle = '#78716c';
-            ctx.fillRect(18, -42, 12, 20);
-            ctx.strokeStyle = '#57534e';
-            ctx.strokeRect(18, -42, 12, 20);
-            
-            // Windows
-            ctx.fillStyle = '#bfdbfe';
-            ctx.fillRect(-28, -12, 16, 16);
-            ctx.strokeStyle = '#3b82f6';
-            ctx.lineWidth = 2;
-            ctx.strokeRect(-28, -12, 16, 16);
-            ctx.beginPath();
-            ctx.moveTo(-20, -12);
-            ctx.lineTo(-20, 4);
-            ctx.moveTo(-28, -4);
-            ctx.lineTo(-12, -4);
-            ctx.stroke();
-            
-            ctx.fillStyle = '#bfdbfe';
-            ctx.fillRect(12, -12, 16, 16);
-            ctx.strokeStyle = '#3b82f6';
-            ctx.strokeRect(12, -12, 16, 16);
-            ctx.beginPath();
-            ctx.moveTo(20, -12);
-            ctx.lineTo(20, 4);
-            ctx.moveTo(12, -4);
-            ctx.lineTo(28, -4);
-            ctx.stroke();
-            
-            // Door
-            ctx.fillStyle = '#92400e';
-            ctx.fillRect(-8, 8, 16, 20);
-            ctx.strokeStyle = '#78350f';
-            ctx.strokeRect(-8, 8, 16, 20);
-            ctx.fillStyle = '#fcd34d';
-            ctx.beginPath();
-            ctx.arc(4, 18, 2, 0, Math.PI * 2);
-            ctx.fill();
-            
-            // Foundation - dark gray for visibility
-            ctx.fillStyle = '#374151';
-            ctx.fillRect(-40, 28, 80, 8);
-            ctx.restore();
 
-            ctx.strokeStyle = '#ef4444';
-            ctx.lineWidth = 2.5;
+            var shiftCm = (6 + severity * 32) * progress;
+            var tilt = (severity * 0.08) * progress;
+            var houseAnchorX = w * 0.58 + shiftCm * 0.55;
+            var houseAnchorY = baseY - rise * 0.58 - 30 + shiftCm * 0.35;
+
+            ctx.strokeStyle = 'rgba(251,191,36,0.7)';
+            ctx.lineWidth = 1.5;
+            ctx.setLineDash([5, 4]);
             ctx.beginPath();
-            ctx.moveTo(width * 0.58, baseY - 48);
-            ctx.lineTo(width * 0.58 + offsetX * 0.6, baseY - 48 + offsetY * 0.85);
+            ctx.moveTo(houseAnchorX - 20, houseAnchorY + 34);
+            ctx.lineTo(houseAnchorX - 20 + shiftCm, houseAnchorY + 34 + shiftCm * 0.4);
             ctx.stroke();
+            ctx.setLineDash([]);
 
-            ctx.fillStyle = '#0f172a';
-            ctx.font = 'bold 14px sans-serif';
-            ctx.fillText('Percent slope: ' + percent.toFixed(1) + '%', 22, 28);
-            ctx.font = '12px sans-serif';
-            ctx.fillStyle = '#334155';
-            ctx.fillText('Projected time to visible movement: ' + years.toFixed(0) + ' years', 22, 52);
-            ctx.fillText('Estimated foundation shift: ' + (movement * progress).toFixed(1) + ' cm', 22, 72);
-            ctx.fillText('Terrain feedback: ' + (severity > 0.65 ? 'High susceptibility' : severity > 0.3 ? 'Moderate susceptibility' : 'Low susceptibility'), 22, 92);
+            if (progress > 0.2) {
+                ctx.strokeStyle = 'rgba(239,68,68,0.6)';
+                for (var c = 0; c < 3; c++) {
+                    ctx.beginPath();
+                    ctx.moveTo(houseAnchorX - 20 + c * 18, houseAnchorY + 26);
+                    ctx.lineTo(houseAnchorX - 15 + c * 18 + progress * 4, houseAnchorY + 32);
+                    ctx.stroke();
+                }
+            }
 
-            document.getElementById('slopeSimStatus').innerText = 'Slope grade ' + percent.toFixed(1) + '% is driving a simplified settlement model. A home on this grade may begin to show subtle displacement over roughly ' + years.toFixed(0) + ' years.';
+            drawNeumorphicHouse(ctx, houseAnchorX, houseAnchorY, tilt, false);
+
+            var years = Math.max(3, Math.min(35, Math.round(28 - degrees * 1.1)));
+            ctx.fillStyle = 'rgba(255,255,255,0.92)';
+            ctx.font = 'bold 11px system-ui,sans-serif';
+            ctx.fillText('Slope: ' + degrees.toFixed(1) + '° (' + percent.toFixed(1) + '%)', 16, 22);
+            ctx.font = '10px system-ui,sans-serif';
+            ctx.fillStyle = 'rgba(255,255,255,0.65)';
+            ctx.fillText('Foundation shift: ' + shiftCm.toFixed(1) + ' cm · Est. ' + years + ' yr to visible movement', 16, 38);
+            ctx.fillText(severity > 0.55 ? '⚠ High settlement susceptibility' : severity > 0.25 ? '◐ Moderate ground creep' : '✓ Stable grade profile', 16, 54);
+
+            document.getElementById('slopeSimStatus').innerText = 'Terrain cross-section at ' + degrees.toFixed(1) + '° (' + percent.toFixed(1) + '% grade). Settlement model projects ~' + shiftCm.toFixed(1) + ' cm foundation displacement with visible movement in ~' + years + ' years.';
         }
 
         function runSlopeSimulation() {
@@ -2591,135 +2886,85 @@
                 document.getElementById('slopeSimStatus').innerText = 'No slope data available yet. Analyze a property to generate a settlement simulation.';
                 return;
             }
-
-            var steps = 18;
-            var step = 0;
+            var steps = 24, step = 0;
             var interval = setInterval(function() {
                 renderSlopeSimulation(lastSlopeDegrees, lastSlopePercent, step / steps);
                 step += 1;
-                if (step > steps) {
-                    clearInterval(interval);
-                }
-            }, 100);
+                if (step > steps) clearInterval(interval);
+            }, 85);
         }
 
         function renderFloodSimulation(score, zone, subtype, progress) {
             var ctx = floodSimCtx;
             var canvas = floodSimCanvas;
-            ctx.clearRect(0, 0, canvas.width, canvas.height);
+            var w = canvas.width, h = canvas.height;
+            ctx.clearRect(0, 0, w, h);
 
-            var width = canvas.width;
-            var height = canvas.height;
-            var baseY = height - 42;
-            var severity = Math.min(1, Math.max(0, (score || 0) / 3));
-            // Water rises from bottom towards the house foundation
-            var maxWaterHeight = baseY - 10; // Stop at foundation level
-            var startWaterHeight = height - 20;
-            var waterHeight = startWaterHeight - (progress * (startWaterHeight - maxWaterHeight));
-            var waterLevel = 0.2 + (score / 3) * 0.6;
+            var riskScore = Math.min(3, Math.max(1, score || 1));
+            var severity = (riskScore - 1) / 2;
+            var depthFt = (0.4 + severity * 4.2) * progress;
+            var baseY = h - 44;
+            var waterTop = baseY - depthFt * 14;
 
-            ctx.fillStyle = '#f7fbff';
-            ctx.fillRect(0, 0, width, height);
+            var bgGrad = ctx.createLinearGradient(0, 0, 0, h);
+            bgGrad.addColorStop(0, '#1e1535');
+            bgGrad.addColorStop(0.5, '#251a38');
+            bgGrad.addColorStop(1, '#1a1228');
+            ctx.fillStyle = bgGrad;
+            ctx.fillRect(0, 0, w, h);
 
-            ctx.fillStyle = '#8fd19a';
-            ctx.fillRect(0, baseY + 2, width, height - baseY - 2);
+            ctx.fillStyle = '#2d4a35';
+            ctx.fillRect(0, baseY, w, h - baseY);
 
-            ctx.fillStyle = '#4ea3ff';
-            ctx.fillRect(0, waterHeight, width, height - waterHeight);
+            var waterGrad = ctx.createLinearGradient(0, waterTop, 0, h);
+            waterGrad.addColorStop(0, 'rgba(20,184,166,0.55)');
+            waterGrad.addColorStop(0.3, 'rgba(14,116,144,0.85)');
+            waterGrad.addColorStop(1, 'rgba(8,51,68,0.95)');
+            ctx.fillStyle = waterGrad;
+            ctx.fillRect(0, waterTop, w, h - waterTop);
 
-            ctx.fillStyle = '#ffffff';
-            ctx.globalAlpha = 0.75;
-            ctx.fillRect(0, waterHeight - 10, width, 8);
-            ctx.globalAlpha = 1;
+            for (var wave = 0; wave < 5; wave++) {
+                ctx.beginPath();
+                ctx.strokeStyle = 'rgba(255,255,255,' + (0.08 + wave * 0.02) + ')';
+                ctx.lineWidth = 1.5;
+                var wy = waterTop + wave * 6 + Math.sin(progress * 8 + wave) * 2;
+                ctx.moveTo(0, wy);
+                for (var wx = 0; wx <= w; wx += 12) {
+                    ctx.lineTo(wx, wy + Math.sin(wx * 0.04 + progress * 10 + wave) * 3);
+                }
+                ctx.stroke();
+            }
 
-            var houseX = width * 0.63;
-            var houseY = baseY - 64;
-            
-            // House body
-            ctx.fillStyle = '#f8fafc';
-            ctx.fillRect(houseX - 38, houseY - 16, 76, 52);
-            ctx.strokeStyle = '#94a3b8';
-            ctx.lineWidth = 2;
-            ctx.strokeRect(houseX - 38, houseY - 16, 76, 52);
-            
-            // Roof
-            ctx.fillStyle = '#dc2626';
-            ctx.beginPath();
-            ctx.moveTo(houseX - 44, houseY - 16);
-            ctx.lineTo(houseX, houseY - 44);
-            ctx.lineTo(houseX + 44, houseY - 16);
-            ctx.closePath();
-            ctx.fill();
-            ctx.strokeStyle = '#991b1b';
-            ctx.lineWidth = 2;
-            ctx.stroke();
-            
-            // Chimney
-            ctx.fillStyle = '#78716c';
-            ctx.fillRect(houseX + 20, houseY - 38, 14, 22);
-            ctx.strokeStyle = '#57534e';
-            ctx.strokeRect(houseX + 20, houseY - 38, 14, 22);
-            
-            // Windows
-            ctx.fillStyle = '#bfdbfe';
-            ctx.fillRect(houseX - 30, houseY - 8, 18, 18);
-            ctx.strokeStyle = '#3b82f6';
-            ctx.lineWidth = 2;
-            ctx.strokeRect(houseX - 30, houseY - 8, 18, 18);
-            ctx.beginPath();
-            ctx.moveTo(houseX - 21, houseY - 8);
-            ctx.lineTo(houseX - 21, houseY + 10);
-            ctx.moveTo(houseX - 30, houseY + 1);
-            ctx.lineTo(houseX - 12, houseY + 1);
-            ctx.stroke();
-            
-            ctx.fillStyle = '#bfdbfe';
-            ctx.fillRect(houseX + 12, houseY - 8, 18, 18);
-            ctx.strokeStyle = '#3b82f6';
-            ctx.strokeRect(houseX + 12, houseY - 8, 18, 18);
-            ctx.beginPath();
-            ctx.moveTo(houseX + 21, houseY - 8);
-            ctx.lineTo(houseX + 21, houseY + 10);
-            ctx.moveTo(houseX + 12, houseY + 1);
-            ctx.lineTo(houseX + 30, houseY + 1);
-            ctx.stroke();
-            
-            // Door
-            ctx.fillStyle = '#92400e';
-            ctx.fillRect(houseX - 8, houseY + 12, 16, 24);
-            ctx.strokeStyle = '#78350f';
-            ctx.strokeRect(houseX - 8, houseY + 12, 16, 24);
-            ctx.fillStyle = '#fcd34d';
-            ctx.beginPath();
-            ctx.arc(houseX + 4, houseY + 24, 2, 0, Math.PI * 2);
-            ctx.fill();
-            
-            // Foundation - dark gray for visibility
-            ctx.fillStyle = '#374151';
-            ctx.fillRect(houseX - 42, houseY + 36, 84, 10);
+            var houseX = w * 0.62;
+            var houseY = baseY - 58;
+            var submerged = waterTop < houseY + 20;
+            drawNeumorphicHouse(ctx, houseX, houseY, submerged ? 0.02 : 0, submerged);
 
-            ctx.fillStyle = '#0f172a';
-            ctx.font = 'bold 14px sans-serif';
-            ctx.fillText('Flood zone: ' + zone, 22, 28);
-            ctx.font = '12px sans-serif';
-            ctx.fillStyle = '#334155';
-            ctx.fillText('Waterline rise estimate: ' + (Math.round((waterLevel + progress * 0.08) * 100)) + '%', 22, 52);
-            ctx.fillText('Subtype: ' + (subtype || 'Surface water influence'), 22, 72);
-            ctx.fillText('Time to meaningful inundation: ' + (4 + severity * 10).toFixed(0) + ' hours', 22, 92);
+            if (submerged && progress > 0.3) {
+                ctx.fillStyle = 'rgba(14,116,144,0.35)';
+                ctx.fillRect(houseX - 36, Math.max(waterTop, houseY - 20), 72, houseY + 40 - waterTop);
+            }
 
-            document.getElementById('floodSimStatus').innerText = 'The local flood signal suggests ' + zone + '. With a waterline rise of roughly ' + (Math.round((waterLevel + progress * 0.08) * 100)) + '%, the property could start showing water intrusion within ' + (4 + severity * 10).toFixed(0) + ' hours.';
+            ctx.fillStyle = 'rgba(255,255,255,0.9)';
+            ctx.font = 'bold 11px system-ui,sans-serif';
+            ctx.fillText('Zone: ' + zone, 16, 22);
+            ctx.font = '10px system-ui,sans-serif';
+            ctx.fillStyle = 'rgba(255,255,255,0.65)';
+            ctx.fillText('Risk level ' + riskScore + '/3 · Depth ~' + depthFt.toFixed(1) + ' ft', 16, 38);
+            ctx.fillText((subtype || 'Surface water').substring(0, 42), 16, 54);
+            var hours = Math.max(2, Math.round(18 - severity * 12));
+            ctx.fillText('Time to threshold inundation: ~' + hours + ' hrs', 16, 70);
+
+            document.getElementById('floodSimStatus').innerText = zone + ' (score ' + riskScore + '/3) projects ~' + depthFt.toFixed(1) + ' ft standing water. At this flood signal, meaningful property inundation could occur within ~' + hours + ' hours under severe rainfall.';
         }
 
         function runFloodSimulation() {
-            var steps = 16;
-            var step = 0;
+            var steps = 28, step = 0;
             var interval = setInterval(function() {
                 renderFloodSimulation(lastFloodScore, lastFloodZone, lastFloodSubtype, step / steps);
                 step += 1;
-                if (step > steps) {
-                    clearInterval(interval);
-                }
-            }, 110);
+                if (step > steps) clearInterval(interval);
+            }, 90);
         }
 
         document.getElementById('btnRunSlopeSim').addEventListener('click', runSlopeSimulation);
@@ -2774,64 +3019,116 @@
             if (e.target === financialOverlay) closeFinancialPanel();
         });
 
-        // Generate mock financial data when property is analyzed
-        function generateFinancialData(lat, lng) {
-            // Generate realistic mock data based on location
-            var baseValue = 250000 + Math.random() * 500000;
-            var pricePerSqFt = 150 + Math.random() * 350;
-            var incomeLevel = 45000 + Math.random() * 80000;
-            var employmentRate = 85 + Math.random() * 12;
-            var businessGrowth = 2 + Math.random() * 6;
-            var rentalYield = 3 + Math.random() * 5;
-            var appreciationRate = 1 + Math.random() * 8;
-            var riskScore = 1 + Math.random() * 4;
+        function drawFinEmlGauge(pct) {
+            var c = document.getElementById('finEmlGauge');
+            if (!c) return;
+            var ctx = c.getContext('2d');
+            ctx.clearRect(0, 0, c.width, c.height);
+            var cx = c.width / 2, cy = c.height - 6, r = 46;
+            ctx.beginPath();
+            ctx.arc(cx, cy, r, Math.PI, 2 * Math.PI);
+            ctx.strokeStyle = 'rgba(120,138,165,0.25)';
+            ctx.lineWidth = 8;
+            ctx.stroke();
+            var end = Math.PI + (pct / 100) * Math.PI;
+            ctx.beginPath();
+            ctx.arc(cx, cy, r, Math.PI, end);
+            var g = ctx.createLinearGradient(0, 0, c.width, 0);
+            g.addColorStop(0, '#14b8a6');
+            g.addColorStop(1, '#22d3ee');
+            ctx.strokeStyle = g;
+            ctx.lineWidth = 8;
+            ctx.lineCap = 'round';
+            ctx.stroke();
+            document.getElementById('finEmlValue').textContent = pct.toFixed(1) + '%';
+        }
 
-            // Update UI
-            document.getElementById('finMedianValue').textContent = '$' + Math.round(baseValue).toLocaleString();
-            document.getElementById('finPricePerSqFt').textContent = '$' + Math.round(pricePerSqFt);
-            document.getElementById('finIncomeLevel').textContent = '$' + Math.round(incomeLevel).toLocaleString();
-            document.getElementById('finEmployment').textContent = employmentRate.toFixed(1) + '%';
-            document.getElementById('finBusinessGrowth').textContent = businessGrowth.toFixed(1) + '%';
-            document.getElementById('finRentalYield').textContent = rentalYield.toFixed(1) + '%';
-            document.getElementById('finAppreciation').textContent = appreciationRate.toFixed(1) + '%';
-            document.getElementById('finRiskScore').textContent = riskScore.toFixed(1) + '/5';
+        function drawFinRiskDonut(pool) {
+            var c = document.getElementById('finRiskDonut');
+            if (!c) return;
+            var ctx = c.getContext('2d');
+            ctx.clearRect(0, 0, c.width, c.height);
+            var cx = c.width / 2, cy = c.height / 2, r = 32, ir = 18;
+            var segments = [
+                { v: pool.flood, c: '#14b8a6' },
+                { v: pool.wildfire, c: '#f97316' },
+                { v: pool.wind, c: '#ef4444' }
+            ];
+            var total = segments.reduce(function(s, x) { return s + x.v; }, 0) || 1;
+            var start = -Math.PI / 2;
+            segments.forEach(function(seg) {
+                var angle = (seg.v / total) * Math.PI * 2;
+                ctx.beginPath();
+                ctx.arc(cx, cy, r, start, start + angle);
+                ctx.arc(cx, cy, ir, start + angle, start, true);
+                ctx.closePath();
+                ctx.fillStyle = seg.c;
+                ctx.fill();
+                start += angle;
+            });
+            ctx.fillStyle = '#64748b';
+            ctx.font = 'bold 7px system-ui,sans-serif';
+            ctx.textAlign = 'center';
+            ctx.fillText('HAZARDS', cx, cy + 3);
+            document.getElementById('finPoolFlood').textContent = 'Flood ' + pool.flood.toFixed(0) + '%';
+            document.getElementById('finPoolWildfire').textContent = 'Wildfire ' + pool.wildfire.toFixed(0) + '%';
+            document.getElementById('finPoolWind').textContent = 'Wind ' + pool.wind.toFixed(0) + '%';
+        }
 
-            // Trends
-            var medianTrend = (Math.random() - 0.4) * 10;
-            document.getElementById('finMedianTrend').textContent = (medianTrend >= 0 ? '+' : '') + medianTrend.toFixed(1) + '%';
-            document.getElementById('finMedianTrend').className = 'financial-metric-trend ' + (medianTrend >= 0 ? 'trend-up' : 'trend-down');
+        function applyFinancialProfile(d) {
+            document.getElementById('finLocationLabel').textContent = d.location_label || ('Lat ' + (d.lat || '--') + ', Lng ' + (d.lng || '--'));
+            document.getElementById('finMedianValue').textContent = '$' + Math.round(d.median_home_value).toLocaleString();
+            document.getElementById('finProjected5yr').textContent = '$' + Math.round(d.projected_5yr_value).toLocaleString();
+            document.getElementById('finAppreciation').textContent = d.appreciation_rate.toFixed(1) + '%';
+            document.getElementById('finMonthlyRent').textContent = '$' + Math.round(d.monthly_rent).toLocaleString();
+            document.getElementById('finAnnualPremium').textContent = '$' + Math.round(d.annual_insurance_premium).toLocaleString();
+            document.getElementById('finPremiumSub').textContent = 'Total value insured ~$' + Math.round(d.median_home_value).toLocaleString() + ' · hazard-adjusted';
+            document.getElementById('finPricePerSqFt').textContent = '$' + Math.round(d.price_per_sqft);
+            document.getElementById('finRentalYield').textContent = d.rental_yield.toFixed(1) + '%';
+            document.getElementById('finIncomeLevel').textContent = '$' + Math.round(d.income_level).toLocaleString();
+            document.getElementById('finEmployment').textContent = d.employment_rate.toFixed(1) + '%';
+            document.getElementById('finRiskScore').textContent = d.investment_risk_score.toFixed(1) + '/5';
+            document.getElementById('finOutlookHeadline').textContent = d.market_trend + ' · ' + d.rental_outlook;
+            document.getElementById('financialAIBox').textContent = d.ai_assessment;
+            var src = d.sources || {};
+            document.getElementById('finSourceFooter').textContent =
+                'Valuation: ' + (src.valuation || 'Regional baseline') + ' · Appreciation: ' + (src.appreciation || 'Risk model') + ' · Insurance: ' + (src.insurance || 'Hazard composite');
 
-            var priceTrend = (Math.random() - 0.4) * 8;
-            document.getElementById('finPriceTrend').textContent = (priceTrend >= 0 ? '+' : '') + priceTrend.toFixed(1) + '%';
-            document.getElementById('finPriceTrend').className = 'financial-metric-trend ' + (priceTrend >= 0 ? 'trend-up' : 'trend-down');
+            var apprTrend = d.appreciation_rate >= 4 ? '+' + d.appreciation_rate.toFixed(1) + '%' : d.appreciation_rate.toFixed(1) + '%';
+            document.getElementById('finPriceTrend').textContent = apprTrend;
+            document.getElementById('finPriceTrend').className = 'financial-metric-trend ' + (d.appreciation_rate >= 3 ? 'trend-up' : 'trend-down');
+            document.getElementById('finEmploymentTrend').textContent = d.employment_rate >= 94 ? '+stable' : 'moderate';
+            document.getElementById('finEmploymentTrend').className = 'financial-metric-trend trend-up';
 
-            var marketTrendText = Math.random() > 0.5 ? 'Bullish' : 'Bearish';
-            document.getElementById('finMarketTrend').textContent = marketTrendText;
-
-            var employmentTrend = (Math.random() - 0.3) * 3;
-            document.getElementById('finEmploymentTrend').textContent = (employmentTrend >= 0 ? '+' : '') + employmentTrend.toFixed(1) + '%';
-            document.getElementById('finEmploymentTrend').className = 'financial-metric-trend ' + (employmentTrend >= 0 ? 'trend-up' : 'trend-down');
-
-            var businessTrend = (Math.random() - 0.3) * 2;
-            document.getElementById('finBusinessTrend').textContent = (businessTrend >= 0 ? '+' : '') + businessTrend.toFixed(1) + '%';
-            document.getElementById('finBusinessTrend').className = 'financial-metric-trend ' + (businessTrend >= 0 ? 'trend-up' : 'trend-down');
-
-            var appreciationTrend = (Math.random() - 0.4) * 4;
-            document.getElementById('finAppreciationTrend').textContent = (appreciationTrend >= 0 ? '+' : '') + appreciationTrend.toFixed(1) + '%';
-            document.getElementById('finAppreciationTrend').className = 'financial-metric-trend ' + (appreciationTrend >= 0 ? 'trend-up' : 'trend-down');
-
-            // AI Financial Assessment
-            var assessment = 'Based on the analyzed location at ' + lat.toFixed(4) + ', ' + lng.toFixed(4) + ':\n\n';
-            assessment += '• Property Market: The area shows ' + (marketTrendText === 'Bullish' ? 'strong' : 'moderate') + ' market conditions with median values around $' + Math.round(baseValue).toLocaleString() + '.\n';
-            assessment += '• Economic Health: Employment rate of ' + employmentRate.toFixed(1) + '% indicates a ' + (employmentRate > 92 ? 'robust' : employmentRate > 88 ? 'stable' : 'developing') + ' local economy.\n';
-            assessment += '• Investment Potential: Rental yield of ' + rentalYield.toFixed(1) + '% combined with ' + appreciationRate.toFixed(1) + '% appreciation suggests ' + (rentalYield > 5 && appreciationRate > 4 ? 'excellent' : rentalYield > 4 || appreciationRate > 3 ? 'good' : 'moderate') + ' investment prospects.\n';
-            assessment += '• Risk Profile: Overall risk score of ' + riskScore.toFixed(1) + '/5 indicates ' + (riskScore < 2.5 ? 'low' : riskScore < 3.5 ? 'moderate' : 'elevated') + ' investment risk.\n\n';
-            assessment += 'Recommendation: ' + (riskScore < 2.5 && appreciationRate > 3 ? 'Strong buy candidate with favorable risk-reward profile.' : riskScore < 3.5 ? 'Consider with due diligence on local market conditions.' : 'Proceed with caution; higher risk area requiring thorough analysis.');
-
-            document.getElementById('financialAIBox').textContent = assessment;
-
-            // Enable button
+            drawFinEmlGauge(d.eml_percent);
+            drawFinRiskDonut(d.risk_pool);
             financialAssistantBtn.disabled = false;
+        }
+
+        function generateFinancialData(analysisPayload) {
+            if (!analysisPayload) return;
+            financialAssistantBtn.disabled = true;
+            document.getElementById('finOutlookHeadline').textContent = 'Computing profile…';
+            document.getElementById('financialAIBox').textContent = 'Pulling location-grounded financial and insurance metrics from analyzed property data…';
+
+            fetch('/api/financial', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(analysisPayload)
+            })
+            .then(function(r) { return r.json(); })
+            .then(function(data) {
+                if (data.status === 'success') {
+                    applyFinancialProfile(data);
+                } else {
+                    document.getElementById('financialAIBox').textContent = 'Financial profile unavailable. Ensure app_temp.py is running with /api/financial enabled.';
+                    financialAssistantBtn.disabled = false;
+                }
+            })
+            .catch(function() {
+                document.getElementById('financialAIBox').textContent = 'Could not reach /api/financial. Run backend with app_temp.py for location-grounded financial data.';
+                financialAssistantBtn.disabled = false;
+            });
         }
 
         // --- Theme selector ---

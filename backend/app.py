@@ -19,9 +19,9 @@ except ImportError:
     from risk_engine import FEATURE_ORDER, build_feature_map_from_payload, score_with_fallback
 
 try:
-    from .pipeline import process_raw_dump_to_database_row
+    from .pipeline import process_raw_dump_to_database_row, generate_financial_profile
 except ImportError:
-    from pipeline import process_raw_dump_to_database_row
+    from pipeline import process_raw_dump_to_database_row, generate_financial_profile
 
 base_dir = os.path.dirname(os.path.abspath(__file__))
 dotenv_path = os.path.abspath(os.path.join(base_dir, "..", ".env"))
@@ -351,6 +351,10 @@ def investor_portal():
 def homowner_portal():
     return render_template('homeowner.html')
 
+@app.route('/homeowner_temp')
+def homowner_temp_portal():
+    return render_template('temp_homeowner.html')
+
 @app.route('/api/set_role', methods=['POST'])
 def set_role():
     data = request.get_json() or {}
@@ -538,6 +542,10 @@ def analyze_risk():
         if clean_numerical_features:
             print("[XGBOOST] Formatting tabular feature vector for inference...")
             inference_features = build_feature_map_from_payload(payload, clean_numerical_features)
+            for _key in ("vegetation_index", "infrastructure_hazard", "slope_gradient",
+                         "flood_proximity_score", "soil_drainage_ratio",
+                         "extreme_wind_count", "snowfall_risk", "urbanization_index"):
+                clean_numerical_features[_key] = inference_features[_key]
             final_risk_score = score_with_fallback(xgb_model, inference_features)
             clean_numerical_features["xgboost_predicted_risk_score"] = round(final_risk_score, 2)
             ai_generated_summary = generate_ai_risk_overview(clean_numerical_features, round(final_risk_score, 2))
@@ -552,6 +560,19 @@ def analyze_risk():
         print(f"\n[WARNING] Pipeline execution block trace error encountered: {str(log_error)}")
 
     return jsonify(payload)
+
+
+@app.route('/api/financial', methods=['POST'])
+def financial_insights():
+    """Location-grounded financial + insurance profile from real analyze payload."""
+    data = request.get_json() or {}
+    try:
+        profile = generate_financial_profile(data)
+        return jsonify({"status": "success", **profile})
+    except Exception as exc:
+        print(f"[FINANCIAL] Profile generation failed: {exc}")
+        return jsonify({"status": "error", "message": str(exc)}), 500
+
 
 if __name__ == '__main__':
     app.run(host="0.0.0.0", port=int(os.getenv("PORT", 5000)), debug=False)
