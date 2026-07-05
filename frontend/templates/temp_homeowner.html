@@ -2,2791 +2,694 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>FinGeoRisk Investor Portal</title>
-    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
-    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/leaflet.draw/1.0.4/leaflet.draw.css"/>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/leaflet.draw/1.0.4/leaflet.draw.js"></script>
+    <title>FinGeoRisk - Get Started</title>
+    <link href="https://cesium.com/downloads/cesiumjs/releases/1.118/Build/Cesium/Widgets/widgets.css" rel="stylesheet">
+    <script src="https://cesium.com/downloads/cesiumjs/releases/1.118/Build/Cesium/Cesium.js"></script>
 
     <style>
-        :root,
-        :root[data-theme="ocean"] {
-            --bg: #e6eef8;
-            --shadow-d: #cbd6e4;
-            --shadow-d2: #c5d0e6;
-            --shadow-d3: #b3c2d8;
-            --shadow-d4: #b8c7dd;
-            --shadow-d5: #b8c5d6;
-            --shadow-l: #ffffff;
-            --border-dash: #cbd5e1;
-            --text-heading: #1e3a8a;
-            --text-heading2: #1e293b;
-            --text-muted: #64748b;
-            --text-muted2: #4b5563;
-            --text-body: #4a5568;
-            --text-slate: #334155;
-            --text-slate2: #475569;
-            --accent: #3b82f6;
-            --accent-deep: #1d4ed8;
-            --ring-bg: #dbeafe;
-            --avatar-a: #3b82f6;
-            --avatar-b: #1d4ed8;
-            --theme-swatch: linear-gradient(135deg, #93c5fd, #1e3a8a);
-        }
-
-        :root[data-theme="violet"] {
-            --bg: #ece6f8;
-            --shadow-d: #d3c9e8;
-            --shadow-d2: #cec2ea;
-            --shadow-d3: #bcabdd;
-            --shadow-d4: #c2b2e0;
-            --shadow-d5: #c0b0d9;
-            --shadow-l: #ffffff;
-            --border-dash: #d6cbe8;
-            --text-heading: #4c1d95;
-            --text-heading2: #312e5b;
-            --text-muted: #7c6f96;
-            --text-muted2: #5b4f78;
-            --text-body: #5b4f78;
-            --text-slate: #453a68;
-            --text-slate2: #584c7a;
-            --accent: #8b5cf6;
-            --accent-deep: #6d28d9;
-            --ring-bg: #ede9fe;
-            --avatar-a: #8b5cf6;
-            --avatar-b: #6d28d9;
-            --theme-swatch: linear-gradient(135deg, #c4b5fd, #4c1d95);
-        }
-
-        :root[data-theme="emerald"] {
-            --bg: #e3f5ec;
-            --shadow-d: #c7e2d4;
-            --shadow-d2: #c0dfd0;
-            --shadow-d3: #a9d0bd;
-            --shadow-d4: #b0d5c4;
-            --shadow-d5: #aed2c0;
-            --shadow-l: #ffffff;
-            --border-dash: #c9e0d5;
-            --text-heading: #065f46;
-            --text-heading2: #1c3b31;
-            --text-muted: #5f8776;
-            --text-muted2: #3f6353;
-            --text-body: #43695a;
-            --text-slate: #2e4d40;
-            --text-slate2: #3f6656;
-            --accent: #10b981;
-            --accent-deep: #059669;
-            --ring-bg: #d1fae5;
-            --avatar-a: #34d399;
-            --avatar-b: #059669;
-            --theme-swatch: linear-gradient(135deg, #6ee7b7, #065f46);
-        }
-
-        :root[data-theme="graphite"] {
-            --bg: #eceef1;
-            --shadow-d: #d2d6dc;
-            --shadow-d2: #cbd0d8;
-            --shadow-d3: #b7bec8;
-            --shadow-d4: #bdc3cd;
-            --shadow-d5: #bac0c9;
-            --shadow-l: #ffffff;
-            --border-dash: #d3d8de;
-            --text-heading: #1f2937;
-            --text-heading2: #111827;
-            --text-muted: #64748b;
-            --text-muted2: #4b5563;
-            --text-body: #475569;
-            --text-slate: #334155;
-            --text-slate2: #475569;
-            --accent: #64748b;
-            --accent-deep: #475569;
-            --ring-bg: #e2e8f0;
-            --avatar-a: #94a3b8;
-            --avatar-b: #334155;
-            --theme-swatch: linear-gradient(135deg, #cbd5e1, #1f2937);
-        }
-
-        :root[data-theme="sunset"] {
-            --bg: #faf0e6;
-            --shadow-d: #e8d6c2;
-            --shadow-d2: #e5d0b9;
-            --shadow-d3: #d9bc9d;
-            --shadow-d4: #ddc3a6;
-            --shadow-d5: #d9bfa1;
-            --shadow-l: #ffffff;
-            --border-dash: #e6d4bb;
-            --text-heading: #9a3412;
-            --text-heading2: #431407;
-            --text-muted: #a1795f;
-            --text-muted2: #7c4a2d;
-            --text-body: #7c4a2d;
-            --text-slate: #5c3a24;
-            --text-slate2: #78502f;
-            --accent: #f97316;
-            --accent-deep: #c2410c;
-            --ring-bg: #fed7aa;
-            --avatar-a: #fb923c;
-            --avatar-b: #c2410c;
-            --theme-swatch: linear-gradient(135deg, #fdba74, #9a3412);
-        }
-
-        body.reduce-motion, body.reduce-motion * {
-            transition-duration: 0.001ms !important;
-            animation-duration: 0.001ms !important;
-        }
-
         * {
             box-sizing: border-box;
-            transition: background-color 0.35s ease, box-shadow 0.35s ease, border-color 0.35s ease, color 0.35s ease;
         }
 
         body {
             margin: 0;
-            background: var(--bg);
+            background: #090d16;
             font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
-            color: var(--text-body);
+            color: #4a5568;
             min-height: 100vh;
             display: flex;
             flex-direction: column;
-            overflow-y: auto;
-            padding: 16px 20px 30px 20px;
-            gap: 20px;
+            overflow-x: hidden;
+            position: relative;
         }
 
         .top-header-panel {
-            width: 100%;
-            height: 70px;
-            padding: 0 24px;
-            background: var(--bg);
-            border-radius: 20px;
-            box-shadow: 6px 6px 16px var(--shadow-d), -6px -6px 16px var(--shadow-l);
+            position: absolute;
+            top: 24px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 90%;
+            max-width: 1100px;
+            height: 66px;
+            padding: 0 30px;
+            background: rgba(230, 238, 248, 0.88);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            border: 1px solid rgba(255, 255, 255, 0.6);
+            border-radius: 50px;
+            box-shadow: 0 12px 40px rgba(0, 0, 0, 0.25),
+                        inset 1px 1px 3px rgba(255, 255, 255, 0.6);
             display: flex;
             align-items: center;
             justify-content: space-between;
-            flex-shrink: 0;
+            z-index: 1000;
+            transition: all 0.6s cubic-bezier(0.16, 1, 0.3, 1);
         }
 
-        .header-brand {
-            font-size: 20px;
+        .logo-area {
+            display: flex;
+            align-items: center;
+        }
+
+        .logo-title {
+            font-size: 1.35rem;
             font-weight: 800;
-            letter-spacing: -0.5px;
-            background: linear-gradient(135deg, var(--text-heading) 0%, var(--accent) 100%);
+            background: linear-gradient(135deg, #1e3a8a, #3b82f6);
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
             background-clip: text;
+            letter-spacing: -0.5px;
         }
 
-        .header-identity {
-            font-size: 13px;
+        .btn-get-started {
+            background: #3b82f6;
+            color: white;
+            border: none;
+            padding: 10px 26px;
+            font-size: 0.95rem;
             font-weight: 600;
-            color: var(--text-muted2);
-            background: var(--bg);
-            padding: 6px 14px;
-            border-radius: 99px;
-            box-shadow: inset 2px 2px 5px var(--shadow-d), inset -2px -2px 5px var(--shadow-l);
-            margin-left: 24px;
-        }
-
-        .header-coords {
-            font-family: monospace;
-            font-size: 12px;
-            font-weight: bold;
-            color: var(--text-muted);
-            background: var(--bg);
-            padding: 6px 14px;
-            border-radius: 10px;
-            box-shadow: inset 2px 2px 5px var(--shadow-d), inset -2px -2px 5px var(--shadow-l);
-            margin-left: auto;
-            margin-right: 20px;
-        }
-
-        .header-controls-mock {
-            display: flex;
-            align-items: center;
-            gap: 12px;
-        }
-
-        .mock-icon-btn {
-            width: 36px;
-            height: 36px;
-            background: var(--bg);
-            border-radius: 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            box-shadow: 3px 3px 6px var(--shadow-d), -3px -3px 6px var(--shadow-l);
-            color: var(--text-muted);
+            border-radius: 25px;
             cursor: pointer;
+            box-shadow: 0 4px 14px rgba(59, 130, 246, 0.4);
+            transition: all 0.3s ease;
         }
 
-        .mock-icon-btn:active,
-        .mock-icon-btn.is-active {
-            box-shadow: inset 2px 2px 5px var(--shadow-d), inset -2px -2px 5px var(--shadow-l);
-            color: var(--accent);
+        .btn-get-started:hover {
+            background: #2563eb;
+            transform: translateY(-1px);
+            box-shadow: 0 6px 20px rgba(37, 99, 235, 0.5);
         }
 
-        .avatar-wrapper {
+        #cesiumContainer {
+            width: 100%;
+            height: 100vh;
+            position: fixed;
+            top: 0;
+            left: 0;
+            z-index: 1;
+            pointer-events: none;
+            touch-action: none;
+        }
+
+        .cesium-viewer-bottom,
+        .cesium-viewer-animationContainer,
+        .cesium-viewer-timelineContainer,
+        .cesium-viewer-toolbar {
+            display: none !important;
+        }
+
+        .scroll-content {
             position: relative;
-            width: 38px;
-            height: 38px;
+            z-index: 10;
+            margin-top: 100vh;
         }
 
-        .mock-avatar {
-            width: 38px;
-            height: 38px;
-            background: linear-gradient(135deg, var(--avatar-a), var(--avatar-b));
-            border-radius: 50%;
-            box-shadow: 3px 3px 6px var(--shadow-d), -3px -3px 6px var(--shadow-l);
-            border: 2px solid var(--bg);
-            cursor: pointer;
-        }
-
-        .avatar-edit-badge {
-            position: absolute;
-            bottom: -3px;
-            right: -3px;
-            width: 17px;
-            height: 17px;
-            border-radius: 50%;
-            background: var(--bg);
-            box-shadow: 2px 2px 4px var(--shadow-d), -2px -2px 4px var(--shadow-l);
+        .feature-section {
+            min-height: 100vh;
             display: flex;
             align-items: center;
             justify-content: center;
-            color: var(--accent);
-            cursor: pointer;
-            pointer-events: none;
+            padding: 80px 20px;
+            position: relative;
         }
 
-        .avatar-edit-badge svg { width: 9px; height: 9px; }
-
-        /* ===== SETTINGS OVERLAY ===== */
-        .settings-overlay {
-            position: fixed;
-            inset: 0;
-            background: rgba(30, 41, 59, 0.28);
-            backdrop-filter: blur(3px);
-            display: flex;
-            align-items: flex-start;
-            justify-content: center;
-            padding-top: 100px;
-            z-index: 1000;
-            opacity: 0;
-            pointer-events: none;
-            transition: opacity 0.25s ease;
-        }
-
-        .settings-overlay.open {
-            opacity: 1;
-            pointer-events: auto;
-        }
-
-        .settings-panel {
-            width: 340px;
-            max-width: 90vw;
-            max-height: 78vh;
-            overflow-y: auto;
-            border-radius: 26px;
-            padding: 22px 22px 26px 22px;
-            background: rgba(255, 255, 255, 0.28);
-            -webkit-backdrop-filter: blur(22px) saturate(180%);
-            backdrop-filter: blur(22px) saturate(180%);
-            border: 1px solid rgba(255, 255, 255, 0.55);
+        .feature-card {
+            background: rgba(230, 238, 248, 0.12);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            border: 1px solid rgba(255, 255, 255, 0.15);
+            border-radius: 32px;
+            padding: 50px 60px;
+            max-width: 900px;
             box-shadow:
-                10px 10px 26px rgba(120, 138, 165, 0.35),
-                -8px -8px 20px rgba(255, 255, 255, 0.55),
-                inset 1px 1px 1px rgba(255, 255, 255, 0.4);
-            transform: scale(0.85) translateY(-14px);
+                8px 8px 32px rgba(0, 0, 0, 0.4),
+                -8px -8px 32px rgba(255, 255, 255, 0.05),
+                inset 1px 1px 2px rgba(255, 255, 255, 0.1);
             opacity: 0;
-            transition: transform 0.32s cubic-bezier(0.34, 1.56, 0.64, 1), opacity 0.25s ease;
+            transform: translateY(60px);
+            transition: all 0.8s cubic-bezier(0.16, 1, 0.3, 1);
         }
 
-        .settings-overlay.open .settings-panel {
-            transform: scale(1) translateY(0);
+        .feature-card.visible {
             opacity: 1;
+            transform: translateY(0);
         }
 
-        /* ===== FINANCIAL OVERLAY — solid neumorphic, no frosted glass ===== */
-        .financial-overlay {
+        .feature-card h2 {
+            font-size: 2.5rem;
+            font-weight: 800;
+            background: linear-gradient(135deg, #93c5fd, #3b82f6);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            margin: 0 0 20px 0;
+            letter-spacing: -1px;
+        }
+
+        .feature-card p {
+            font-size: 1.15rem;
+            line-height: 1.8;
+            color: #cbd5e1;
+            margin: 0 0 30px 0;
+        }
+
+        .feature-stats {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 24px;
+            margin-top: 30px;
+        }
+
+        .stat-item {
+            background: rgba(30, 41, 59, 0.6);
+            border-radius: 20px;
+            padding: 24px 20px;
+            text-align: center;
+            box-shadow:
+                inset 4px 4px 12px rgba(0, 0, 0, 0.3),
+                inset -4px -4px 12px rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+        }
+
+        .stat-value {
+            font-size: 2rem;
+            font-weight: 800;
+            color: #3b82f6;
+            margin-bottom: 8px;
+        }
+
+        .stat-label {
+            font-size: 0.85rem;
+            color: #94a3b8;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            font-weight: 600;
+        }
+
+        .feature-icon {
+            width: 80px;
+            height: 80px;
+            background: linear-gradient(135deg, rgba(59, 130, 246, 0.2), rgba(59, 130, 246, 0.05));
+            border-radius: 24px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 2.5rem;
+            margin-bottom: 24px;
+            box-shadow:
+                6px 6px 16px rgba(0, 0, 0, 0.3),
+                -6px -6px 16px rgba(255, 255, 255, 0.05),
+                inset 1px 1px 2px rgba(255, 255, 255, 0.15);
+            border: 1px solid rgba(59, 130, 246, 0.3);
+        }
+
+        .floating-orb {
             position: fixed;
-            inset: 0;
-            background: rgba(30, 41, 59, 0.32);
-            display: flex;
-            align-items: flex-start;
-            justify-content: center;
-            padding-top: 72px;
-            z-index: 1000;
-            opacity: 0;
+            border-radius: 50%;
             pointer-events: none;
-            transition: opacity 0.25s ease;
+            z-index: 5;
+            opacity: 0.3;
+            filter: blur(60px);
         }
 
-        .financial-overlay.open {
-            opacity: 1;
-            pointer-events: auto;
+        .orb-1 {
+            width: 400px;
+            height: 400px;
+            background: radial-gradient(circle, rgba(59, 130, 246, 0.4), transparent);
+            top: 20%;
+            right: -10%;
+            animation: float1 20s ease-in-out infinite;
         }
 
-        .financial-panel {
-            width: 520px;
-            max-width: 94vw;
-            max-height: 82vh;
-            overflow-y: auto;
-            border-radius: 28px;
-            padding: 22px 22px 24px;
-            background: var(--bg);
-            box-shadow: 10px 10px 24px var(--shadow-d2), -10px -10px 24px var(--shadow-l);
-            transform: scale(0.88) translateY(-16px);
-            opacity: 0;
-            transition: transform 0.32s cubic-bezier(0.34, 1.56, 0.64, 1), opacity 0.25s ease;
+        .orb-2 {
+            width: 300px;
+            height: 300px;
+            background: radial-gradient(circle, rgba(16, 185, 129, 0.3), transparent);
+            bottom: 30%;
+            left: -5%;
+            animation: float2 25s ease-in-out infinite;
         }
 
-        .financial-overlay.open .financial-panel {
-            transform: scale(1) translateY(0);
-            opacity: 1;
+        .orb-3 {
+            width: 250px;
+            height: 250px;
+            background: radial-gradient(circle, rgba(168, 85, 247, 0.3), transparent);
+            top: 60%;
+            right: 20%;
+            animation: float3 22s ease-in-out infinite;
         }
 
-        .financial-panel-header {
+        @keyframes float1 {
+            0%, 100% { transform: translate(0, 0) scale(1); }
+            33% { transform: translate(-30px, 40px) scale(1.1); }
+            66% { transform: translate(20px, -20px) scale(0.9); }
+        }
+
+        @keyframes float2 {
+            0%, 100% { transform: translate(0, 0) scale(1); }
+            33% { transform: translate(40px, -30px) scale(1.05); }
+            66% { transform: translate(-20px, 30px) scale(0.95); }
+        }
+
+        @keyframes float3 {
+            0%, 100% { transform: translate(0, 0) scale(1); }
+            50% { transform: translate(-25px, 25px) scale(1.08); }
+        }
+
+        .scroll-indicator {
+            position: fixed;
+            bottom: 40px;
+            left: 50%;
+            transform: translateX(-50%);
+            z-index: 100;
             display: flex;
+            flex-direction: column;
             align-items: center;
-            justify-content: space-between;
-            margin-bottom: 14px;
+            gap: 8px;
+            opacity: 0.7;
+            animation: bounce 2s ease-in-out infinite;
         }
 
-        .fin-brand-row {
-            display: flex;
-            align-items: center;
-            gap: 10px;
+        .scroll-indicator span {
+            color: #94a3b8;
+            font-size: 0.8rem;
+            font-weight: 600;
+            letter-spacing: 1px;
+            text-transform: uppercase;
         }
 
-        .fin-brand-icon {
-            width: 32px;
-            height: 32px;
-            border-radius: 10px;
+        .scroll-indicator .arrow {
+            width: 24px;
+            height: 24px;
+            border-right: 2px solid #94a3b8;
+            border-bottom: 2px solid #94a3b8;
+            transform: rotate(45deg);
+        }
+
+        @keyframes bounce {
+            0%, 100% { transform: translateX(-50%) translateY(0); }
+            50% { transform: translateX(-50%) translateY(10px); }
+        }
+
+        .feature-section:nth-child(even) .feature-card {
+            margin-left: auto;
+        }
+
+        .feature-section:nth-child(odd) .feature-card {
+            margin-right: auto;
+        }
+
+        .cta-section {
+            min-height: 80vh;
             display: flex;
+            flex-direction: column;
             align-items: center;
             justify-content: center;
-            background: var(--bg);
-            box-shadow: 3px 3px 7px var(--shadow-d), -3px -3px 7px var(--shadow-l);
+            padding: 80px 20px;
+            text-align: center;
+        }
+
+        .cta-card {
+            background: linear-gradient(135deg, rgba(59, 130, 246, 0.15), rgba(59, 130, 246, 0.05));
+            backdrop-filter: blur(25px);
+            -webkit-backdrop-filter: blur(25px);
+            border: 1px solid rgba(59, 130, 246, 0.3);
+            border-radius: 40px;
+            padding: 60px 80px;
+            max-width: 700px;
+            box-shadow:
+                0 20px 60px rgba(59, 130, 246, 0.3),
+                inset 1px 1px 2px rgba(255, 255, 255, 0.1);
+            opacity: 0;
+            transform: translateY(60px);
+            transition: all 0.8s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+
+        .cta-card.visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        .cta-card h2 {
+            font-size: 2.8rem;
+            font-weight: 800;
+            background: linear-gradient(135deg, #ffffff, #93c5fd);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            margin: 0 0 20px 0;
+        }
+
+        .cta-card p {
+            font-size: 1.2rem;
+            color: #cbd5e1;
+            margin: 0 0 35px 0;
+        }
+
+        .cta-btn {
+            background: linear-gradient(135deg, #3b82f6, #2563eb);
+            color: white;
+            border: none;
+            padding: 16px 48px;
+            font-size: 1.1rem;
+            font-weight: 700;
+            border-radius: 30px;
+            cursor: pointer;
+            box-shadow:
+                0 8px 24px rgba(59, 130, 246, 0.4),
+                inset 1px 1px 2px rgba(255, 255, 255, 0.2);
+            transition: all 0.3s ease;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .cta-btn:hover {
+            transform: translateY(-3px);
+            box-shadow:
+                0 12px 32px rgba(59, 130, 246, 0.5),
+                inset 1px 1px 2px rgba(255, 255, 255, 0.3);
+        }
+
+        .role-container {
+    position: absolute;
+    /* Change top from 55% to a fixed position or a smaller percentage */
+    top: 120px; 
+    left: 50%;
+    /* Update the vertical translate from -50% to 0 so it aligns cleanly from its top edge */
+    transform: translate(-50%, 0) scale(0.9);
+    
+    width: 90%;
+    max-width: 480px;
+    background: rgba(10, 17, 34, 0.7);
+    backdrop-filter: blur(18px);
+    -webkit-backdrop-filter: blur(18px);
+    border: 1px solid rgba(255, 255, 255, 0.12);
+    box-shadow: 0 30px 70px rgba(0, 0, 0, 0.5);
+    border-radius: 28px;
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+    z-index: 2000;
+    opacity: 0;
+    pointer-events: none;
+    transition: all 0.8s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+        .role-container.active {
+    opacity: 1;
+    pointer-events: auto;
+    transform: translate(-50%, 0) scale(1);
+}
+
+        .role-header {
+            background: rgba(59, 130, 246, 0.15);
+            border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+            color: #f8fafc;
+            padding: 22px 24px 4px;
+            font-weight: 700;
             font-size: 16px;
         }
 
-        .financial-panel-title {
+        .role-subtext {
+            color: #94a3b8;
             font-size: 13px;
-            font-weight: 800;
-            color: var(--text-heading);
-            text-transform: uppercase;
-            letter-spacing: 0.5px;
-            line-height: 1.2;
+            padding: 0 24px 18px;
         }
 
-        .fin-location-sub {
-            font-size: 10px;
+        .role-options {
+            display: flex;
+            flex-direction: column;
+            gap: 14px;
+            padding: 8px 24px 28px;
+        }
+
+        .role-btn {
+            display: flex;
+            align-items: center;
+            gap: 14px;
+            background: rgba(30, 41, 59, 0.8);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            color: #f8fafc;
+            padding: 18px 20px;
+            border-radius: 16px;
+            font-size: 15px;
             font-weight: 600;
-            color: var(--text-muted);
+            cursor: pointer;
+            text-align: left;
+            transition: all 0.2s ease;
+        }
+
+        .role-btn:hover {
+            background: #3b82f6;
+            border-color: #3b82f6;
+            transform: translateY(-1px);
+        }
+
+        .role-btn .icon {
+            font-size: 22px;
+        }
+
+        .role-btn .desc {
+            font-size: 12.5px;
+            font-weight: 400;
+            color: #cbd5e1;
             margin-top: 2px;
         }
 
-        .financial-close-btn {
-            width: 28px;
-            height: 28px;
-            border-radius: 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            background: var(--bg);
-            box-shadow: 2px 2px 5px var(--shadow-d), -2px -2px 5px var(--shadow-l);
-            color: var(--text-muted);
-            cursor: pointer;
-            font-size: 13px;
-            font-weight: 700;
-            border: none;
+        .role-btn:hover .desc {
+            color: #e0ecff;
         }
 
-        .fin-nav-tabs {
-            display: flex;
-            gap: 6px;
-            margin-bottom: 14px;
-        }
-
-        .fin-tab {
-            flex: 1;
+        .role-loading {
             text-align: center;
-            font-size: 9px;
-            font-weight: 800;
-            letter-spacing: 0.6px;
-            text-transform: uppercase;
-            color: var(--text-muted);
-            padding: 8px 4px;
-            border-radius: 10px;
-            background: var(--bg);
-            box-shadow: inset 1px 1px 3px var(--shadow-d);
-        }
-
-        .fin-tab.active {
-            color: var(--accent-deep);
-            background: var(--bg);
-            box-shadow: 3px 3px 8px var(--shadow-d), -2px -2px 6px var(--shadow-l);
-        }
-
-        .fin-metrics-grid {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 10px;
-            margin-bottom: 12px;
-        }
-
-        .fin-metric-card {
-            padding: 14px 14px 12px;
-            border-radius: 16px;
-            background: var(--bg);
-            box-shadow: inset 2px 2px 5px var(--shadow-d), inset -2px -2px 5px var(--shadow-l);
-        }
-
-        .fin-metric-card-label {
-            font-size: 9px;
-            font-weight: 800;
-            color: var(--text-muted);
-            text-transform: uppercase;
-            letter-spacing: 0.55px;
-            margin-bottom: 6px;
-        }
-
-        .fin-metric-card-value {
-            font-size: 17px;
-            font-weight: 800;
-            color: var(--text-heading);
-            letter-spacing: -0.3px;
-        }
-
-        .fin-metric-card-value.accent-teal { color: #0d9488; }
-        .fin-metric-card-value.accent-orange { color: #ea580c; }
-
-        .fin-insurance-row {
-            display: grid;
-            grid-template-columns: 1.1fr 0.9fr 0.9fr;
-            gap: 10px;
-            margin-bottom: 12px;
-        }
-
-        .fin-ins-card {
-            padding: 12px;
-            border-radius: 16px;
-            background: var(--bg);
-            box-shadow: inset 2px 2px 5px var(--shadow-d), inset -2px -2px 5px var(--shadow-l);
-            min-height: 108px;
-        }
-
-        .fin-ins-card-title {
-            font-size: 9px;
-            font-weight: 800;
-            color: var(--text-muted);
-            text-transform: uppercase;
-            letter-spacing: 0.5px;
-            margin-bottom: 8px;
-        }
-
-        .fin-premium-value {
-            font-size: 20px;
-            font-weight: 800;
-            color: #0d9488;
-            line-height: 1.1;
-        }
-
-        .fin-premium-sub {
-            font-size: 10px;
-            color: var(--text-muted);
-            margin-top: 6px;
-            line-height: 1.35;
-        }
-
-        .fin-gauge-wrap {
-            position: relative;
-            width: 100%;
-            height: 64px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-        }
-
-        .fin-gauge-value {
-            position: absolute;
-            font-size: 18px;
-            font-weight: 800;
-            color: var(--text-heading);
-            bottom: 2px;
-        }
-
-        .fin-donut-legend {
-            display: flex;
-            flex-direction: column;
-            gap: 4px;
-            margin-top: 4px;
-        }
-
-        .fin-legend-item {
-            display: flex;
-            align-items: center;
-            gap: 6px;
-            font-size: 9px;
-            font-weight: 700;
-            color: var(--text-slate);
-        }
-
-        .fin-legend-dot {
-            width: 8px;
-            height: 8px;
-            border-radius: 2px;
-            flex-shrink: 0;
-        }
-
-        .fin-outlook-card {
-            padding: 14px 16px;
-            border-radius: 16px;
-            background: var(--bg);
-            box-shadow: inset 2px 2px 5px var(--shadow-d), inset -2px -2px 5px var(--shadow-l);
-            margin-bottom: 10px;
-        }
-
-        .fin-outlook-headline {
-            font-size: 14px;
-            font-weight: 800;
-            color: var(--text-heading);
-            margin-bottom: 8px;
-        }
-
-        .fin-outlook-body {
-            font-size: 11.5px;
-            line-height: 1.55;
-            color: var(--text-slate);
-        }
-
-        .fin-source-footer {
-            font-size: 9px;
-            color: var(--text-muted);
-            line-height: 1.5;
-            margin-top: 8px;
-        }
-
-        .financial-section {
-            margin-bottom: 20px;
-        }
-
-        .financial-section-label {
-            font-size: 10.5px;
-            font-weight: 800;
-            color: var(--text-muted);
-            text-transform: uppercase;
-            letter-spacing: 0.6px;
-            margin-bottom: 10px;
-        }
-
-        .financial-metric-row {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            padding: 12px 14px;
-            border-radius: 14px;
-            background: var(--bg);
-            box-shadow: inset 1px 1px 3px var(--shadow-d), inset -1px -1px 3px var(--shadow-l);
-            margin-bottom: 8px;
-        }
-
-        .financial-metric-label {
-            font-size: 12.5px;
-            font-weight: 700;
-            color: var(--text-slate);
-        }
-
-        .financial-metric-value {
+            color: #94a3b8;
             font-size: 13px;
-            font-weight: 800;
-            color: var(--accent);
-        }
-
-        .financial-metric-trend {
-            font-size: 10px;
-            font-weight: 600;
-            margin-left: 6px;
-        }
-
-        .trend-up { color: #10b981; }
-        .trend-down { color: #ef4444; }
-
-        .financial-assistant-btn {
-            width: 100%;
-            padding: 14px;
-            background: var(--bg);
-            border: none;
-            border-radius: 14px;
-            font-weight: 800;
-            font-size: 12px;
-            color: var(--text-heading);
-            text-transform: uppercase;
-            letter-spacing: 0.5px;
-            cursor: pointer;
-            box-shadow: 4px 4px 10px var(--shadow-d), -4px -4px 10px var(--shadow-l);
-            transition: all 0.2s ease;
-            margin-top: 12px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            gap: 8px;
-        }
-
-        .financial-assistant-btn:hover {
-            transform: translateY(-1px);
-            box-shadow: 5px 5px 12px var(--shadow-d), -5px -5px 12px var(--shadow-l);
-        }
-
-        .financial-assistant-btn:active {
-            transform: translateY(1px);
-            box-shadow: 2px 2px 5px var(--shadow-d), -2px -2px 5px var(--shadow-l);
-        }
-
-        .financial-assistant-btn:disabled {
-            opacity: 0.5;
-            cursor: not-allowed;
-            transform: none;
-        }
-
-        .financial-assistant-btn.is-active {
-            box-shadow: inset 3px 3px 7px var(--shadow-d), inset -3px -3px 7px var(--shadow-l);
-            color: var(--accent-deep);
-        }
-
-        /* ===== SETTINGS PANEL INTERNALS ===== */
-        .settings-panel-header {
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            margin-bottom: 18px;
-        }
-
-        .settings-panel-title {
-            font-size: 14px;
-            font-weight: 800;
-            color: var(--text-heading);
-            text-transform: uppercase;
-            letter-spacing: 0.6px;
-        }
-
-        .settings-close-btn {
-            width: 26px;
-            height: 26px;
-            border-radius: 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            background: rgba(255, 255, 255, 0.4);
-            box-shadow: 2px 2px 5px rgba(120, 138, 165, 0.3), -2px -2px 5px rgba(255, 255, 255, 0.6);
-            color: var(--text-muted);
-            cursor: pointer;
-            font-size: 13px;
-            font-weight: 700;
-            border: none;
-        }
-
-        .settings-section {
-            margin-bottom: 20px;
-        }
-
-        .settings-section-label {
-            font-size: 10.5px;
-            font-weight: 800;
-            color: var(--text-muted);
-            text-transform: uppercase;
-            letter-spacing: 0.6px;
-            margin-bottom: 10px;
-            display: flex;
-            align-items: center;
-            gap: 6px;
-        }
-
-        .theme-swatch-row {
-            display: flex;
-            gap: 10px;
-            flex-wrap: wrap;
-        }
-
-        .theme-swatch-btn {
-            width: 34px;
-            height: 34px;
-            border-radius: 50%;
-            border: 2px solid rgba(255, 255, 255, 0.7);
-            cursor: pointer;
-            box-shadow: 2px 2px 6px rgba(120, 138, 165, 0.35), -2px -2px 6px rgba(255, 255, 255, 0.55);
-            position: relative;
-            padding: 0;
-        }
-
-        .theme-swatch-btn.is-selected::after {
-            content: '';
-            position: absolute;
-            inset: -4px;
-            border-radius: 50%;
-            border: 2px solid var(--text-heading);
-        }
-
-        .avatar-swatch-row {
-            display: flex;
-            gap: 10px;
-            flex-wrap: wrap;
-        }
-
-        .avatar-swatch-btn {
-            width: 30px;
-            height: 30px;
-            border-radius: 50%;
-            border: 2px solid rgba(255, 255, 255, 0.7);
-            cursor: pointer;
-            box-shadow: 2px 2px 5px rgba(120, 138, 165, 0.3), -2px -2px 5px rgba(255, 255, 255, 0.55);
-            padding: 0;
-            position: relative;
-        }
-
-        .avatar-swatch-btn.is-selected::after {
-            content: '';
-            position: absolute;
-            inset: -4px;
-            border-radius: 50%;
-            border: 2px solid var(--text-heading);
-        }
-
-        .settings-row {
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            padding: 10px 12px;
-            border-radius: 14px;
-            background: rgba(255, 255, 255, 0.32);
-            box-shadow: inset 1px 1px 3px rgba(120, 138, 165, 0.25), inset -1px -1px 3px rgba(255, 255, 255, 0.5);
-            margin-bottom: 8px;
-        }
-
-        .settings-row-label {
-            font-size: 12.5px;
-            font-weight: 700;
-            color: var(--text-slate);
-        }
-
-        .settings-row-sub {
-            font-size: 10.5px;
-            color: var(--text-muted);
-            font-weight: 500;
-            margin-top: 1px;
-        }
-
-        .toggle-switch {
-            width: 40px;
-            height: 22px;
-            border-radius: 99px;
-            background: rgba(120, 138, 165, 0.3);
-            position: relative;
-            cursor: pointer;
-            flex-shrink: 0;
-            transition: background 0.25s ease;
-        }
-
-        .toggle-switch.is-on {
-            background: linear-gradient(135deg, var(--accent), var(--accent-deep));
-        }
-
-        .toggle-switch-knob {
-            position: absolute;
-            top: 2px;
-            left: 2px;
-            width: 18px;
-            height: 18px;
-            border-radius: 50%;
-            background: #ffffff;
-            box-shadow: 1px 1px 3px rgba(0,0,0,0.25);
-            transition: left 0.25s cubic-bezier(0.34, 1.56, 0.64, 1);
-        }
-
-        .toggle-switch.is-on .toggle-switch-knob {
-            left: 20px;
-        }
-
-        .segmented-control {
-            display: flex;
-            border-radius: 12px;
-            background: rgba(120, 138, 165, 0.18);
-            padding: 3px;
-            gap: 3px;
-        }
-
-        .segmented-option {
-            flex: 1;
-            text-align: center;
-            padding: 6px 4px;
-            font-size: 11px;
-            font-weight: 700;
-            color: var(--text-muted);
-            
-            border-radius: 9px;
-            cursor: pointer;
-            transition: background 0.2s ease, color 0.2s ease;
-        }
-
-        .segmented-option.is-selected {
-            background: rgba(255, 255, 255, 0.7);
-            color: var(--text-heading);
-            box-shadow: 1px 1px 4px rgba(120, 138, 165, 0.3);
-        }
-
-        /* ===== WORKSPACE GRID ===== */
-        .workspace-grid-layout {
-            display: grid;
-            grid-template-columns: 330px 1fr 330px;
-            gap: 20px;
-            width: 100%;
-            align-items: stretch;
-        }
-
-        .search-sidebar {
-            background: var(--bg);
-            border-radius: 24px;
-            padding: 24px 20px;
-            box-shadow: 6px 6px 16px var(--shadow-d2), -6px -6px 16px var(--shadow-l);
-            display: flex;
-            flex-direction: column;
-            justify-content: flex-start;
-        }
-
-        .search-top-group {
-            width: 100%;
-        }
-
-        .search-sidebar h3 {
-            margin: 0;
-            color: var(--text-heading2);
-            font-size: 21px;
-            font-weight: 800;
-            letter-spacing: -0.3px;
-        }
-
-        .search-label-title {
-            width: 100%;
-            font-size: 12px;
-            font-weight: 700;
-            letter-spacing: 0.5px;
-            text-transform: uppercase;
-            color: var(--text-muted);
-            margin-bottom: 10px;
-            text-align: left;
-        }
-
-        .gauge-sidebar {
-            background: var(--bg);
-            border-radius: 24px;
-            padding: 24px 20px;
-            box-shadow: 6px 6px 16px var(--shadow-d2), -6px -6px 16px var(--shadow-l);
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-        }
-
-        .center-dashboard-stack {
-            display: flex;
-            flex-direction: column;
-            gap: 20px;
-        }
-
-        .map-container-fixed {
-            height: 500px;
-            border-radius: 24px;
-            overflow: hidden;
-            background: var(--bg);
-            box-shadow: 6px 6px 16px var(--shadow-d2), -6px -6px 16px var(--shadow-l);
-            border: 4px solid var(--bg);
-            position: relative;
-        }
-
-        #map {
-            width: 100%;
-            height: 100%;
-            border-radius: 20px;
-        }
-
-        .bottom-info-panel {
-            background: var(--bg);
-            border-radius: 24px;
-            padding: 24px;
-            box-shadow: 6px 6px 16px var(--shadow-d2), -6px -6px 16px var(--shadow-l);
-        }
-
-        .diagnostics-grid {
-            display: grid;
-            grid-template-columns: repeat(6, 1fr);
-            gap: 20px;
-            width: 100%;
-        }
-
-        .metric-card-indented {
-            background: var(--bg);
-            border-radius: 18px;
-            padding: 20px;
-            min-height: 130px;
-            display: flex;
-            flex-direction: column;
-            justify-content: space-between;
-            box-shadow: inset 5px 5px 10px var(--shadow-d), inset -5px -5px 10px var(--shadow-l);
-        }
-
-        .card-row1 { grid-column: span 2; }
-        .card-row2 { grid-column: span 3; }
-
-        .card-label {
-            font-size: 12px;
-            font-weight: 700;
-            color: var(--text-muted);
-            text-transform: uppercase;
-            letter-spacing: 0.5px;
-        }
-
-        .card-value-display {
-            margin-top: 12px;
-            padding: 12px;
-            background: var(--bg);
-            border-radius: 10px;
-            font-weight: 800;
-            font-size: 18px;
-            color: var(--text-heading);
-            text-align: center;
-            box-shadow: inset 3px 3px 6px var(--shadow-d), inset -3px -3px 6px var(--shadow-l);
-        }
-
-        .panel-divider {
-            width: 100%;
-            border-top: 2px dashed var(--border-dash);
-            margin: 20px 0 16px 0;
-        }
-
-        .ai-overview-title {
-            width: 100%;
-            font-size: 12px;
-            font-weight: 700;
-            letter-spacing: 0.5px;
-            text-transform: uppercase;
-            color: var(--text-muted);
-            margin-bottom: 10px;
-            text-align: left;
-        }
-
-        .terrace-outer-layer {
-            width: 100%;
-            padding: 10px;
-            background: var(--bg);
-            border-radius: 18px;
-            box-shadow: inset 4px 4px 10px var(--shadow-d), inset -4px -4px 10px var(--shadow-l);
-            flex-grow: 1;
-            display: flex;
-        }
-
-        .terrace-inner-textbox {
-            width: 100%;
-            min-height: 260px;
-            padding: 14px;
-            background: var(--bg);
-            border-radius: 12px;
-            font-size: 13px;
-            line-height: 1.6;
-            color: var(--text-slate);
-            overflow-y: auto;
-            white-space: pre-line;
-            box-shadow: inset 6px 6px 12px var(--shadow-d5), inset -6px -6px 12px var(--shadow-l);
-            flex-grow: 1;
-        }
-
-        /* ===== AI CHATBOT ===== */
-        .chatbot-section {
-            margin-top: 24px;
-            width: 100%;
-        }
-
-        .chatbot-outer-layer {
-            width: 100%;
-            padding: 12px;
-            background: var(--bg);
-            border-radius: 18px;
-            box-shadow: inset 4px 4px 10px var(--shadow-d), inset -4px -4px 10px var(--shadow-l);
-        }
-
-        .chatbot-middle-layer {
-            width: 100%;
-            padding: 10px;
-            background: var(--bg);
-            border-radius: 14px;
-            box-shadow: inset 3px 3px 8px var(--shadow-d), inset -3px -3px 8px var(--shadow-l);
-        }
-
-        .chatbot-inner-layer {
-            width: 100%;
-            min-height: 280px;
-            max-height: 400px;
-            padding: 12px;
-            background: var(--bg);
-            border-radius: 10px;
-            font-size: 12px;
-            line-height: 1.5;
-            color: var(--text-slate);
-            overflow-y: auto;
-            box-shadow: inset 6px 6px 12px var(--shadow-d5), inset -6px -6px 12px var(--shadow-l);
-            display: flex;
-            flex-direction: column;
-        }
-
-        .chat-messages {
-            flex: 1;
-            overflow-y: auto;
-            margin-bottom: 10px;
-            padding-right: 4px;
-        }
-
-        .chat-message {
-            margin-bottom: 10px;
-            padding: 8px 12px;
-            border-radius: 10px;
-            max-width: 85%;
-            word-wrap: break-word;
-        }
-
-        .chat-message.user {
-            background: var(--accent);
-            color: white;
-            margin-left: auto;
-            box-shadow: 2px 2px 6px var(--shadow-d), -2px -2px 6px var(--shadow-l);
-        }
-
-        .chat-message.ai {
-            background: var(--shadow-d2);
-            color: var(--text-slate);
-            margin-right: auto;
-            box-shadow: 2px 2px 6px var(--shadow-d), -2px -2px 6px var(--shadow-l);
-        }
-
-        .chat-input-wrapper {
-            display: flex;
-            gap: 8px;
-            margin-top: 8px;
-        }
-
-        .chat-input {
-            flex: 1;
-            padding: 10px 12px;
-            background: var(--bg);
-            border: none;
-            border-radius: 10px;
-            font-size: 12px;
-            color: var(--text-slate);
-            outline: none;
-            box-shadow: inset 3px 3px 6px var(--shadow-d), inset -3px -3px 6px var(--shadow-l);
-        }
-
-        .chat-send-btn {
-            width: 36px;
-            height: 36px;
-            background: var(--accent);
-            border: none;
-            border-radius: 10px;
-            color: white;
-            cursor: pointer;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            box-shadow: 3px 3px 6px var(--shadow-d), -3px -3px 6px var(--shadow-l);
-            transition: all 0.2s ease;
-        }
-
-        .chat-send-btn:hover { transform: translateY(-1px); }
-        .chat-send-btn:active { transform: translateY(1px); }
-        .chat-send-btn svg { width: 16px; height: 16px; }
-
-        .chat-loading {
-            display: flex;
-            align-items: center;
-            gap: 6px;
-            font-size: 11px;
-            color: var(--text-muted);
-        }
-
-        .chat-loading-dot {
-            width: 6px;
-            height: 6px;
-            background: var(--accent);
-            border-radius: 50%;
-            animation: pulse 1.4s ease-in-out infinite;
-        }
-
-        .chat-loading-dot:nth-child(2) { animation-delay: 0.2s; }
-        .chat-loading-dot:nth-child(3) { animation-delay: 0.4s; }
-
-        @keyframes pulse {
-            0%, 80%, 100% { opacity: 0.3; transform: scale(0.8); }
-            40% { opacity: 1; transform: scale(1); }
-        }
-
-        /* ===== ADDRESS INPUT ===== */
-        .autocomplete-wrapper {
-            position: relative;
-            width: 100%;
-        }
-
-        .address-input {
-            width: 100%;
-            padding: 14px 16px;
-            background: var(--bg);
-            border: none;
-            border-radius: 14px;
-            font-size: 13.5px;
-            color: var(--text-slate);
-            outline: none;
-            box-shadow: inset 4px 4px 8px var(--border-dash), inset -4px -4px 8px var(--shadow-l);
-        }
-
-        .suggestions-box {
-            position: absolute;
-            top: calc(100% + 8px);
-            left: 0; right: 0;
-            background: rgba(230, 238, 248, 0.95);
-            backdrop-filter: blur(10px);
-            border-radius: 14px;
-            max-height: 200px;
-            overflow-y: auto;
-            z-index: 2000;
-            box-shadow: 4px 4px 12px rgba(163, 177, 198, 0.3), -4px -4px 12px var(--shadow-l);
-            border: 1px solid rgba(255,255,255,0.6);
+            padding: 0 24px 24px;
             display: none;
-        }
-
-        .suggestion-item {
-            padding: 12px 14px;
-            cursor: pointer;
-            font-size: 12.5px;
-            color: var(--text-body);
-            border-bottom: 1px solid rgba(0,0,0,0.03);
-            white-space: nowrap;
-            overflow: hidden;
-            text-overflow: ellipsis;
-        }
-
-        .suggestion-item:hover {
-            background-color: rgba(255,255,255,0.5);
-            color: var(--accent);
-        }
-
-        /* ===== LOADING OVERLAY ===== */
-        .blur-overlay-curtain {
-            position: absolute;
-            top: 0; left: 0; right: 0; bottom: 0;
-            background: rgba(230, 238, 248, 0.35);
-            backdrop-filter: blur(6px);
-            -webkit-backdrop-filter: blur(6px);
-            z-index: 1000;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-            border-radius: 20px;
-            opacity: 0;
-            pointer-events: none;
-            transition: opacity 0.3s ease-in-out;
-        }
-
-        .blur-overlay-curtain.active {
-            opacity: 1;
-            pointer-events: auto;
-        }
-
-        .pulse-loader-ring {
-            width: 45px;
-            height: 45px;
-            border: 4px solid rgba(59, 130, 246, 0.1);
-            border-top-color: var(--accent);
-            border-radius: 50%;
-            animation: spinRing 0.8s linear infinite;
-            margin-bottom: 12px;
-        }
-
-        .loader-caption-text {
-            font-size: 13px;
-            font-weight: 700;
-            color: var(--text-heading);
-        }
-
-        @keyframes spinRing { to { transform: rotate(360deg); } }
-
-        /* ===== CLICKABLE METRIC CARDS ===== */
-        #grid-vegetation-card,
-        #grid-slope-card,
-        #grid-flood-card {
-            cursor: pointer;
-            transition: transform 0.2s ease, box-shadow 0.2s ease;
-        }
-
-        #grid-vegetation-card:hover,
-        #grid-slope-card:hover,
-        #grid-flood-card:hover {
-            transform: translateY(-2px);
-            box-shadow: 6px 6px 14px var(--shadow-d), -6px -6px 14px var(--shadow-l);
-        }
-
-        /* ===== BREAKDOWN PANELS ===== */
-        .mini-breakdown-panel {
-            background: var(--bg);
-            border-radius: 24px;
-            padding: 20px;
-            box-shadow: 6px 6px 16px var(--shadow-d2), -6px -6px 16px var(--shadow-l);
-            margin-top: 20px;
-            display: none;
-            width: 100%;
-        }
-
-        .mini-key-row {
-            display: flex;
-            align-items: center;
-            gap: 18px;
-            margin-top: 14px;
-            flex-wrap: wrap;
-        }
-
-        .mini-key-item {
-            display: inline-flex;
-            align-items: center;
-            gap: 6px;
-            font-size: 11.5px;
-            font-weight: 700;
-            color: var(--text-slate);
-        }
-
-        .mini-key-dot {
-            width: 9px;
-            height: 9px;
-            border-radius: 50%;
-            display: inline-block;
-            flex-shrink: 0;
-        }
-
-        .vegetation-breakdown-panel {
-            background: var(--bg);
-            border-radius: 24px;
-            padding: 24px;
-            box-shadow: 6px 6px 16px var(--shadow-d2), -6px -6px 16px var(--shadow-l);
-            margin-top: 20px;
-            display: none;
-            width: 100%;
-        }
-
-        .breakdown-header-row {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            width: 100%;
-        }
-
-        .breakdown-title {
-            font-size: 13px;
-            font-weight: 800;
-            color: var(--text-heading);
-            text-transform: uppercase;
-            letter-spacing: 0.5px;
-        }
-
-        .breakdown-value-extruded {
-            padding: 10px 24px;
-            background: var(--bg);
-            border-radius: 12px;
-            font-size: 18px;
-            font-weight: 900;
-            font-family: monospace;
-            text-align: center;
-            box-shadow: 3px 3px 6px var(--shadow-d), -3px -3px 6px var(--shadow-l),
-                        0px 3px 0px var(--shadow-d);
-            transition: color 0.3s ease;
-        }
-
-        .breakdown-divider {
-            width: 100%;
-            border-top: 2px dashed var(--border-dash);
-            margin: 18px 0;
-        }
-
-        .severity-legend-grid {
-            display: grid;
-            grid-template-columns: repeat(3, 1fr);
-            gap: 16px;
-            width: 100%;
-            margin-bottom: 20px;
-        }
-
-        .legend-indicator-card {
-            background: var(--bg);
-            border-radius: 14px;
-            padding: 14px;
-            box-shadow: inset 3px 3px 6px var(--shadow-d), inset -5px -5px 10px var(--shadow-l);
-            display: flex;
-            flex-direction: column;
-            gap: 4px;
-        }
-
-        .legend-badge {
-            font-size: 11px;
-            font-weight: 800;
-            text-transform: uppercase;
-            letter-spacing: 0.5px;
-            display: inline-flex;
-            align-items: center;
-            gap: 6px;
-        }
-
-        .legend-badge::before {
-            content: '';
-            width: 8px;
-            height: 8px;
-            border-radius: 50%;
-            display: inline-block;
-        }
-
-        .badge-green { color: #10b981; }
-        .badge-green::before { background: #10b981; }
-        .badge-orange { color: #f59e0b; }
-        .badge-orange::before { background: #f59e0b; }
-        .badge-red { color: #ef4444; }
-        .badge-red::before { background: #ef4444; }
-
-        .legend-desc {
-            font-size: 11.5px;
-            color: var(--text-muted);
-            line-height: 1.4;
-        }
-
-        /* ===== WILDFIRE SIMULATOR ===== */
-        .simulation-container {
-            width: 100%;
-            display: grid;
-            grid-template-columns: 1fr 240px;
-            gap: 20px;
-            margin-top: 15px;
-        }
-
-        .sim-map-wrapper {
-            position: relative;
-            height: 560px;
-            border-radius: 18px;
-            overflow: hidden;
-            border: 3px solid var(--bg);
-            box-shadow: 4px 4px 10px var(--shadow-d), -4px -4px 10px var(--shadow-l);
-        }
-
-        #simMap {
-            width: 100%;
-            height: 100%;
-            z-index: 1;
-        }
-
-        #simCanvas {
-            position: absolute;
-            top: 0; left: 0;
-            width: 100%; height: 100%;
-            z-index: 10;
-            pointer-events: auto;
-            cursor: crosshair;
-            display: block;
-        }
-
-        .sim-controls-panel {
-            background: var(--bg);
-            border-radius: 18px;
-            padding: 16px;
-            box-shadow: inset 3px 3px 6px var(--shadow-d), inset -3px -3px 6px var(--shadow-l);
-            display: flex;
-            flex-direction: column;
-            justify-content: space-between;
-        }
-
-        .sim-meta-heading {
-            font-size: 11px;
-            font-weight: 800;
-            color: var(--text-muted);
-            text-transform: uppercase;
-            letter-spacing: 0.5px;
-            margin-bottom: 8px;
-        }
-
-        .sim-status-box {
-            padding: 10px;
-            background: var(--bg);
-            border-radius: 10px;
-            font-size: 12px;
-            color: var(--text-slate);
-            box-shadow: inset 2px 2px 5px var(--shadow-d), inset -2px -2px 5px var(--shadow-l);
-            min-height: 120px;
-            font-family: inherit;
-            line-height: 1.4;
-        }
-
-        .sim-action-btn {
-            width: 100%;
-            padding: 12px;
-            background: var(--bg);
-            border: none;
-            border-radius: 12px;
-            font-weight: 800;
-            font-size: 11px;
-            color: var(--text-heading);
-            text-transform: uppercase;
-            letter-spacing: 0.5px;
-            cursor: pointer;
-            box-shadow: 4px 4px 10px var(--shadow-d), -4px -4px 10px var(--shadow-l),
-                        0px 3px 0px var(--shadow-d);
-            transition: all 0.1s ease;
-            outline: none;
-            margin-top: 10px;
-        }
-
-        .sim-action-btn:hover {
-            transform: translateY(-1px);
-            box-shadow: 5px 6px 12px var(--shadow-d), -5px -6px 12px var(--shadow-l),
-                        0px 4px 0px var(--shadow-d);
-        }
-
-        .sim-action-btn:active {
-            transform: translateY(3px);
-            box-shadow: 1px 1px 3px var(--shadow-d), -1px -1px 3px var(--shadow-l),
-                        0px 0px 0px var(--shadow-d);
-        }
-
-        .slope-sim-panel,
-        .flood-sim-panel {
-            display: grid;
-            grid-template-columns: 1.2fr 240px;
-            gap: 16px;
-            margin-top: 16px;
-            align-items: stretch;
-        }
-
-         .slope-sim-stage,
-        .flood-sim-stage {
-            position: relative;
-            min-height: 280px;
-            border-radius: 18px;
-            overflow: hidden;
-            background: linear-gradient(165deg, #1a1228 0%, #2d1f3d 45%, #1e1529 100%);
-            box-shadow: inset 5px 5px 12px rgba(0,0,0,0.45), inset -3px -3px 10px rgba(255,255,255,0.04), 4px 4px 14px var(--shadow-d);
-            border: 1px solid rgba(255,255,255,0.06);
-        }
-
-        .slope-sim-stage canvas,
-        .flood-sim-stage canvas {
-            width: 100%;
-            height: 100%;
-            display: block;
-        }
-
-        .slope-sim-controls,
-        .flood-sim-controls {
-            display: flex;
-            flex-direction: column;
-            gap: 10px;
         }
     </style>
 </head>
 <body>
+    <div class="top-header-panel" id="headerPanel">
+        <div class="logo-area">
+            <span class="logo-title">FinGeoRisk Portal</span>
+        </div>
+        <button class="btn-get-started" id="getStartedBtn" onclick="startOnboardingAnimation()">Get Started</button>
+    </div>
 
-    <div class="top-header-panel">
-        <div class="header-brand">FinGeoRisk</div>
-        <div class="header-identity">ID: Investor</div>
-        <div id="header-coordinates" class="header-coords">Lat: -- | Lng: --</div>
+    <div id="cesiumContainer"></div>
 
-        <div class="header-controls-mock">
-            <div class="mock-icon-btn" id="settingsTriggerBtn" title="Settings Menu">
-                <svg width="18" height="18" fill="currentColor" viewBox="0 0 16 16">
-                    <path d="M9.405 1.05c-.413-1.4-2.397-1.4-2.81 0l-.1.34a1.464 1.464 0 0 1-2.105.872l-.31-.17c-1.283-.698-2.686.705-1.987 1.987l.169.311c.446.82.023 1.841-.872 2.105l-.34.1c-1.4.413-1.4 2.397 0 2.81l.34.1a1.464 1.464 0 0 1 .872 2.105l-.17.31c-.698 1.283.705 2.686 1.987 1.987l.311-.169a1.464 1.464 0 0 1 2.105.872l.1.34c.413 1.4 2.397 1.4 2.81 0l.1-.34a1.464 1.464 0 0 1 2.105-.872l.31.17c1.283.698 2.686-.705 1.987-1.987l-.169-.311a1.464 1.464 0 0 1 .872-2.105l.34-.1c1.4-.413 1.4-2.397 0-2.81l-.34-.1a1.464 1.464 0 0 1-.872-2.105l.17-.31c.698-1.283-.705-2.686-1.987-1.987l-.311.169a1.464 1.464 0 0 1-2.105-.872zM8 10.93a2.929 2.929 0 1 1 0-5.86 2.929 2.929 0 0 1 0 5.86z"/>
-                </svg>
-            </div>
-            <div class="avatar-wrapper">
-                <div class="mock-avatar" id="headerAvatar" title="Click the settings icon to change your avatar color"></div>
-                <div class="avatar-edit-badge">
-                    <svg fill="currentColor" viewBox="0 0 16 16"><path d="M12.146.146a.5.5 0 0 1 .708 0l3 3a.5.5 0 0 1 0 .708l-10 10a.5.5 0 0 1-.168.11l-5 2a.5.5 0 0 1-.65-.65l2-5a.5.5 0 0 1 .11-.168l10-10zM11.207 2.5 13.5 4.793 14.793 3.5 12.5 1.207 11.207 2.5zm1.586 3L10.5 3.207 4 9.707V10h.5a.5.5 0 0 1 .5.5v.5h.5a.5.5 0 0 1 .5.5v.5h.293l6.5-6.5zm-9.761 5.175-.106.106-1.528 3.821 3.821-1.528.106-.106A.5.5 0 0 1 5 12.5V12h-.5a.5.5 0 0 1-.5-.5V11h-.5a.5.5 0 0 1-.468-.325z"/></svg>
+    <div class="floating-orb orb-1"></div>
+    <div class="floating-orb orb-2"></div>
+    <div class="floating-orb orb-3"></div>
+
+    <div class="scroll-indicator" id="scrollIndicator">
+        <span>Scroll to Explore</span>
+        <div class="arrow"></div>
+    </div>
+
+    <div class="scroll-content">
+        <div class="feature-section">
+            <div class="feature-card" data-animate>
+                <div class="feature-icon">🌍</div>
+                <h2>Global Risk Intelligence</h2>
+                <p>Access comprehensive geospatial risk data from anywhere in the world. Our AI-powered platform analyzes flood zones, wildfire hazards, slope stability, and infrastructure risks in real-time.</p>
+                <div class="feature-stats">
+                    <div class="stat-item">
+                        <div class="stat-value">150+</div>
+                        <div class="stat-label">Countries</div>
+                    </div>
+                    <div class="stat-item">
+                        <div class="stat-value">50M+</div>
+                        <div class="stat-label">Properties</div>
+                    </div>
+                    <div class="stat-item">
+                        <div class="stat-value">99.9%</div>
+                        <div class="stat-label">Accuracy</div>
+                    </div>
                 </div>
+            </div>
+        </div>
+
+        <div class="feature-section">
+            <div class="feature-card" data-animate>
+                <div class="feature-icon">🏠</div>
+                <h2>Homeowner Protection</h2>
+                <p>Make informed decisions about your most valuable asset. Get detailed risk assessments for any property, including interactive simulations showing potential hazards and mitigation strategies.</p>
+                <div class="feature-stats">
+                    <div class="stat-item">
+                        <div class="stat-value">24/7</div>
+                        <div class="stat-label">Monitoring</div>
+                    </div>
+                    <div class="stat-item">
+                        <div class="stat-value">AI</div>
+                        <div class="stat-label">Powered</div>
+                    </div>
+                    <div class="stat-item">
+                        <div class="stat-value">Real</div>
+                        <div class="stat-label">Time</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="feature-section">
+            <div class="feature-card" data-animate>
+                <div class="feature-icon">📈</div>
+                <h2>Investor Insights</h2>
+                <p>Evaluate commercial and residential investment opportunities with precision. Analyze entire tracts, assess financial viability, and identify high-potential areas with comprehensive market intelligence.</p>
+                <div class="feature-stats">
+                    <div class="stat-item">
+                        <div class="stat-value">ROI</div>
+                        <div class="stat-label">Analysis</div>
+                    </div>
+                    <div class="stat-item">
+                        <div class="stat-value">Market</div>
+                        <div class="stat-label">Trends</div>
+                    </div>
+                    <div class="stat-item">
+                        <div class="stat-value">Risk</div>
+                        <div class="stat-label">Scoring</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="cta-section">
+            <div class="cta-card" data-animate>
+                <h2>Ready to Get Started?</h2>
+                <p>Join thousands of homeowners and investors making smarter, safer property decisions with FinGeoRisk.</p>
+                <button class="cta-btn" onclick="startOnboardingAnimation()">Begin Your Journey</button>
             </div>
         </div>
     </div>
 
-    <!-- ============ SETTINGS OVERLAY ============ -->
-    <div class="settings-overlay" id="settingsOverlay">
-        <div class="settings-panel" id="settingsPanel">
-            <div class="settings-panel-header">
-                <div class="settings-panel-title">Settings</div>
-                <button type="button" class="settings-close-btn" id="settingsCloseBtn">✕</button>
-            </div>
-
-            <div class="settings-section">
-                <div class="settings-section-label">Theme</div>
-                <div class="theme-swatch-row" id="themeSwatchRow">
-                    <button type="button" class="theme-swatch-btn is-selected" data-theme="ocean" style="background: linear-gradient(135deg, #93c5fd, #1e3a8a);" title="Ocean"></button>
-                    <button type="button" class="theme-swatch-btn" data-theme="violet" style="background: linear-gradient(135deg, #c4b5fd, #4c1d95);" title="Violet"></button>
-                    <button type="button" class="theme-swatch-btn" data-theme="emerald" style="background: linear-gradient(135deg, #6ee7b7, #065f46);" title="Emerald"></button>
-                    <button type="button" class="theme-swatch-btn" data-theme="graphite" style="background: linear-gradient(135deg, #cbd5e1, #1f2937);" title="Graphite"></button>
-                    <button type="button" class="theme-swatch-btn" data-theme="sunset" style="background: linear-gradient(135deg, #fdba74, #9a3412);" title="Sunset"></button>
-                </div>
-            </div>
-
-            <div class="settings-section">
-                <div class="settings-section-label">
-                    <svg width="11" height="11" fill="currentColor" viewBox="0 0 16 16"><path d="M12.146.146a.5.5 0 0 1 .708 0l3 3a.5.5 0 0 1 0 .708l-10 10a.5.5 0 0 1-.168.11l-5 2a.5.5 0 0 1-.65-.65l2-5a.5.5 0 0 1 .11-.168l10-10z"/></svg>
-                    Profile Picture Color
-                </div>
-                <div class="avatar-swatch-row" id="avatarSwatchRow">
-                    <button type="button" class="avatar-swatch-btn is-selected" data-a="#3b82f6" data-b="#1d4ed8" style="background: linear-gradient(135deg, #3b82f6, #1d4ed8);" title="Blue"></button>
-                    <button type="button" class="avatar-swatch-btn" data-a="#8b5cf6" data-b="#6d28d9" style="background: linear-gradient(135deg, #8b5cf6, #6d28d9);" title="Violet"></button>
-                    <button type="button" class="avatar-swatch-btn" data-a="#10b981" data-b="#059669" style="background: linear-gradient(135deg, #10b981, #059669);" title="Emerald"></button>
-                    <button type="button" class="avatar-swatch-btn" data-a="#f97316" data-b="#c2410c" style="background: linear-gradient(135deg, #f97316, #c2410c);" title="Sunset"></button>
-                    <button type="button" class="avatar-swatch-btn" data-a="#f43f5e" data-b="#be123c" style="background: linear-gradient(135deg, #f43f5e, #be123c);" title="Rose"></button>
-                    <button type="button" class="avatar-swatch-btn" data-a="#64748b" data-b="#334155" style="background: linear-gradient(135deg, #64748b, #334155);" title="Graphite"></button>
-                </div>
-            </div>
-
-            <div class="settings-section">
-                <div class="settings-section-label">Basemap Style</div>
-                <div class="segmented-control" id="basemapControl">
-                    <div class="segmented-option is-selected" data-basemap="streets">Streets</div>
-                    <div class="segmented-option" data-basemap="satellite">Satellite</div>
-                </div>
-            </div>
-
-            <div class="settings-section" style="margin-bottom: 4px;">
-                <div class="settings-section-label">Accessibility</div>
-                <div class="settings-row">
-                    <div>
-                        <div class="settings-row-label">Reduce Motion</div>
-                        <div class="settings-row-sub">Minimizes animations & transitions</div>
-                    </div>
-                    <div class="toggle-switch" id="reduceMotionToggle"><div class="toggle-switch-knob"></div></div>
-                </div>
-                <div class="settings-row">
-                    <div>
-                        <div class="settings-row-label">Units</div>
-                        <div class="settings-row-sub">Slope gradient display format</div>
-                    </div>
-                    <div class="segmented-control" style="width: 120px;" id="unitsControl">
-                        <div class="segmented-option is-selected" data-units="deg">Degrees</div>
-                        <div class="segmented-option" data-units="pct">Percent</div>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-
-    <!-- ============ FINANCIAL OVERLAY ============ -->
-    <div class="financial-overlay" id="financialOverlay">
-        <div class="financial-panel" id="financialPanel">
-            <div class="financial-panel-header">
-                <div class="fin-brand-row">
-                    <div class="fin-brand-icon">📊</div>
-                    <div>
-                        <div class="financial-panel-title">Tract Finance & Insurance Intel</div>
-                        <div class="fin-location-sub" id="finLocationLabel">Analyze a tract to load location data</div>
-                    </div>
-                </div>
-                <button type="button" class="financial-close-btn" id="financialCloseBtn">✕</button>
-            </div>
-
-            <div class="fin-nav-tabs">
-                <span class="fin-tab active">Appreciation</span>
-                <span class="fin-tab">Rental</span>
-                <span class="fin-tab">Insurance</span>
-            </div>
-
-            <div class="fin-metrics-grid">
-                <div class="fin-metric-card">
-                    <div class="fin-metric-card-label">Estimated Value</div>
-                    <div class="fin-metric-card-value" id="finMedianValue">--</div>
-                </div>
-                <div class="fin-metric-card">
-                    <div class="fin-metric-card-label">5-Year Projected Value</div>
-                    <div class="fin-metric-card-value accent-teal" id="finProjected5yr">--</div>
-                </div>
-                <div class="fin-metric-card">
-                    <div class="fin-metric-card-label">Appreciation Rate</div>
-                    <div class="fin-metric-card-value" id="finAppreciation">--</div>
-                </div>
-                <div class="fin-metric-card">
-                    <div class="fin-metric-card-label">Est. Monthly Rent</div>
-                    <div class="fin-metric-card-value accent-orange" id="finMonthlyRent">--</div>
-                </div>
-            </div>
-
-            <div class="fin-insurance-row">
-                <div class="fin-ins-card">
-                    <div class="fin-ins-card-title">Annual Underwriting Target</div>
-                    <div class="fin-premium-value" id="finAnnualPremium">--</div>
-                    <div class="fin-premium-sub" id="finPremiumSub">Hazard-adjusted premium from live risk signals</div>
-                </div>
-                <div class="fin-ins-card">
-                    <div class="fin-ins-card-title">Estimated Max Loss</div>
-                    <div class="fin-gauge-wrap">
-                        <canvas id="finEmlGauge" width="120" height="70"></canvas>
-                        <div class="fin-gauge-value" id="finEmlValue">--</div>
-                    </div>
-                </div>
-                <div class="fin-ins-card">
-                    <div class="fin-ins-card-title">Risk Pool Allocation</div>
-                    <canvas id="finRiskDonut" width="90" height="90" style="display:block;margin:0 auto;"></canvas>
-                    <div class="fin-donut-legend">
-                        <div class="fin-legend-item"><span class="fin-legend-dot" style="background:#14b8a6;"></span><span id="finPoolFlood">Flood --</span></div>
-                        <div class="fin-legend-item"><span class="fin-legend-dot" style="background:#f97316;"></span><span id="finPoolWildfire">Wildfire --</span></div>
-                        <div class="fin-legend-item"><span class="fin-legend-dot" style="background:#ef4444;"></span><span id="finPoolWind">Wind --</span></div>
-                    </div>
-                </div>
-            </div>
-
-            <div class="fin-outlook-card">
-                <div class="fin-metric-card-label">Rental & Market Outlook</div>
-                <div class="fin-outlook-headline" id="finOutlookHeadline">Awaiting analysis</div>
-                <div class="fin-outlook-body" id="financialAIBox">Analyze a tract to receive location-grounded financial and insurance insights.</div>
-                <div class="fin-source-footer" id="finSourceFooter"></div>
-            </div>
-
-            <div class="financial-section" style="margin-bottom: 0;">
-                <div class="financial-section-label">Area Economics</div>
-                <div class="financial-metric-row">
-                    <div class="financial-metric-label">Price per Sq Ft</div>
-                    <div><span class="financial-metric-value" id="finPricePerSqFt">--</span><span class="financial-metric-trend" id="finPriceTrend"></span></div>
-                </div>
-                <div class="financial-metric-row">
-                    <div class="financial-metric-label">Rental Yield</div>
-                    <div class="financial-metric-value" id="finRentalYield">--</div>
-                </div>
-                <div class="financial-metric-row">
-                    <div class="financial-metric-label">Area Income Level</div>
-                    <div class="financial-metric-value" id="finIncomeLevel">--</div>
-                </div>
-                <div class="financial-metric-row">
-                    <div class="financial-metric-label">Employment Rate</div>
-                    <div><span class="financial-metric-value" id="finEmployment">--</span><span class="financial-metric-trend" id="finEmploymentTrend"></span></div>
-                </div>
-                <div class="financial-metric-row">
-                    <div class="financial-metric-label">Investment Risk</div>
-                    <div class="financial-metric-value" id="finRiskScore">--</div>
-                </div>
-            </div>
-        </div>
-    </div>
-    <div class="workspace-grid-layout">
-
-        <!-- ============ LEFT SIDEBAR ============ -->
-        <div class="search-sidebar">
-            <div class="search-top-group">
-                <h3>Tract Search</h3>
-
-                <div class="panel-divider"></div>
-
-                <div class="search-label-title">Search Area</div>
-                <div class="autocomplete-wrapper">
-                    <input type="text" id="addressSearch" class="address-input" placeholder="Search city, address, or tract area..." autocomplete="off">
-                    <div id="suggestionsBox" class="suggestions-box"></div>
-                </div>
-            </div>
-
-            <div class="chatbot-section">
-                <div class="search-label-title">AI Risk Assistant</div>
-                <div class="chatbot-outer-layer">
-                    <div class="chatbot-middle-layer">
-                        <div class="chatbot-inner-layer">
-                            <div id="chatMessages" class="chat-messages">
-                                <div class="chat-message ai">Hello! I'm your AI Risk Assistant. Ask me anything about investment tract risks, flood zones, wildfire hazards, slope analysis, or financial exposure.</div>
-                            </div>
-                            <div class="chat-input-wrapper">
-                                <input type="text" id="chatInput" class="chat-input" placeholder="Ask about tract risks...">
-                                <button id="chatSendBtn" class="chat-send-btn">
-                                    <svg fill="currentColor" viewBox="0 0 16 16">
-                                        <path d="M15.854.146a.5.5 0 0 1 .11.54l-5.819 14.547a.75.75 0 0 1-1.329.124l-3.178-4.995L.643 7.184a.75.75 0 0 1 .124-1.33L15.314.037a.5.5 0 0 1 .54.11ZM6.636 10.07l2.761 4.338L14.13 2.576 6.636 10.07Zm6.787-8.201L1.591 6.602l4.339 2.76 7.494-7.493Z"/>
-                                    </svg>
-                                </button>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-
-        <!-- ============ CENTER COLUMN ============ -->
-        <div class="center-dashboard-stack">
-
-            <div class="map-container-fixed">
-                <div id="map"></div>
-                <div id="blurOverlay" class="blur-overlay-curtain">
-                    <div class="pulse-loader-ring"></div>
-                    <div class="loader-caption-text">Calculating Bounds & Polygon Tree Inference Models...</div>
-                </div>
-            </div>
-
-            <div class="bottom-info-panel">
-                <div class="diagnostics-grid">
-                    <div class="metric-card-indented card-row1">
-                        <div class="card-label">Crime Risk</div>
-                        <div id="grid-crime" class="card-value-display">--</div>
-                    </div>
-                    <div id="grid-slope-card" class="metric-card-indented card-row1">
-                        <div class="card-label">Slope Gradient</div>
-                        <div id="grid-slope" class="card-value-display">--°</div>
-                    </div>
-                    <div id="grid-vegetation-card" class="metric-card-indented card-row1">
-                        <div class="card-label">Vegetation Index</div>
-                        <div id="grid-vegetation" class="card-value-display">--</div>
-                    </div>
-                    <div id="grid-flood-card" class="metric-card-indented card-row2">
-                        <div class="card-label">Flood Proximity</div>
-                        <div id="grid-flood" class="card-value-display">--</div>
-                    </div>
-                    <div class="metric-card-indented card-row2">
-                        <div class="card-label">Infrastructure Hazard</div>
-                        <div id="grid-infrastructure" class="card-value-display">--</div>
-                    </div>
-                </div>
-            </div>
-
-            <!-- Vegetation Breakdown -->
-            <div id="vegetationBreakdown" class="vegetation-breakdown-panel">
-                <div class="breakdown-header-row">
-                    <div class="breakdown-title">Vegetation Canopy Signature</div>
-                    <div id="breakdownVegValue" class="breakdown-value-extruded">--</div>
-                </div>
-
-                <div class="breakdown-divider"></div>
-
-                <div class="severity-legend-grid">
-                    <div class="legend-indicator-card">
-                        <div class="legend-badge badge-green">Low Risk (< 0.3)</div>
-                        <div class="legend-desc">Sparse canopy footprint. Minimal brush-loading and low wildfire transmission risks.</div>
-                    </div>
-                    <div class="legend-indicator-card">
-                        <div class="legend-badge badge-orange">Moderate (0.3 - 0.5)</div>
-                        <div class="legend-desc">Moderate woodland growth. Average dynamic wildland urban interface profile.</div>
-                    </div>
-                    <div class="legend-indicator-card">
-                        <div class="legend-badge badge-red">High Risk (> 0.5)</div>
-                        <div class="legend-desc">Dense forestry/overgrowth canopy. Heavy ground fuel loading conditions.</div>
-                    </div>
-                </div>
-
-                <div class="breakdown-title" style="margin-top: 10px;">5x5 Mile Bounding Box Wildfire Spread Simulator</div>
-
-                <div class="simulation-container">
-                    <div class="sim-map-wrapper">
-                        <div id="simMap"></div>
-                        <canvas id="simCanvas"></canvas>
-                    </div>
-                    <div class="sim-controls-panel">
-                        <div>
-                            <div class="sim-meta-heading">Simulation Feedback</div>
-                            <div id="simStatus" class="sim-status-box">Awaiting coordinate parameters... Click on the map grid to choose an ignition point.</div>
-                        </div>
-                        <div>
-                            <div class="sim-meta-heading" style="margin-top: 12px;">Wind Direction</div>
-                            <div style="display: flex; gap: 8px; margin-top: 6px;">
-                                <button class="wind-dir-btn" data-dir="N" style="flex: 1; padding: 8px; background: var(--bg); border: 1px solid var(--shadow-d); border-radius: 8px; cursor: pointer; font-size: 11px; font-weight: 700;">N</button>
-                                <button class="wind-dir-btn" data-dir="NE" style="flex: 1; padding: 8px; background: var(--bg); border: 1px solid var(--shadow-d); border-radius: 8px; cursor: pointer; font-size: 11px; font-weight: 700;">NE</button>
-                                <button class="wind-dir-btn" data-dir="E" style="flex: 1; padding: 8px; background: var(--bg); border: 1px solid var(--shadow-d); border-radius: 8px; cursor: pointer; font-size: 11px; font-weight: 700;">E</button>
-                                <button class="wind-dir-btn" data-dir="SE" style="flex: 1; padding: 8px; background: var(--bg); border: 1px solid var(--shadow-d); border-radius: 8px; cursor: pointer; font-size: 11px; font-weight: 700;">SE</button>
-                            </div>
-                            <div style="display: flex; gap: 8px; margin-top: 4px;">
-                                <button class="wind-dir-btn" data-dir="NW" style="flex: 1; padding: 8px; background: var(--bg); border: 1px solid var(--shadow-d); border-radius: 8px; cursor: pointer; font-size: 11px; font-weight: 700;">NW</button>
-                                <button class="wind-dir-btn" data-dir="W" style="flex: 1; padding: 8px; background: var(--bg); border: 1px solid var(--shadow-d); border-radius: 8px; cursor: pointer; font-size: 11px; font-weight: 700;">W</button>
-                                <button class="wind-dir-btn" data-dir="SW" style="flex: 1; padding: 8px; background: var(--bg); border: 1px solid var(--shadow-d); border-radius: 8px; cursor: pointer; font-size: 11px; font-weight: 700;">SW</button>
-                                <button class="wind-dir-btn is-selected" data-dir="S" style="flex: 1; padding: 8px; background: var(--accent); color: white; border: 1px solid var(--accent); border-radius: 8px; cursor: pointer; font-size: 11px; font-weight: 700;">S</button>
-                            </div>
-                        </div>
-                        <div>
-                            <div class="sim-meta-heading" style="margin-top: 12px;">Wind Speed</div>
-                            <input type="range" id="windSpeedSlider" min="0" max="100" value="30" style="width: 100%; margin-top: 6px;">
-                            <div id="windSpeedDisplay" style="font-size: 11px; color: var(--text-muted); margin-top: 4px;">30 km/h</div>
-                        </div>
-                        <div>
-                            <div class="sim-meta-heading" style="margin-top: 12px;">Fire Statistics</div>
-                            <div id="fireStats" class="sim-status-box" style="min-height: 60px;">Ignition: Not started</div>
-                        </div>
-                        <div>
-                            <button id="btnStartSim" class="sim-action-btn">Run Wildfire Simulation</button>
-                            <button id="btnResetSim" class="sim-action-btn" style="background: var(--shadow-d2); color: var(--text-slate2);">Reset Tree Canopy</button>
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-            <!-- Slope Breakdown -->
-            <div id="slopeBreakdown" class="mini-breakdown-panel">
-                <div class="breakdown-header-row">
-                    <div class="breakdown-title">Slope Gradient Signature</div>
-                    <div id="breakdownSlopeValue" class="breakdown-value-extruded">--</div>
-                </div>
-                <div class="mini-key-row">
-                    <span class="mini-key-item"><span class="mini-key-dot" style="background:#10b981;"></span>Low Risk (< 10°)</span>
-                    <span class="mini-key-item"><span class="mini-key-dot" style="background:#f59e0b;"></span>Moderate (10° - 20°)</span>
-                    <span class="mini-key-item"><span class="mini-key-dot" style="background:#ef4444;"></span>High Risk (> 20°)</span>
-                </div>
-                <div class="slope-sim-panel">
-                    <div class="slope-sim-stage">
-                        <canvas id="slopeSimCanvas" width="520" height="280"></canvas>
-                    </div>
-                    <div class="slope-sim-controls">
-                        <div class="sim-meta-heading">Foundation Settlement</div>
-                        <div id="slopeSimStatus" class="sim-status-box">Awaiting slope data. Once a tract is analyzed, this simulator will estimate how quickly a structure could begin to shift or settle on the terrain.</div>
-                        <button id="btnRunSlopeSim" class="sim-action-btn">Simulate Settlement</button>
-                    </div>
-                </div>
-            </div>
-
-            <!-- Flood Breakdown -->
-            <div id="floodBreakdown" class="mini-breakdown-panel">
-                <div class="breakdown-header-row">
-                    <div class="breakdown-title">Flood Proximity Signature</div>
-                    <div id="breakdownFloodValue" class="breakdown-value-extruded">--</div>
-                </div>
-                <div class="mini-key-row">
-                    <span class="mini-key-item"><span class="mini-key-dot" style="background:#10b981;"></span>Low Risk (< 0.3)</span>
-                    <span class="mini-key-item"><span class="mini-key-dot" style="background:#f59e0b;"></span>Moderate (0.3 - 0.6)</span>
-                    <span class="mini-key-item"><span class="mini-key-dot" style="background:#ef4444;"></span>High Risk (> 0.6)</span>
-                </div>
-                <div class="flood-sim-panel">
-                    <div class="flood-sim-stage">
-                        <canvas id="floodSimCanvas" width="520" height="280"></canvas>
-                    </div>
-                    <div class="flood-sim-controls">
-                        <div class="sim-meta-heading">Flood Inundation</div>
-                        <div id="floodSimStatus" class="sim-status-box">Awaiting flood data. This view visualizes how quickly a tract could become water-affected based on the local flood signal.</div>
-                        <button id="btnRunFloodSim" class="sim-action-btn">Run Flood Simulation</button>
-                    </div>
-                </div>
-            </div>
-
-        </div>
-
-        <!-- ============ RIGHT SIDEBAR ============ -->
-        <div class="gauge-sidebar">
-            <div class="gauge-container" style="transform: scale(1.35); margin-top: 30px; margin-bottom: 10px; position: relative;">
-                <svg width="110" height="110" viewBox="0 0 120 120">
-                    <circle cx="60" cy="60" r="50" fill="none" stroke="var(--ring-bg)" stroke-width="10"/>
-                    <circle id="gaugeMeter" cx="60" cy="60" r="50" fill="none" stroke="#10b981" stroke-width="10"
-                            stroke-dasharray="314.16" stroke-dashoffset="314.16" stroke-linecap="round" transform="rotate(-90 60 60)" style="transition: stroke-dashoffset 0.6s ease-in-out;"/>
-                    <text id="gaugeText" x="60" y="68" text-anchor="middle" font-family="system-ui" font-size="20" font-weight="800" fill="var(--text-heading)">0.0%</text>
-                </svg>
-            </div>
-
-            <div style="font-size: 11px; font-weight: 800; color: var(--text-muted); text-transform: uppercase; letter-spacing: 0.8px; margin-top: 15px;">Tract Risk</div>
-
-            <div class="panel-divider"></div>
-            <div class="ai-overview-title">AI Overview</div>
-
-            <div class="terrace-outer-layer">
-                <div id="aiOverviewBox" class="terrace-inner-textbox">Awaiting spatial polygon generation matrices...</div>
-            </div>
-
-            <button id="financialAssistantBtn" class="financial-assistant-btn" disabled>
-                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                    <path d="M3 3v18h18"></path>
-                    <path d="M7 16l4-8 4 5 4-9"></path>
-                </svg>
-                Finance & Insurance Intel
+    <div class="role-container" id="rolePopup">
+        <div class="role-header">Welcome to FinGeoRisk</div>
+        <div class="role-subtext">Tell us who you are so we can show you the right view.</div>
+        <div class="role-options">
+            <button class="role-btn" onclick="selectRole('homeowner')">
+                <span class="icon">🏠</span>
+                <span>
+                    Homeowner
+                    <div class="desc">Checking risk for a home I own or live in</div>
+                </span>
+            </button>
+            <button class="role-btn" onclick="selectRole('investor')">
+                <span class="icon">📈</span>
+                <span>
+                    Investor
+                    <div class="desc">Evaluating land or property for purchase</div>
+                </span>
             </button>
         </div>
-
+        <div class="role-loading" id="roleLoading">Loading your dashboard...</div>
     </div>
-        <script>
-        var BASEMAP_SOURCES = {
-            streets: { url: 'https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', attribution: '© OpenStreetMap', maxZoom: 19 },
-            satellite: { url: 'https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}', attribution: 'Tiles © Esri', maxZoom: 19 }
+
+    <script>
+        Cesium.Ion.defaultAccessToken = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJqdGkiOiI3NWYzMmM1OS1lMzE5LTRmZTMtOWNlNi00OWZmMzkxMDhlNzgiLCJpZCI6NDUwNDgwLCJzdWIiOiJTaWRkaGFudF8xMjEzIiwiaXNzIjoiaHR0cHM6Ly9hcGkuY2VzaXVtLmNvbSIsImF1ZCI6IlVudGl0bGVkIiwiaWF0IjoxNzgyNzU0MTU2fQ.H6iNblLtKvy83srBaTEv1BJl_xO17vJE3hCZZ0x3M-4';
+
+        const viewer = new Cesium.Viewer('cesiumContainer', {
+            baseLayerPicker: false,
+            geocoder: false,
+            homeButton: false,
+            infoBox: false,
+            sceneModePicker: false,
+            selectionIndicator: false,
+            timeline: false,
+            navigationHelpButton: false,
+            animation: false,
+            scene3DOnly: true
+        });
+
+        viewer.camera.setView({
+            destination: Cesium.Cartesian3.fromDegrees(0.0, 15.0, 18500000.0)
+        });
+
+        viewer.scene.screenSpaceCameraController.enableInputs = false;
+        viewer.scene.screenSpaceCameraController.enableRotate = false;
+        viewer.scene.screenSpaceCameraController.enableTranslate = false;
+        viewer.scene.screenSpaceCameraController.enableZoom = false;
+        viewer.scene.screenSpaceCameraController.enableTilt = false;
+        viewer.scene.screenSpaceCameraController.enableLook = false;
+
+        let lastTime = Date.now();
+        let spinning = true;
+
+        const spinGlobe = () => {
+            if (spinning) {
+                const now = Date.now();
+                const delta = (now - lastTime) / 1000;
+                lastTime = now;
+                viewer.camera.rotate(Cesium.Cartesian3.UNIT_Z, -0.04 * delta);
+            }
         };
 
-        var map = L.map('map').setView([34.22, -84.11], 13);
-        var mainTileLayer = L.tileLayer(BASEMAP_SOURCES.streets.url, { maxZoom: 19, attribution: BASEMAP_SOURCES.streets.attribution }).addTo(map);
+        viewer.scene.postRender.addEventListener(spinGlobe);
 
-        var editableLayers = new L.FeatureGroup();
-        map.addLayer(editableLayers);
+        function startOnboardingAnimation() {
+            spinning = false;
 
-        var drawControl = new L.Control.Draw({
-            draw: { polygon: true, rectangle: true, circle: false, circlemarker: false, polyline: false, marker: false },
-            edit: { featureGroup: editableLayers, remove: true }
-        });
-        map.addControl(drawControl);
+            document.getElementById('getStartedBtn').style.opacity = '0';
+            document.getElementById('getStartedBtn').style.pointerEvents = 'none';
+            document.getElementById('headerPanel').style.top = '12px';
+            document.getElementById('headerPanel').style.background = 'rgba(230, 238, 248, 0.4)';
+            document.getElementById('scrollIndicator').style.opacity = '0';
 
-        var currentLat = null, currentLng = null, currentLabel = '';
-        var lastSlopeDegrees = 0, lastSlopePercent = 0;
-        var lastFloodScore = 0, lastFloodZone = 'N/A', lastFloodSubtype = '';
-        var currentUnits = 'deg';
-
-        var simMap = L.map('simMap', {
-            zoomControl: false, boxZoom: false, doubleClickZoom: false,
-            dragging: false, scrollWheelZoom: false, touchZoom: false, attributionControl: false
-        }).setView([34.22, -84.11], 12);
-        var simTileLayer = L.tileLayer(BASEMAP_SOURCES.streets.url, { maxZoom: 19 }).addTo(simMap);
-
-        function setBasemapStyle(styleKey) {
-            var src = BASEMAP_SOURCES[styleKey] || BASEMAP_SOURCES.streets;
-            map.removeLayer(mainTileLayer);
-            mainTileLayer = L.tileLayer(src.url, { maxZoom: src.maxZoom, attribution: src.attribution }).addTo(map);
-            mainTileLayer.bringToBack();
-            simMap.removeLayer(simTileLayer);
-            simTileLayer = L.tileLayer(src.url, { maxZoom: src.maxZoom }).addTo(simMap);
-            simTileLayer.bringToBack();
-        }
-
-        var simCanvas = document.getElementById('simCanvas');
-        var simCtx = simCanvas.getContext('2d');
-        var simGridSize = 55;
-        var simGrid = [];
-        var simInterval = null;
-        var currentVegDensity = 0.4;
-        var fuelBurnProbability = 0.45;
-        var selectedIgnitionCell = null;
-        var windDirection = 'S';
-        var windSpeed = 30;
-        var totalTreesBurned = 0;
-        var simulationStartTime = null;
-        var simFuelLoad = [];
-        var simIntensity = [];
-        var simBurnAge = [];
-        var fireParticles = [];
-        var simAnimFrame = null;
-        var currentNriFactor = 0.3;
-        var geoLimits = { minX: 0, maxX: 0, minY: 0, maxY: 0 };
-
-
-        var slopeSimCanvas = document.getElementById('slopeSimCanvas');
-        var slopeSimCtx = slopeSimCanvas.getContext('2d');
-        var floodSimCanvas = document.getElementById('floodSimCanvas');
-        var floodSimCtx = floodSimCanvas.getContext('2d');
-
-        function updateRiskWheel(scoreValue) {
-            var circle = document.getElementById('gaugeMeter');
-            var text = document.getElementById('gaugeText');
-            var circumference = 2 * Math.PI * circle.r.baseVal.value;
-            circle.style.strokeDashoffset = circumference - (scoreValue / 100) * circumference;
-            text.textContent = scoreValue.toFixed(1) + '%';
-            circle.style.stroke = scoreValue > 60 ? '#ef4444' : scoreValue > 35 ? '#f59e0b' : '#10b981';
-        }
-
-        function calculateSlopePercent(degrees) { return Math.tan(degrees * Math.PI / 180) * 100; }
-
-        function assignRiskColor(value, elementId, warn, high) {
-            var el = document.getElementById(elementId);
-            var n = parseFloat(value) || 0;
-            el.style.color = n >= high ? '#ef4444' : n >= warn ? '#f59e0b' : '#10b981';
-        }
-
-        function assignVegetationColor(value, elementId) { assignRiskColor(value, elementId, 0.3, 0.5); }
-
-        function renderSlopeDisplay() {
-            var el = document.getElementById('grid-slope');
-            el.innerText = currentUnits === 'pct' ? lastSlopePercent.toFixed(1) + '%' : lastSlopeDegrees.toFixed(1) + '°';
-        }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-        function applyNegativeCroppingMask(targetMap, currentMask, currentBoundsLayer, sw, ne) {
-            if (currentMask) { targetMap.removeLayer(currentMask); }
-            if (currentBoundsLayer) { targetMap.removeLayer(currentBoundsLayer); }
-            var outerRing = [ L.latLng(-90, -180), L.latLng(90, -180), L.latLng(90, 180), L.latLng(-90, 180) ];
-            var innerHole = [ L.latLng(sw.lat, sw.lng), L.latLng(ne.lat, sw.lng), L.latLng(ne.lat, ne.lng), L.latLng(sw.lat, ne.lng) ];
-            var themeBg = getComputedStyle(document.documentElement).getPropertyValue('--bg').trim() || '#e6eef8';
-            var themeHeading = getComputedStyle(document.documentElement).getPropertyValue('--text-heading').trim() || '#1e3a8a';
-            var maskLayer = L.polygon([outerRing, innerHole], { color: themeBg, weight: 0, fillColor: themeBg, fillOpacity: 1.0, interactive: false }).addTo(targetMap);
-            var boundsLayer = L.rectangle(L.latLngBounds(sw, ne), { color: themeHeading, weight: 3, fillOpacity: 0, interactive: false }).addTo(targetMap);
-            return { maskLayer: maskLayer, boundsLayer: boundsLayer };
-        }
-
-        var simMaskLayer = null;
-        var simBoundsLayer = null;
-
-        function updateSimulationMapLayers(lat, lng, vegIndexValue) {
-            currentNriFactor = Math.min(Math.max(parseFloat(vegIndexValue) || 0.3, 0.05), 0.95);
-            currentVegDensity = currentNriFactor;
-            fuelBurnProbability = 0.12 + (currentNriFactor * 0.55);
-            var latOffset = 2.5 * (1 / 69.0);
-            var lngOffset = 2.5 * (1 / (69.0 * Math.cos(lat * Math.PI / 180)));
-            var swCorner = L.latLng(lat - latOffset, lng - lngOffset);
-            var neCorner = L.latLng(lat + latOffset, lng + lngOffset);
-            var bounds = L.latLngBounds(swCorner, neCorner);
-            var maskResult = applyNegativeCroppingMask(simMap, simMaskLayer, simBoundsLayer, swCorner, neCorner);
-            simMaskLayer = maskResult.maskLayer;
-            simBoundsLayer = maskResult.boundsLayer;
-            simMap.fitBounds(bounds, { padding: [0, 0], animate: false });
-            simMap.once('moveend', function() {
-                setTimeout(function() {
-                    calculateGeographicConstraints(swCorner, neCorner);
-                    initializeSimulationGrid();
-                }, 100);
+            viewer.camera.flyTo({
+                destination: Cesium.Cartesian3.fromDegrees(-40.0, 23.0, 4000000.0),
+                duration: 2.8,
+                easingFunction: Cesium.EasingFunction.QUADRATIC_IN_OUT,
+                complete: function() {
+                    document.getElementById('rolePopup').classList.add('active');
+                }
             });
         }
 
-        function calculateGeographicConstraints(sw, ne) {
-    var w = simCanvas.offsetWidth;
-    var h = simCanvas.offsetHeight;
-    if (w < 10 || h < 10) return;
-    simCanvas.width = w;
-    simCanvas.height = h;
-    var pSW = simMap.latLngToContainerPoint(sw);
-    var pNE = simMap.latLngToContainerPoint(ne);
-    geoLimits.minX = Math.max(0, Math.min(pSW.x, pNE.x));
-    geoLimits.maxX = Math.min(w, Math.max(pSW.x, pNE.x));
-    geoLimits.minY = Math.max(0, Math.min(pSW.y, pNE.y));
-    geoLimits.maxY = Math.min(h, Math.max(pSW.y, pNE.y));
-}
+        const observerOptions = {
+            threshold: 0.2,
+            rootMargin: '0px 0px -100px 0px'
+        };
 
-        function initializeSimulationGrid() {
-            if (simInterval) { clearInterval(simInterval); simInterval = null; }
-            if (simAnimFrame) { cancelAnimationFrame(simAnimFrame); simAnimFrame = null; }
-            fireParticles = [];
-            selectedIgnitionCell = null;
-            totalTreesBurned = 0;
-            simulationStartTime = null;
-            document.getElementById('simStatus').innerText = 'Click inside the 5×5 mile grid to place an ignition point. Fuel load driven by NDVI ' + currentNriFactor.toFixed(3) + '.';
-            document.getElementById('fireStats').innerText = 'Ignition: Not started';
-            simCanvas.width = simCanvas.offsetWidth;
-            simCanvas.height = simCanvas.offsetHeight;
-            if (geoLimits.maxX === 0 || geoLimits.maxX === geoLimits.minX) { drawSimulationGrid(); return; }
-            var cellW = simCanvas.width / simGridSize;
-            var cellH = simCanvas.height / simGridSize;
-            simGrid = []; simFuelLoad = []; simIntensity = []; simBurnAge = [];
-            for (var x = 0; x < simGridSize; x++) {
-                simGrid[x] = []; simFuelLoad[x] = []; simIntensity[x] = []; simBurnAge[x] = [];
-                for (var y = 0; y < simGridSize; y++) {
-                    var cellPixelX = x * cellW + cellW / 2;
-                    var cellPixelY = y * cellH + cellH / 2;
-                    var inBounds = cellPixelX >= geoLimits.minX && cellPixelX <= geoLimits.maxX &&
-                        cellPixelY >= geoLimits.minY && cellPixelY <= geoLimits.maxY;
-                    if (inBounds) {
-                        var nx = x / simGridSize, ny = y / simGridSize;
-                        var cluster = Math.sin(nx * 11 + ny * 7) * 0.22 + Math.sin(nx * 17 - ny * 9) * 0.14;
-                        var fuel = Math.min(1, Math.max(0, currentNriFactor + cluster + (Math.random() - 0.5) * 0.12));
-                        if (fuel > 0.22) { simGrid[x][y] = 1; simFuelLoad[x][y] = fuel; }
-                        else { simGrid[x][y] = 0; simFuelLoad[x][y] = 0; }
-                    } else { simGrid[x][y] = 0; simFuelLoad[x][y] = 0; }
-                    simIntensity[x][y] = 0; simBurnAge[x][y] = 0;
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('visible');
+                }
+            });
+        }, observerOptions);
+
+        document.querySelectorAll('[data-animate]').forEach(el => {
+            observer.observe(el);
+        });
+
+        let hasScrolled = false;
+        window.addEventListener('scroll', () => {
+            if (!hasScrolled && window.scrollY > 50) {
+                hasScrolled = true;
+                const scrollIndicator = document.getElementById('scrollIndicator');
+                if (scrollIndicator) {
+                    scrollIndicator.style.opacity = '0';
+                    scrollIndicator.style.transition = 'opacity 0.3s ease';
                 }
             }
-            drawSimulationGrid();
-        }
+        });
 
-        function spawnFireParticles(cx, cy, count, intensity) {
-            for (var i = 0; i < count; i++) {
-                fireParticles.push({
-                    x: cx + (Math.random() - 0.5) * 8, y: cy + (Math.random() - 0.5) * 8,
-                    vx: (Math.random() - 0.5) * 2.2, vy: -1.2 - Math.random() * 2.5 * intensity,
-                    life: 0.6 + Math.random() * 0.5, age: 0, size: 1.5 + Math.random() * 2.5 * intensity
+        async function selectRole(role) {
+            document.getElementById('roleLoading').style.display = 'block';
+
+            try {
+                await fetch('/api/set_role', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ role: role })
                 });
-            }
-        }
-
-        function drawSimulationGrid() {
-            simCtx.clearRect(0, 0, simCanvas.width, simCanvas.height);
-            var cellW = simCanvas.width / simGridSize;
-            var cellH = simCanvas.height / simGridSize;
-            for (var x = 0; x < simGridSize; x++) {
-                for (var y = 0; y < simGridSize; y++) {
-                    var posX = Math.floor(x * cellW), posY = Math.floor(y * cellH);
-                    var exactW = Math.floor((x + 1) * cellW) - posX;
-                    var exactH = Math.floor((y + 1) * cellH) - posY;
-                    var centerX = posX + exactW / 2, centerY = posY + exactH / 2;
-                    var state = simGrid[x][y], fuel = simFuelLoad[x][y] || 0, intensity = simIntensity[x][y] || 0;
-                    if (state === 1) {
-                        var g = 80 + fuel * 100, r = 20 + fuel * 40;
-                        simCtx.beginPath();
-                        simCtx.arc(centerX, centerY, Math.min(exactW, exactH) * (0.38 + fuel * 0.12), 0, 2 * Math.PI);
-                        var grad = simCtx.createRadialGradient(centerX, centerY, 0, centerX, centerY, Math.min(exactW, exactH) * 0.5);
-                        grad.addColorStop(0, 'rgba(' + r + ',' + g + ',45,0.95)');
-                        grad.addColorStop(1, 'rgba(15,60,25,0.75)');
-                        simCtx.fillStyle = grad; simCtx.fill();
-                    } else if (state === 2) {
-                        var radius = Math.min(exactW, exactH) * (0.48 + intensity * 0.08);
-                        var fireGrad = simCtx.createRadialGradient(centerX, centerY - radius * 0.2, 0, centerX, centerY, radius);
-                        fireGrad.addColorStop(0, 'rgba(255,240,120,0.98)');
-                        fireGrad.addColorStop(0.35, 'rgba(255,120,30,0.95)');
-                        fireGrad.addColorStop(0.7, 'rgba(220,40,20,0.9)');
-                        fireGrad.addColorStop(1, 'rgba(80,10,5,0.6)');
-                        simCtx.beginPath(); simCtx.arc(centerX, centerY, radius, 0, 2 * Math.PI);
-                        simCtx.fillStyle = fireGrad; simCtx.fill();
-                        simCtx.shadowColor = 'rgba(255,100,0,0.8)'; simCtx.shadowBlur = 12 * intensity;
-                        simCtx.beginPath(); simCtx.arc(centerX, centerY, radius * 0.55, 0, 2 * Math.PI);
-                        simCtx.fillStyle = 'rgba(255,220,80,0.85)'; simCtx.fill();
-                        simCtx.shadowBlur = 0;
-                    } else if (state === 3) {
-                        simCtx.beginPath(); simCtx.arc(centerX, centerY, Math.min(exactW, exactH) * 0.36, 0, 2 * Math.PI);
-                        simCtx.fillStyle = 'rgba(45,35,30,0.85)'; simCtx.fill();
-                        simCtx.beginPath(); simCtx.arc(centerX, centerY, Math.min(exactW, exactH) * 0.2, 0, 2 * Math.PI);
-                        simCtx.fillStyle = 'rgba(25,20,18,0.9)'; simCtx.fill();
-                    }
-                }
-            }
-            fireParticles.forEach(function(p) {
-                var alpha = Math.max(0, 1 - p.age / p.life);
-                simCtx.beginPath(); simCtx.arc(p.x, p.y, p.size * alpha, 0, 2 * Math.PI);
-                simCtx.fillStyle = 'rgba(255,' + Math.floor(140 + 80 * alpha) + ',40,' + (alpha * 0.7) + ')';
-                simCtx.fill();
-            });
-            if (selectedIgnitionCell) {
-                var ix = Math.floor(selectedIgnitionCell.x * cellW) + cellW / 2;
-                var iy = Math.floor(selectedIgnitionCell.y * cellH) + cellH / 2;
-                simCtx.beginPath(); simCtx.arc(ix, iy, Math.max(cellW, cellH) * 1.8, 0, 2 * Math.PI);
-                simCtx.strokeStyle = '#ff3366'; simCtx.lineWidth = 2;
-                simCtx.setLineDash([4, 4]); simCtx.stroke(); simCtx.setLineDash([]);
-                simCtx.beginPath(); simCtx.arc(ix, iy, 4, 0, 2 * Math.PI);
-                simCtx.fillStyle = '#ff3366'; simCtx.fill();
-            }
-        }
-
-        simCanvas.addEventListener('click', function(e) {
-            var rect = simCanvas.getBoundingClientRect();
-            var clickX = e.clientX - rect.left, clickY = e.clientY - rect.top;
-            if (clickX < geoLimits.minX || clickX > geoLimits.maxX || clickY < geoLimits.minY || clickY > geoLimits.maxY) return;
-            var cellX = Math.floor(clickX / (simCanvas.width / simGridSize));
-            var cellY = Math.floor(clickY / (simCanvas.height / simGridSize));
-            if (cellX >= 0 && cellX < simGridSize && cellY >= 0 && cellY < simGridSize) {
-                simGrid[cellX][cellY] = 2;
-                selectedIgnitionCell = { x: cellX, y: cellY };
-                drawSimulationGrid();
-                document.getElementById('simStatus').innerText = 'Spark ignition set inside grid bounds vector [' + cellX + ', ' + cellY + '].';
-            }
-        });
-
-        function getWindVector(direction) {
-            var map = { 'N':{dx:0,dy:-1},'NE':{dx:1,dy:-1},'E':{dx:1,dy:0},'SE':{dx:1,dy:1},'S':{dx:0,dy:1},'SW':{dx:-1,dy:1},'W':{dx:-1,dy:0},'NW':{dx:-1,dy:-1} };
-            return map[direction] || map['S'];
-        }
-
-        function runFireSimulationStep() {
-            var nextGrid = [], nextIntensity = [], activeFires = 0, newlyIgnited = 0;
-            var wind = getWindVector(windDirection);
-            var speedFactor = 0.25 + (windSpeed / 100) * 0.85;
-            var moisture = Math.max(0.15, 0.55 - currentNriFactor * 0.35);
-            for (var x = 0; x < simGridSize; x++) { nextGrid[x] = simGrid[x].slice(); nextIntensity[x] = simIntensity[x].slice(); }
-            for (var x = 0; x < simGridSize; x++) {
-                for (var y = 0; y < simGridSize; y++) {
-                    if (simGrid[x][y] === 2) {
-                        var fuel = simFuelLoad[x][y] || 0.5, inten = simIntensity[x][y] || 0.6;
-                        simBurnAge[x][y] = (simBurnAge[x][y] || 0) + 1;
-                        if (simBurnAge[x][y] > 8 + fuel * 10) {
-                            nextGrid[x][y] = 3; nextIntensity[x][y] = 0; totalTreesBurned++;
-                        } else {
-                            nextIntensity[x][y] = Math.min(1, inten + 0.04);
-                            [[x-1,y,0,0],[x+1,y,0,0],[x,y-1,0,0],[x,y+1,0,0],[x-1,y-1,-1,-1],[x+1,y-1,1,-1],[x-1,y+1,-1,1],[x+1,y+1,1,1]].forEach(function(n) {
-                                var nx = n[0], ny = n[1];
-                                if (nx < 0 || nx >= simGridSize || ny < 0 || ny >= simGridSize || simGrid[nx][ny] !== 1) return;
-                                var dot = (n[2] * wind.dx + n[3] * wind.dy);
-                                var windBoost = 1 + Math.max(0, dot) * 0.85;
-                                var distPenalty = (n[2] !== 0 && n[3] !== 0) ? 0.72 : 1;
-                                var nfuel = simFuelLoad[nx][ny] || 0.3;
-                                var spreadProb = fuelBurnProbability * windBoost * speedFactor * distPenalty * (1 - moisture) * nfuel;
-                                if (Math.random() < spreadProb) { nextGrid[nx][ny] = 2; nextIntensity[nx][ny] = 0.35 + nfuel * 0.4; newlyIgnited++; }
-                            });
-                            if (Math.random() < 0.008 * speedFactor * currentNriFactor) {
-                                var sx = x + Math.round(wind.dx * (2 + Math.random() * 3));
-                                var sy = y + Math.round(wind.dy * (2 + Math.random() * 3));
-                                if (sx >= 0 && sx < simGridSize && sy >= 0 && sy < simGridSize && simGrid[sx][sy] === 1) {
-                                    nextGrid[sx][sy] = 2; nextIntensity[sx][sy] = 0.5; newlyIgnited++;
-                                }
-                            }
-                        }
-                    }
-                }
-            }
-            simGrid = nextGrid; simIntensity = nextIntensity;
-            var cellW = simCanvas.width / simGridSize, cellH = simCanvas.height / simGridSize;
-            for (var x = 0; x < simGridSize; x++) {
-                for (var y = 0; y < simGridSize; y++) {
-                    if (simGrid[x][y] === 2) {
-                        activeFires++;
-                        if (Math.random() < 0.35) spawnFireParticles(Math.floor(x * cellW) + cellW / 2, Math.floor(y * cellH) + cellH / 2, 1, simIntensity[x][y]);
-                    }
-                }
-            }
-            fireParticles = fireParticles.filter(function(p) {
-                p.age += 0.04; p.x += p.vx + wind.dx * 0.3; p.y += p.vy; return p.age < p.life;
-            });
-            drawSimulationGrid();
-            var elapsed = ((Date.now() - simulationStartTime) / 1000).toFixed(1);
-            var acresEst = (totalTreesBurned * 0.08).toFixed(1);
-            document.getElementById('fireStats').innerHTML = 'Active Fronts: ' + activeFires + '<br>Cells Consumed: ' + totalTreesBurned + '<br>New Ignitions: ' + newlyIgnited + '<br>Est. Burn Area: ~' + acresEst + ' ac<br>Elapsed: ' + elapsed + 's';
-            if (activeFires === 0) { simAnimFrame = null; document.getElementById('simStatus').innerText = 'Simulation complete. Wildfire spread halted at fuel boundary.'; return; }
-            simAnimFrame = requestAnimationFrame(runFireSimulationStep);
-        }
-
-        document.getElementById('btnStartSim').addEventListener('click', function() {
-            if (!selectedIgnitionCell) return;
-            if (simInterval) { clearInterval(simInterval); simInterval = null; }
-            if (simAnimFrame) { cancelAnimationFrame(simAnimFrame); }
-            simulationStartTime = Date.now();
-            totalTreesBurned = 0; fireParticles = [];
-            var ix = selectedIgnitionCell.x, iy = selectedIgnitionCell.y;
-            simGrid[ix][iy] = 2; simIntensity[ix][iy] = 0.85; simBurnAge[ix][iy] = 0;
-            document.getElementById('simStatus').innerText = 'Wildfire simulation running — NDVI fuel load ' + currentNriFactor.toFixed(3) + ', wind ' + windDirection + ' @ ' + windSpeed + ' km/h.';
-            simAnimFrame = requestAnimationFrame(runFireSimulationStep);
-        });
-
-        document.getElementById('btnResetSim').addEventListener('click', initializeSimulationGrid);
-         function drawNeumorphicHouse(ctx, x, y, tilt, submerged) {
-            ctx.save();
-            ctx.translate(x, y);
-            ctx.rotate(tilt || 0);
-            ctx.fillStyle = submerged ? '#94a3b8' : '#e8ecf4';
-            ctx.fillRect(-34, -18, 68, 44);
-            ctx.strokeStyle = submerged ? '#64748b' : '#a8b4c8';
-            ctx.lineWidth = 1.5;
-            ctx.strokeRect(-34, -18, 68, 44);
-            ctx.fillStyle = submerged ? '#78716c' : '#c2410c';
-            ctx.beginPath();
-            ctx.moveTo(-40, -18); ctx.lineTo(0, -44); ctx.lineTo(40, -18);
-            ctx.closePath(); ctx.fill();
-            ctx.fillStyle = submerged ? 'rgba(56,189,248,0.5)' : 'rgba(147,197,253,0.9)';
-            ctx.fillRect(-24, -10, 14, 14);
-            ctx.fillRect(10, -10, 14, 14);
-            ctx.fillStyle = '#475569';
-            ctx.fillRect(-38, 26, 76, 7);
-            ctx.restore();
-        }
-
-        function renderSlopeSimulation(degrees, percent, progress) {
-            var ctx = slopeSimCtx;
-            var canvas = slopeSimCanvas;
-            var w = canvas.width, h = canvas.height;
-            ctx.clearRect(0, 0, w, h);
-
-            var skyGrad = ctx.createLinearGradient(0, 0, 0, h * 0.55);
-            skyGrad.addColorStop(0, '#2a1f45');
-            skyGrad.addColorStop(1, '#1a1228');
-            ctx.fillStyle = skyGrad;
-            ctx.fillRect(0, 0, w, h);
-
-            var severity = Math.min(1, Math.max(0, Math.abs(degrees) / 25));
-            var run = w * 0.72;
-            var rise = Math.tan(Math.abs(degrees) * Math.PI / 180) * run;
-            rise = Math.max(18, Math.min(130, rise));
-            var baseY = h - 36;
-
-            ctx.beginPath();
-            ctx.moveTo(20, baseY);
-            ctx.lineTo(w - 20, baseY - rise);
-            ctx.lineTo(w - 20, h);
-            ctx.lineTo(20, h);
-            ctx.closePath();
-            var soilGrad = ctx.createLinearGradient(0, baseY - rise, 0, h);
-            soilGrad.addColorStop(0, '#4ade80');
-            soilGrad.addColorStop(0.15, '#3d6b42');
-            soilGrad.addColorStop(0.4, '#5c4033');
-            soilGrad.addColorStop(1, '#2d1810');
-            ctx.fillStyle = soilGrad;
-            ctx.fill();
-
-            var shiftCm = (6 + severity * 32) * progress;
-            var tilt = (severity * 0.08) * progress;
-            var houseAnchorX = w * 0.58 + shiftCm * 0.55;
-            var houseAnchorY = baseY - rise * 0.58 - 30 + shiftCm * 0.35;
-
-            ctx.strokeStyle = 'rgba(251,191,36,0.7)';
-            ctx.lineWidth = 1.5;
-            ctx.setLineDash([5, 4]);
-            ctx.beginPath();
-            ctx.moveTo(houseAnchorX - 20, houseAnchorY + 34);
-            ctx.lineTo(houseAnchorX - 20 + shiftCm, houseAnchorY + 34 + shiftCm * 0.4);
-            ctx.stroke();
-            ctx.setLineDash([]);
-
-            drawNeumorphicHouse(ctx, houseAnchorX, houseAnchorY, tilt, false);
-
-            var years = Math.max(3, Math.min(35, Math.round(28 - degrees * 1.1)));
-            ctx.fillStyle = 'rgba(255,255,255,0.92)';
-            ctx.font = 'bold 11px system-ui,sans-serif';
-            ctx.fillText('Slope: ' + degrees.toFixed(1) + '° (' + percent.toFixed(1) + '%)', 16, 22);
-            ctx.font = '10px system-ui,sans-serif';
-            ctx.fillStyle = 'rgba(255,255,255,0.65)';
-            ctx.fillText('Foundation shift: ' + shiftCm.toFixed(1) + ' cm · Est. ' + years + ' yr to visible movement', 16, 38);
-            ctx.fillText(severity > 0.55 ? '⚠ High settlement susceptibility' : severity > 0.25 ? '◐ Moderate ground creep' : '✓ Stable grade profile', 16, 54);
-
-            document.getElementById('slopeSimStatus').innerText = 'Terrain cross-section at ' + degrees.toFixed(1) + '° (' + percent.toFixed(1) + '% grade). Settlement model projects ~' + shiftCm.toFixed(1) + ' cm foundation displacement with visible movement in ~' + years + ' years.';
-        }
-
-        function runSlopeSimulation() {
-            if (lastSlopeDegrees === 0 && lastSlopePercent === 0) {
-                document.getElementById('slopeSimStatus').innerText = 'No slope data yet. Analyze a tract first.';
-                return;
-            }
-            var steps = 18, step = 0;
-            var interval = setInterval(function() {
-                renderSlopeSimulation(lastSlopeDegrees, lastSlopePercent, step / steps);
-                step++;
-                if (step > steps) clearInterval(interval);
-            }, 100);
-        }
-
-        function renderFloodSimulation(score, zone, subtype, progress) {
-            var ctx = floodSimCtx;
-            var canvas = floodSimCanvas;
-            var w = canvas.width, h = canvas.height;
-            ctx.clearRect(0, 0, w, h);
-
-            var riskScore = Math.min(3, Math.max(1, score || 1));
-            var severity = (riskScore - 1) / 2;
-            var depthFt = (0.4 + severity * 4.2) * progress;
-            var baseY = h - 44;
-            var waterTop = baseY - depthFt * 14;
-
-            var bgGrad = ctx.createLinearGradient(0, 0, 0, h);
-            bgGrad.addColorStop(0, '#1e1535');
-            bgGrad.addColorStop(0.5, '#251a38');
-            bgGrad.addColorStop(1, '#1a1228');
-            ctx.fillStyle = bgGrad;
-            ctx.fillRect(0, 0, w, h);
-
-            ctx.fillStyle = '#2d4a35';
-            ctx.fillRect(0, baseY, w, h - baseY);
-
-            var waterGrad = ctx.createLinearGradient(0, waterTop, 0, h);
-            waterGrad.addColorStop(0, 'rgba(20,184,166,0.55)');
-            waterGrad.addColorStop(0.3, 'rgba(14,116,144,0.85)');
-            waterGrad.addColorStop(1, 'rgba(8,51,68,0.95)');
-            ctx.fillStyle = waterGrad;
-            ctx.fillRect(0, waterTop, w, h - waterTop);
-
-            for (var wave = 0; wave < 5; wave++) {
-                ctx.beginPath();
-                ctx.strokeStyle = 'rgba(255,255,255,' + (0.08 + wave * 0.02) + ')';
-                ctx.lineWidth = 1.5;
-                var wy = waterTop + wave * 6 + Math.sin(progress * 8 + wave) * 2;
-                ctx.moveTo(0, wy);
-                for (var wx = 0; wx <= w; wx += 12) {
-                    ctx.lineTo(wx, wy + Math.sin(wx * 0.04 + progress * 10 + wave) * 3);
-                }
-                ctx.stroke();
+            } catch (e) {
+                console.warn('Could not save role to session:', e);
             }
 
-            var houseX = w * 0.62;
-            var houseY = baseY - 58;
-            var submerged = waterTop < houseY + 20;
-            drawNeumorphicHouse(ctx, houseX, houseY, submerged ? 0.02 : 0, submerged);
-
-            ctx.fillStyle = 'rgba(255,255,255,0.9)';
-            ctx.font = 'bold 11px system-ui,sans-serif';
-            ctx.fillText('Zone: ' + zone, 16, 22);
-            ctx.font = '10px system-ui,sans-serif';
-            ctx.fillStyle = 'rgba(255,255,255,0.65)';
-            ctx.fillText('Risk level ' + riskScore + '/3 · Depth ~' + depthFt.toFixed(1) + ' ft', 16, 38);
-            ctx.fillText((subtype || 'Surface water').substring(0, 42), 16, 54);
-            var hours = Math.max(2, Math.round(18 - severity * 12));
-            ctx.fillText('Time to threshold inundation: ~' + hours + ' hrs', 16, 70);
-
-            document.getElementById('floodSimStatus').innerText = zone + ' (score ' + riskScore + '/3) projects ~' + depthFt.toFixed(1) + ' ft standing water. At this flood signal, meaningful property inundation could occur within ~' + hours + ' hours under severe rainfall.';
+            window.location.href = role === 'investor' ? '/investor' : '/homeowner';
         }
-        function runFloodSimulation() {
-            var steps = 16, step = 0;
-            var interval = setInterval(function() {
-                renderFloodSimulation(lastFloodScore, lastFloodZone, lastFloodSubtype, step / steps);
-                step++;
-                if (step > steps) clearInterval(interval);
-            }, 110);
-        }
-
-        document.getElementById('btnRunSlopeSim').addEventListener('click', runSlopeSimulation);
-        document.getElementById('btnRunFloodSim').addEventListener('click', runFloodSimulation);
-        renderSlopeSimulation(0, 0, 0);
-        renderFloodSimulation(0, 'N/A', '', 0);
-
-        function updateBreakdownPanels(metrics, data, lat, lng) {
-            var vegValue = (parseFloat(metrics.vegetation_index) || 0).toFixed(4);
-            var elevationData = data.elevation_raster || {};
-            var floodData = data.flood || {};
-            lastSlopeDegrees = parseFloat(elevationData.slope_mean_deg) || parseFloat(metrics.slope_gradient) || 0;
-            lastSlopePercent = calculateSlopePercent(lastSlopeDegrees);
-            lastFloodScore = floodData.flood_proximity_score != null ? parseFloat(floodData.flood_proximity_score) : (metrics.flood_proximity_score != null ? parseFloat(metrics.flood_proximity_score) : 0);
-            lastFloodZone = floodData.flood_zone || (lastFloodScore ? 'Zone Level ' + lastFloodScore : 'N/A');
-            lastFloodSubtype = floodData.zone_subtype || '';
-
-            renderSlopeDisplay();
-            document.getElementById('grid-vegetation').innerText = vegValue;
-            document.getElementById('grid-flood').innerText = lastFloodZone;
-            document.getElementById('breakdownVegValue').innerText = vegValue;
-            document.getElementById('breakdownSlopeValue').innerText = lastSlopeDegrees.toFixed(1) + '°';
-            document.getElementById('breakdownFloodValue').innerText = lastFloodZone;
-            assignVegetationColor(vegValue, 'breakdownVegValue');
-            assignRiskColor(lastSlopeDegrees, 'breakdownSlopeValue', 10, 20);
-            assignRiskColor(lastFloodScore, 'breakdownFloodValue', 1.5, 2.5);
-            updateSimulationMapLayers(lat, lng, vegValue);
-            renderSlopeSimulation(lastSlopeDegrees, lastSlopePercent, 0);
-            renderFloodSimulation(lastFloodScore, lastFloodZone, lastFloodSubtype, 0);
-        }
-
-         function togglePanel(cardId, panelId, valueId, onOpen) {
-            document.getElementById(cardId).addEventListener('click', function() {
-                var value = document.getElementById(valueId).innerText.trim();
-                if (value === '--' || value === '--°' || value === '') return;
-                var panel = document.getElementById(panelId);
-                var isHidden = panel.style.display === 'none' || panel.style.display === '';
-                panel.style.display = isHidden ? 'block' : 'none';
-                if (isHidden) { if (onOpen) onOpen(); panel.scrollIntoView({ behavior: 'smooth', block: 'nearest' }); }
-            });
-        }
-
-        togglePanel('grid-vegetation-card', 'vegetationBreakdown', 'grid-vegetation', function() {
-    setTimeout(function() {
-        simMap.invalidateSize();
-        if (currentLat && currentLng) {
-            var latOffset = 2.5 * (1 / 69.0);
-            var lngOffset = 2.5 * (1 / (69.0 * Math.cos(currentLat * Math.PI / 180)));
-            var swCorner = L.latLng(currentLat - latOffset, currentLng - lngOffset);
-            var neCorner = L.latLng(currentLat + latOffset, currentLng + lngOffset);
-            simMap.fitBounds(L.latLngBounds(swCorner, neCorner), { padding: [0, 0], animate: false });
-            simMap.once('moveend', function() {
-                setTimeout(function() {
-                    calculateGeographicConstraints(swCorner, neCorner);
-                    initializeSimulationGrid();
-                }, 80);
-            });
-        } else {
-            initializeSimulationGrid();
-        }
-    }, 150);
-});
-
-        togglePanel('grid-slope-card', 'slopeBreakdown', 'grid-slope', function() { renderSlopeSimulation(lastSlopeDegrees, lastSlopePercent, 0); });
-        togglePanel('grid-flood-card', 'floodBreakdown', 'grid-flood', function() { renderFloodSimulation(lastFloodScore, lastFloodZone, lastFloodSubtype, 0); });
-
-        // --- AI CHAT ---
-        var chatInput = document.getElementById('chatInput');
-        var chatSendBtn = document.getElementById('chatSendBtn');
-        var chatMessages = document.getElementById('chatMessages');
-
-        function addChatMessage(message, isUser) {
-            var msgDiv = document.createElement('div');
-            msgDiv.className = 'chat-message ' + (isUser ? 'user' : 'ai');
-            msgDiv.textContent = message;
-            chatMessages.appendChild(msgDiv);
-            chatMessages.scrollTop = chatMessages.scrollHeight;
-        }
-
-        function sendChatMessage() {
-            var message = chatInput.value.trim();
-            if (!message) return;
-            addChatMessage(message, true);
-            chatInput.value = '';
-            addChatMessage('Thinking through the tract risk context...', false);
-            var loadingNode = chatMessages.lastChild;
-            fetch('/api/chat', {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({
-                    message: message, currentLat: currentLat, currentLng: currentLng, currentLabel: currentLabel,
-                    riskScore: document.getElementById('gaugeText').textContent,
-                    slope: document.getElementById('grid-slope').textContent,
-                    vegetation: document.getElementById('grid-vegetation').textContent,
-                    flood: document.getElementById('grid-flood').textContent
-                })
-            })
-            .then(function(r) { return r.json(); })
-            .then(function(data) { loadingNode.remove(); addChatMessage(data.status === 'success' ? data.response : 'Sorry, I encountered an error. Please try again.', false); })
-            .catch(function() { loadingNode.remove(); addChatMessage('Sorry, I could not connect to the AI service. Please try again.', false); });
-        }
-
-        chatSendBtn.addEventListener('click', sendChatMessage);
-        chatInput.addEventListener('keypress', function(e) { if (e.key === 'Enter') sendChatMessage(); });
-
-        // --- ADDRESS SEARCH (navigate only, no analyze button) ---
-        var searchInput = document.getElementById('addressSearch');
-        var suggestionsBox = document.getElementById('suggestionsBox');
-        var debounceTimeout = null;
-
-        searchInput.addEventListener('input', function() {
-            clearTimeout(debounceTimeout);
-            var query = searchInput.value.trim();
-            if (query.length < 3) { suggestionsBox.style.display = 'none'; return; }
-            debounceTimeout = setTimeout(function() {
-                fetch('https://nominatim.openstreetmap.org/search?format=json&q=' + encodeURIComponent(query) + '&limit=5&countrycodes=us', { headers: { 'User-Agent': 'FinGeoRisk_Investor_Client/1.0' } })
-                .then(function(r) { return r.json(); })
-                .then(function(data) {
-                    suggestionsBox.innerHTML = '';
-                    if (!data.length) { suggestionsBox.style.display = 'none'; return; }
-                    data.forEach(function(item) {
-                        var div = document.createElement('div');
-                        div.className = 'suggestion-item';
-                        div.textContent = item.display_name;
-                        div.addEventListener('click', function() {
-                            searchInput.value = item.display_name;
-                            suggestionsBox.style.display = 'none';
-                            currentLat = parseFloat(item.lat); currentLng = parseFloat(item.lon); currentLabel = item.display_name;
-                            map.setView([currentLat, currentLng], 14);
-                            document.getElementById('header-coordinates').innerText = 'Lat: ' + currentLat.toFixed(4) + ' | Lng: ' + currentLng.toFixed(4);
-                        });
-                        suggestionsBox.appendChild(div);
-                    });
-                    suggestionsBox.style.display = 'block';
-                }).catch(function(err) { console.error(err); });
-            }, 350);
-        });
-
-        document.addEventListener('click', function(e) { if (e.target !== searchInput) suggestionsBox.style.display = 'none'; });
-
-        // --- LEAFLET.DRAW: polygon/rectangle triggers analysis ---
-        map.on(L.Draw.Event.CREATED, function(event) {
-            var layer = event.layer;
-            editableLayers.clearLayers();
-            editableLayers.addLayer(layer);
-            document.getElementById('blurOverlay').classList.add('active');
-
-            var coordinates = layer.getLatLngs()[0];
-            var formattedCoords = coordinates.map(function(pair) { return [pair.lat, pair.lng]; });
-
-            if (coordinates[0]) {
-                currentLat = coordinates[0].lat; currentLng = coordinates[0].lng; currentLabel = 'Investor tract polygon';
-                document.getElementById('header-coordinates').innerText = 'Lat: ' + coordinates[0].lat.toFixed(4) + ' | Lng: ' + coordinates[0].lng.toFixed(4);
-            }
-
-            fetch('/api/analyze', {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ type: 'polygon', points: formattedCoords })
-            })
-            .then(function(r) { return r.json(); })
-            .then(function(data) {
-                document.getElementById('blurOverlay').classList.remove('active');
-                if (data.status === 'success') {
-                    var rawRiskScore = parseFloat(data.calculated_risk_score) || 0;
-                    var metrics = data.metrics || {};
-                    updateRiskWheel(rawRiskScore);
-                    document.getElementById('aiOverviewBox').innerText = data.ai_summary || 'Risk analysis complete.';
-                    document.getElementById('grid-crime').innerText = (metrics.crime_risk_index || 0).toFixed(1);
-                    document.getElementById('grid-infrastructure').innerText = metrics.infrastructure_hazard != null ? metrics.infrastructure_hazard : 0;
-                    if (coordinates[0]) {
-                        updateBreakdownPanels(metrics, data, coordinates[0].lat, coordinates[0].lng);
-                        generateFinancialData(data);
-                    }
-                    var levelColor = rawRiskScore > 60 ? '#ef4444' : rawRiskScore > 30 ? '#f59e0b' : '#10b981';
-                    layer.bindPopup(
-                        '<div style="font-family:inherit;min-width:180px;">' +
-                        '<h4 style="margin:0 0 5px;color:#1e3a8a;font-weight:800;">Risk Computation</h4>' +
-                        '<hr style="border:0;border-top:1px solid #cbd5e1;margin:5px 0;">' +
-                        '<p style="margin:0;font-size:1.05em;"><strong>XGBoost Index:</strong> <span style="color:' + levelColor + ';font-weight:bold;">' + rawRiskScore.toFixed(2) + '%</span></p>' +
-                        '</div>'
-                    ).openPopup();
-                }
-            })
-            .catch(function(err) {
-                console.error('Boundary processing exception:', err);
-                setTimeout(function() {
-                    document.getElementById('blurOverlay').classList.remove('active');
-                    var demoScore = Math.random() * 95;
-                    var mockSlope = Math.random() * 25;
-                    var mockMetrics = {
-                        crime_risk_index: Math.random() * 80,
-                        vegetation_index: Math.random(),
-                        slope_gradient: mockSlope,
-                        flood_proximity_score: 2,
-                        infrastructure_hazard: (Math.random() * 10).toFixed(1)
-                    };
-                                        var mockData = {
-                        flood: { flood_zone: 'Zone AE', flood_proximity_score: 2, zone_subtype: 'Approximate floodplain band' },
-                        elevation_raster: { slope_mean_deg: mockSlope }
-                    };
-                    updateRiskWheel(demoScore);
-                    document.getElementById('grid-crime').innerText = mockMetrics.crime_risk_index.toFixed(1);
-                    document.getElementById('grid-infrastructure').innerText = mockMetrics.infrastructure_hazard;
-                    document.getElementById('aiOverviewBox').innerText = 'Simulation Callback Active.\nTract Boundary Evaluation complete.\n\nComposite spatial array risk metrics calculated fallback simulation at ' + demoScore.toFixed(2) + '%.';
-                    if (coordinates[0]) {
-                        updateBreakdownPanels(mockMetrics, mockData, coordinates[0].lat, coordinates[0].lng);
-                        generateFinancialData({ lat: coordinates[0].lat, lng: coordinates[0].lng, calculated_risk_score: demoScore, metrics: mockMetrics, flood: mockData.flood });
-                    }
-                }, 800);
-            });
-        });
-
-        // --- SETTINGS PANEL ---
-        var settingsTriggerBtn = document.getElementById('settingsTriggerBtn');
-        var settingsOverlay = document.getElementById('settingsOverlay');
-        var settingsCloseBtn = document.getElementById('settingsCloseBtn');
-
-        function openSettingsPanel() { settingsOverlay.classList.add('open'); settingsTriggerBtn.classList.add('is-active'); }
-        function closeSettingsPanel() { settingsOverlay.classList.remove('open'); settingsTriggerBtn.classList.remove('is-active'); }
-
-        settingsTriggerBtn.addEventListener('click', function(e) { e.stopPropagation(); openSettingsPanel(); });
-        settingsCloseBtn.addEventListener('click', closeSettingsPanel);
-        settingsOverlay.addEventListener('click', function(e) { if (e.target === settingsOverlay) closeSettingsPanel(); });
-
-        // --- FINANCIAL PANEL ---
-        var financialAssistantBtn = document.getElementById('financialAssistantBtn');
-        var financialOverlay = document.getElementById('financialOverlay');
-        var financialCloseBtn = document.getElementById('financialCloseBtn');
-
-        function openFinancialPanel() { financialOverlay.classList.add('open'); financialAssistantBtn.classList.add('is-active'); }
-        function closeFinancialPanel() { financialOverlay.classList.remove('open'); financialAssistantBtn.classList.remove('is-active'); }
-
-        financialAssistantBtn.addEventListener('click', function(e) { e.stopPropagation(); openFinancialPanel(); });
-        financialCloseBtn.addEventListener('click', closeFinancialPanel);
-        financialOverlay.addEventListener('click', function(e) { if (e.target === financialOverlay) closeFinancialPanel(); });
-
-        // --- FINANCIAL CANVAS HELPERS ---
-        function drawFinEmlGauge(pct) {
-            var c = document.getElementById('finEmlGauge');
-            if (!c) return;
-            var ctx = c.getContext('2d');
-            ctx.clearRect(0, 0, c.width, c.height);
-            var cx = c.width / 2, cy = c.height - 6, r = 46;
-            ctx.beginPath(); ctx.arc(cx, cy, r, Math.PI, 2 * Math.PI);
-            ctx.strokeStyle = 'rgba(120,138,165,0.25)'; ctx.lineWidth = 8; ctx.stroke();
-            var end = Math.PI + (pct / 100) * Math.PI;
-            ctx.beginPath(); ctx.arc(cx, cy, r, Math.PI, end);
-            var g = ctx.createLinearGradient(0, 0, c.width, 0);
-            g.addColorStop(0, '#14b8a6'); g.addColorStop(1, '#22d3ee');
-            ctx.strokeStyle = g; ctx.lineWidth = 8; ctx.lineCap = 'round'; ctx.stroke();
-            document.getElementById('finEmlValue').textContent = pct.toFixed(1) + '%';
-        }
-
-        function drawFinRiskDonut(pool) {
-            var c = document.getElementById('finRiskDonut');
-            if (!c) return;
-            var ctx = c.getContext('2d');
-            ctx.clearRect(0, 0, c.width, c.height);
-            var cx = c.width / 2, cy = c.height / 2, r = 32, ir = 18;
-            var segments = [{ v: pool.flood, c: '#14b8a6' }, { v: pool.wildfire, c: '#f97316' }, { v: pool.wind, c: '#ef4444' }];
-            var total = segments.reduce(function(s, x) { return s + x.v; }, 0) || 1;
-            var start = -Math.PI / 2;
-            segments.forEach(function(seg) {
-                var angle = (seg.v / total) * Math.PI * 2;
-                ctx.beginPath(); ctx.arc(cx, cy, r, start, start + angle); ctx.arc(cx, cy, ir, start + angle, start, true);
-                ctx.closePath(); ctx.fillStyle = seg.c; ctx.fill();
-                start += angle;
-            });
-            ctx.fillStyle = '#64748b'; ctx.font = 'bold 7px system-ui,sans-serif'; ctx.textAlign = 'center'; ctx.fillText('HAZARDS', cx, cy + 3);
-            document.getElementById('finPoolFlood').textContent = 'Flood ' + pool.flood.toFixed(0) + '%';
-            document.getElementById('finPoolWildfire').textContent = 'Wildfire ' + pool.wildfire.toFixed(0) + '%';
-            document.getElementById('finPoolWind').textContent = 'Wind ' + pool.wind.toFixed(0) + '%';
-        }
-
-        function applyFinancialProfile(d) {
-            document.getElementById('finLocationLabel').textContent = d.location_label || ('Lat ' + (d.lat || '--') + ', Lng ' + (d.lng || '--'));
-            document.getElementById('finMedianValue').textContent = '$' + Math.round(d.median_home_value).toLocaleString();
-            document.getElementById('finProjected5yr').textContent = '$' + Math.round(d.projected_5yr_value).toLocaleString();
-            document.getElementById('finAppreciation').textContent = d.appreciation_rate.toFixed(1) + '%';
-            document.getElementById('finMonthlyRent').textContent = '$' + Math.round(d.monthly_rent).toLocaleString();
-            document.getElementById('finAnnualPremium').textContent = '$' + Math.round(d.annual_insurance_premium).toLocaleString();
-            document.getElementById('finPremiumSub').textContent = 'Total value insured ~$' + Math.round(d.median_home_value).toLocaleString() + ' · hazard-adjusted';
-            document.getElementById('finPricePerSqFt').textContent = '$' + Math.round(d.price_per_sqft);
-            document.getElementById('finRentalYield').textContent = d.rental_yield.toFixed(1) + '%';
-            document.getElementById('finIncomeLevel').textContent = '$' + Math.round(d.income_level).toLocaleString();
-            document.getElementById('finEmployment').textContent = d.employment_rate.toFixed(1) + '%';
-            document.getElementById('finRiskScore').textContent = d.investment_risk_score.toFixed(1) + '/5';
-            document.getElementById('finOutlookHeadline').textContent = d.market_trend + ' · ' + d.rental_outlook;
-            document.getElementById('financialAIBox').textContent = d.ai_assessment;
-            var src = d.sources || {};
-            document.getElementById('finSourceFooter').textContent = 'Valuation: ' + (src.valuation || 'Regional baseline') + ' · Appreciation: ' + (src.appreciation || 'Risk model') + ' · Insurance: ' + (src.insurance || 'Hazard composite');
-            document.getElementById('finPriceTrend').textContent = d.appreciation_rate >= 4 ? '+' + d.appreciation_rate.toFixed(1) + '%' : d.appreciation_rate.toFixed(1) + '%';
-            document.getElementById('finPriceTrend').className = 'financial-metric-trend ' + (d.appreciation_rate >= 3 ? 'trend-up' : 'trend-down');
-            document.getElementById('finEmploymentTrend').textContent = d.employment_rate >= 94 ? '+stable' : 'moderate';
-            document.getElementById('finEmploymentTrend').className = 'financial-metric-trend trend-up';
-            drawFinEmlGauge(d.eml_percent);
-            drawFinRiskDonut(d.risk_pool);
-            financialAssistantBtn.disabled = false;
-        }
-
-        function generateFinancialData(analysisPayload) {
-            if (!analysisPayload) return;
-            financialAssistantBtn.disabled = true;
-            document.getElementById('finOutlookHeadline').textContent = 'Computing profile…';
-            document.getElementById('financialAIBox').textContent = 'Pulling location-grounded financial and insurance metrics…';
-            fetch('/api/financial', {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify(analysisPayload)
-            })
-            .then(function(r) { return r.json(); })
-            .then(function(data) {
-                if (data.status === 'success') {
-                    applyFinancialProfile(data);
-                } else {
-                    document.getElementById('financialAIBox').textContent = 'Financial profile unavailable. Ensure backend is running with /api/financial enabled.';
-                    financialAssistantBtn.disabled = false;
-                }
-            })
-            .catch(function() {
-                document.getElementById('financialAIBox').textContent = 'Could not reach /api/financial. Run backend with app_temp.py for location-grounded financial data.';
-                financialAssistantBtn.disabled = false;
-            });
-        }
-
-        // --- THEME SELECTOR ---
-        var themeSwatchRow = document.getElementById('themeSwatchRow');
-        themeSwatchRow.querySelectorAll('.theme-swatch-btn').forEach(function(btn) {
-            btn.addEventListener('click', function() {
-                document.documentElement.setAttribute('data-theme', btn.getAttribute('data-theme'));
-                themeSwatchRow.querySelectorAll('.theme-swatch-btn').forEach(function(b) { b.classList.remove('is-selected'); });
-                btn.classList.add('is-selected');
-            });
-        });
-
-        // --- AVATAR COLOR SELECTOR ---
-        var avatarSwatchRow = document.getElementById('avatarSwatchRow');
-        avatarSwatchRow.querySelectorAll('.avatar-swatch-btn').forEach(function(btn) {
-            btn.addEventListener('click', function() {
-                document.documentElement.style.setProperty('--avatar-a', btn.getAttribute('data-a'));
-                document.documentElement.style.setProperty('--avatar-b', btn.getAttribute('data-b'));
-                avatarSwatchRow.querySelectorAll('.avatar-swatch-btn').forEach(function(x) { x.classList.remove('is-selected'); });
-                btn.classList.add('is-selected');
-            });
-        });
-
-        // --- BASEMAP STYLE ---
-        var basemapControl = document.getElementById('basemapControl');
-        basemapControl.querySelectorAll('.segmented-option').forEach(function(opt) {
-            opt.addEventListener('click', function() {
-                basemapControl.querySelectorAll('.segmented-option').forEach(function(o) { o.classList.remove('is-selected'); });
-                opt.classList.add('is-selected');
-                setBasemapStyle(opt.getAttribute('data-basemap'));
-            });
-        });
-
-        // --- REDUCE MOTION ---
-        var reduceMotionToggle = document.getElementById('reduceMotionToggle');
-        reduceMotionToggle.addEventListener('click', function() {
-            var isOn = reduceMotionToggle.classList.toggle('is-on');
-            document.body.classList.toggle('reduce-motion', isOn);
-        });
-
-        // --- UNITS TOGGLE ---
-        var unitsControl = document.getElementById('unitsControl');
-        unitsControl.querySelectorAll('.segmented-option').forEach(function(opt) {
-            opt.addEventListener('click', function() {
-                unitsControl.querySelectorAll('.segmented-option').forEach(function(o) { o.classList.remove('is-selected'); });
-                opt.classList.add('is-selected');
-                currentUnits = opt.getAttribute('data-units');
-                renderSlopeDisplay();
-            });
-        });
     </script>
 </body>
 </html>
-
-

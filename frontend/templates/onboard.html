@@ -5,529 +5,551 @@
     <title>FinGeoRisk - Get Started</title>
     <link href="https://cesium.com/downloads/cesiumjs/releases/1.118/Build/Cesium/Widgets/widgets.css" rel="stylesheet">
     <script src="https://cesium.com/downloads/cesiumjs/releases/1.118/Build/Cesium/Cesium.js"></script>
-
     <style>
-        * {
-            box-sizing: border-box;
-        }
+        * { box-sizing: border-box; margin: 0; padding: 0; }
 
         body {
-            margin: 0;
-            background: #090d16;
-            font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
-            color: #4a5568;
+            background: #04080f;
+            font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+            color: #e2e8f0;
             min-height: 100vh;
-            display: flex;
-            flex-direction: column;
             overflow-x: hidden;
-            position: relative;
         }
 
-        .top-header-panel {
-            position: absolute;
-            top: 24px;
-            left: 50%;
+        #cesiumContainer {
+            width: 100%; height: 100vh;
+            position: fixed; top: 0; left: 0;
+            z-index: 1; pointer-events: none; touch-action: none;
+        }
+        .cesium-viewer-bottom, .cesium-viewer-animationContainer,
+        .cesium-viewer-timelineContainer, .cesium-viewer-toolbar { display: none !important; }
+
+        #starCanvas {
+            position: fixed; top: 0; left: 0;
+            width: 100%; height: 100%;
+            z-index: 0; pointer-events: none;
+        }
+
+        .navbar {
+            position: fixed; top: 20px; left: 50%;
             transform: translateX(-50%);
-            width: 90%;
-            max-width: 1100px;
-            height: 66px;
-            padding: 0 30px;
-            background: rgba(230, 238, 248, 0.88);
-            backdrop-filter: blur(12px);
-            -webkit-backdrop-filter: blur(12px);
-            border: 1px solid rgba(255, 255, 255, 0.6);
+            width: 92%; max-width: 1100px;
+            height: 62px; padding: 0 28px;
+            background: rgba(4, 8, 15, 0.6);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            border: 1px solid rgba(59, 130, 246, 0.2);
             border-radius: 50px;
-            box-shadow: 0 12px 40px rgba(0, 0, 0, 0.25),
-                        inset 1px 1px 3px rgba(255, 255, 255, 0.6);
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
+            box-shadow: 0 0 0 1px rgba(255,255,255,0.04), 0 8px 32px rgba(0,0,0,0.4);
+            display: flex; align-items: center; justify-content: space-between;
             z-index: 1000;
             transition: all 0.6s cubic-bezier(0.16, 1, 0.3, 1);
         }
 
-        .logo-area {
-            display: flex;
-            align-items: center;
+        .logo-area { display: flex; align-items: center; gap: 10px; }
+
+        .logo-pulse {
+            width: 8px; height: 8px; border-radius: 50%;
+            background: #22d3ee;
+            box-shadow: 0 0 8px #22d3ee;
+            animation: pulse-dot 2s ease-in-out infinite;
+        }
+        @keyframes pulse-dot {
+            0%, 100% { opacity: 1; transform: scale(1); }
+            50% { opacity: 0.4; transform: scale(0.6); }
         }
 
         .logo-title {
-            font-size: 1.35rem;
-            font-weight: 800;
-            background: linear-gradient(135deg, #1e3a8a, #3b82f6);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            background-clip: text;
-            letter-spacing: -0.5px;
+            font-size: 1.25rem; font-weight: 800;
+            background: linear-gradient(135deg, #e0f2fe, #3b82f6);
+            -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+            background-clip: text; letter-spacing: -0.5px;
+        }
+
+        .nav-links { display: flex; align-items: center; gap: 8px; }
+
+        .nav-tag {
+            font-size: 0.75rem; font-weight: 600;
+            color: #64748b; letter-spacing: 0.5px;
+            padding: 4px 12px;
+            border: 1px solid rgba(255,255,255,0.06);
+            border-radius: 20px;
+            background: rgba(255,255,255,0.03);
         }
 
         .btn-get-started {
-            background: #3b82f6;
-            color: white;
-            border: none;
-            padding: 10px 26px;
-            font-size: 0.95rem;
-            font-weight: 600;
-            border-radius: 25px;
-            cursor: pointer;
-            box-shadow: 0 4px 14px rgba(59, 130, 246, 0.4);
+            background: linear-gradient(135deg, #3b82f6, #06b6d4);
+            color: white; border: none;
+            padding: 10px 24px;
+            font-size: 0.9rem; font-weight: 700;
+            border-radius: 25px; cursor: pointer;
+            box-shadow: 0 0 20px rgba(59,130,246,0.4);
             transition: all 0.3s ease;
         }
-
         .btn-get-started:hover {
-            background: #2563eb;
-            transform: translateY(-1px);
-            box-shadow: 0 6px 20px rgba(37, 99, 235, 0.5);
+            transform: translateY(-2px);
+            box-shadow: 0 0 30px rgba(59,130,246,0.6);
         }
 
-        #cesiumContainer {
-            width: 100%;
-            height: 100vh;
-            position: fixed;
-            top: 0;
-            left: 0;
-            z-index: 1;
-            pointer-events: none;
-            touch-action: none;
+        .hero-overlay {
+            position: fixed; top: 0; left: 0;
+            width: 100%; height: 100vh;
+            z-index: 5; pointer-events: none;
+            display: flex; flex-direction: column;
+            align-items: center; justify-content: center;
+            text-align: center; padding: 0 20px;
         }
 
-        .cesium-viewer-bottom,
-        .cesium-viewer-animationContainer,
-        .cesium-viewer-timelineContainer,
-        .cesium-viewer-toolbar {
-            display: none !important;
+        .hero-badge {
+            display: inline-flex; align-items: center; gap: 6px;
+            background: rgba(59,130,246,0.12);
+            border: 1px solid rgba(59,130,246,0.3);
+            border-radius: 20px; padding: 6px 16px;
+            font-size: 0.75rem; font-weight: 700;
+            color: #93c5fd; letter-spacing: 1.5px;
+            text-transform: uppercase; margin-bottom: 28px;
+            animation: fadeSlideDown 1s ease both;
+        }
+        .hero-badge-dot {
+            width: 6px; height: 6px; border-radius: 50%;
+            background: #22d3ee; box-shadow: 0 0 6px #22d3ee;
+            animation: pulse-dot 1.5s ease-in-out infinite;
+        }
+
+        .hero-title {
+            font-size: clamp(2.8rem, 6vw, 5.5rem);
+            font-weight: 900; line-height: 1.05;
+            letter-spacing: -2px; margin-bottom: 20px;
+            animation: fadeSlideDown 1s 0.15s ease both;
+        }
+        .hero-title .line1 { display: block; color: #f8fafc; }
+        .hero-title .line2 {
+            display: block;
+            background: linear-gradient(135deg, #3b82f6 0%, #06b6d4 50%, #8b5cf6 100%);
+            -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .hero-sub {
+            font-size: 1.1rem; color: #64748b; max-width: 520px;
+            line-height: 1.7; margin-bottom: 40px;
+            animation: fadeSlideDown 1s 0.3s ease both;
+        }
+
+        .hero-cta-group {
+            display: flex; gap: 14px; align-items: center;
+            pointer-events: auto;
+            animation: fadeSlideDown 1s 0.45s ease both;
+        }
+
+        .hero-btn-primary {
+            background: linear-gradient(135deg, #3b82f6, #06b6d4);
+            color: white; border: none;
+            padding: 15px 36px; font-size: 1rem; font-weight: 700;
+            border-radius: 50px; cursor: pointer;
+            box-shadow: 0 0 40px rgba(59,130,246,0.5), 0 4px 20px rgba(0,0,0,0.3);
+            transition: all 0.3s ease;
+            position: relative; overflow: hidden;
+        }
+        .hero-btn-primary::after {
+            content: ''; position: absolute; inset: 0;
+            background: linear-gradient(135deg, rgba(255,255,255,0.15), transparent);
+            border-radius: inherit;
+        }
+        .hero-btn-primary:hover {
+            transform: translateY(-3px) scale(1.02);
+            box-shadow: 0 0 60px rgba(59,130,246,0.7), 0 8px 30px rgba(0,0,0,0.4);
+        }
+
+        .hero-btn-secondary {
+            color: #94a3b8; background: transparent;
+            border: 1px solid rgba(255,255,255,0.1);
+            padding: 15px 28px; font-size: 0.95rem; font-weight: 600;
+            border-radius: 50px; cursor: pointer;
+            transition: all 0.3s ease;
+            backdrop-filter: blur(10px);
+        }
+        .hero-btn-secondary:hover {
+            border-color: rgba(59,130,246,0.4);
+            color: #e2e8f0; background: rgba(59,130,246,0.08);
+        }
+
+        @keyframes fadeSlideDown {
+            from { opacity: 0; transform: translateY(-20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .scroll-indicator {
+            position: fixed; bottom: 36px; left: 50%;
+            transform: translateX(-50%);
+            z-index: 100; display: flex; flex-direction: column;
+            align-items: center; gap: 10px;
+            transition: opacity 0.4s ease;
+        }
+        .scroll-ring {
+            width: 36px; height: 36px; border-radius: 50%;
+            border: 1.5px solid rgba(148,163,184,0.3);
+            display: flex; align-items: center; justify-content: center;
+            animation: scroll-pulse 2s ease-in-out infinite;
+        }
+        .scroll-ring::after {
+            content: ''; width: 6px; height: 10px;
+            border: 1.5px solid #64748b; border-radius: 3px;
+            position: relative; top: -2px;
+        }
+        @keyframes scroll-pulse {
+            0%, 100% { transform: translateY(0); opacity: 0.5; }
+            50% { transform: translateY(6px); opacity: 1; }
+        }
+        .scroll-label {
+            font-size: 0.65rem; font-weight: 700; letter-spacing: 2px;
+            text-transform: uppercase; color: #475569;
         }
 
         .scroll-content {
-            position: relative;
-            z-index: 10;
+            position: relative; z-index: 10;
             margin-top: 100vh;
+            background: linear-gradient(to bottom, transparent, #04080f 120px);
         }
 
         .feature-section {
             min-height: 100vh;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            padding: 80px 20px;
-            position: relative;
+            display: flex; align-items: center; justify-content: center;
+            padding: 80px 40px;
         }
 
         .feature-card {
-            background: rgba(230, 238, 248, 0.12);
-            backdrop-filter: blur(20px);
-            -webkit-backdrop-filter: blur(20px);
-            border: 1px solid rgba(255, 255, 255, 0.15);
-            border-radius: 32px;
-            padding: 50px 60px;
-            max-width: 900px;
-            box-shadow:
-                8px 8px 32px rgba(0, 0, 0, 0.4),
-                -8px -8px 32px rgba(255, 255, 255, 0.05),
-                inset 1px 1px 2px rgba(255, 255, 255, 0.1);
-            opacity: 0;
-            transform: translateY(60px);
-            transition: all 0.8s cubic-bezier(0.16, 1, 0.3, 1);
+            max-width: 860px; width: 100%;
+            background: rgba(8, 14, 28, 0.7);
+            backdrop-filter: blur(24px);
+            -webkit-backdrop-filter: blur(24px);
+            border-radius: 28px;
+            border: 1px solid rgba(255,255,255,0.06);
+            box-shadow: 0 0 0 1px rgba(255,255,255,0.02), 0 24px 64px rgba(0,0,0,0.5);
+            overflow: hidden;
+            opacity: 0; transform: translateY(50px);
+            transition: all 0.9s cubic-bezier(0.16, 1, 0.3, 1);
+            position: relative;
         }
+        .feature-card::before {
+            content: ''; position: absolute;
+            top: 0; left: 0; right: 0; height: 1px;
+            background: linear-gradient(90deg, transparent, rgba(59,130,246,0.5), transparent);
+        }
+        .feature-card.visible { opacity: 1; transform: translateY(0); }
 
-        .feature-card.visible {
-            opacity: 1;
-            transform: translateY(0);
+        .feature-card-inner { display: flex; align-items: stretch; }
+
+        .feature-accent { width: 4px; flex-shrink: 0; }
+        .accent-blue { background: linear-gradient(to bottom, #3b82f6, #06b6d4); }
+        .accent-green { background: linear-gradient(to bottom, #10b981, #06b6d4); }
+        .accent-purple { background: linear-gradient(to bottom, #8b5cf6, #ec4899); }
+
+        .feature-body { padding: 44px 48px; flex: 1; }
+
+        .feature-eyebrow {
+            font-size: 0.7rem; font-weight: 800; letter-spacing: 2.5px;
+            text-transform: uppercase; margin-bottom: 14px;
         }
+        .eyebrow-blue { color: #3b82f6; }
+        .eyebrow-green { color: #10b981; }
+        .eyebrow-purple { color: #8b5cf6; }
+
+        .feature-header { display: flex; align-items: center; gap: 18px; margin-bottom: 18px; }
+
+        .feature-icon-wrap {
+            width: 56px; height: 56px; border-radius: 16px;
+            display: flex; align-items: center; justify-content: center;
+            font-size: 1.8rem; flex-shrink: 0;
+        }
+        .icon-blue { background: rgba(59,130,246,0.12); border: 1px solid rgba(59,130,246,0.2); }
+        .icon-green { background: rgba(16,185,129,0.12); border: 1px solid rgba(16,185,129,0.2); }
+        .icon-purple { background: rgba(139,92,246,0.12); border: 1px solid rgba(139,92,246,0.2); }
 
         .feature-card h2 {
-            font-size: 2.5rem;
-            font-weight: 800;
-            background: linear-gradient(135deg, #93c5fd, #3b82f6);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            background-clip: text;
-            margin: 0 0 20px 0;
-            letter-spacing: -1px;
+            font-size: 1.9rem; font-weight: 800;
+            color: #f1f5f9; letter-spacing: -0.5px; line-height: 1.2;
         }
 
         .feature-card p {
-            font-size: 1.15rem;
-            line-height: 1.8;
-            color: #cbd5e1;
-            margin: 0 0 30px 0;
+            font-size: 1rem; line-height: 1.8; color: #64748b; margin-bottom: 32px;
         }
 
-        .feature-stats {
-            display: grid;
-            grid-template-columns: repeat(3, 1fr);
-            gap: 24px;
-            margin-top: 30px;
-        }
+        .feature-stats { display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px; }
 
         .stat-item {
-            background: rgba(30, 41, 59, 0.6);
-            border-radius: 20px;
-            padding: 24px 20px;
-            text-align: center;
-            box-shadow:
-                inset 4px 4px 12px rgba(0, 0, 0, 0.3),
-                inset -4px -4px 12px rgba(255, 255, 255, 0.05);
-            border: 1px solid rgba(255, 255, 255, 0.08);
+            background: rgba(255,255,255,0.02);
+            border: 1px solid rgba(255,255,255,0.05);
+            border-radius: 16px; padding: 20px 16px; text-align: center;
+            position: relative; overflow: hidden;
+        }
+        .stat-item::before {
+            content: ''; position: absolute;
+            bottom: 0; left: 0; right: 0; height: 1px;
+            background: linear-gradient(90deg, transparent, rgba(59,130,246,0.3), transparent);
         }
 
         .stat-value {
-            font-size: 2rem;
-            font-weight: 800;
-            color: #3b82f6;
-            margin-bottom: 8px;
+            font-size: 1.7rem; font-weight: 900;
+            background: linear-gradient(135deg, #f8fafc, #93c5fd);
+            -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+            background-clip: text; margin-bottom: 6px; letter-spacing: -0.5px;
         }
 
         .stat-label {
-            font-size: 0.85rem;
-            color: #94a3b8;
-            text-transform: uppercase;
-            letter-spacing: 1px;
-            font-weight: 600;
-        }
-
-        .feature-icon {
-            width: 80px;
-            height: 80px;
-            background: linear-gradient(135deg, rgba(59, 130, 246, 0.2), rgba(59, 130, 246, 0.05));
-            border-radius: 24px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 2.5rem;
-            margin-bottom: 24px;
-            box-shadow:
-                6px 6px 16px rgba(0, 0, 0, 0.3),
-                -6px -6px 16px rgba(255, 255, 255, 0.05),
-                inset 1px 1px 2px rgba(255, 255, 255, 0.15);
-            border: 1px solid rgba(59, 130, 246, 0.3);
-        }
-
-        .floating-orb {
-            position: fixed;
-            border-radius: 50%;
-            pointer-events: none;
-            z-index: 5;
-            opacity: 0.3;
-            filter: blur(60px);
-        }
-
-        .orb-1 {
-            width: 400px;
-            height: 400px;
-            background: radial-gradient(circle, rgba(59, 130, 246, 0.4), transparent);
-            top: 20%;
-            right: -10%;
-            animation: float1 20s ease-in-out infinite;
-        }
-
-        .orb-2 {
-            width: 300px;
-            height: 300px;
-            background: radial-gradient(circle, rgba(16, 185, 129, 0.3), transparent);
-            bottom: 30%;
-            left: -5%;
-            animation: float2 25s ease-in-out infinite;
-        }
-
-        .orb-3 {
-            width: 250px;
-            height: 250px;
-            background: radial-gradient(circle, rgba(168, 85, 247, 0.3), transparent);
-            top: 60%;
-            right: 20%;
-            animation: float3 22s ease-in-out infinite;
-        }
-
-        @keyframes float1 {
-            0%, 100% { transform: translate(0, 0) scale(1); }
-            33% { transform: translate(-30px, 40px) scale(1.1); }
-            66% { transform: translate(20px, -20px) scale(0.9); }
-        }
-
-        @keyframes float2 {
-            0%, 100% { transform: translate(0, 0) scale(1); }
-            33% { transform: translate(40px, -30px) scale(1.05); }
-            66% { transform: translate(-20px, 30px) scale(0.95); }
-        }
-
-        @keyframes float3 {
-            0%, 100% { transform: translate(0, 0) scale(1); }
-            50% { transform: translate(-25px, 25px) scale(1.08); }
-        }
-
-        .scroll-indicator {
-            position: fixed;
-            bottom: 40px;
-            left: 50%;
-            transform: translateX(-50%);
-            z-index: 100;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            gap: 8px;
-            opacity: 0.7;
-            animation: bounce 2s ease-in-out infinite;
-        }
-
-        .scroll-indicator span {
-            color: #94a3b8;
-            font-size: 0.8rem;
-            font-weight: 600;
-            letter-spacing: 1px;
-            text-transform: uppercase;
-        }
-
-        .scroll-indicator .arrow {
-            width: 24px;
-            height: 24px;
-            border-right: 2px solid #94a3b8;
-            border-bottom: 2px solid #94a3b8;
-            transform: rotate(45deg);
-        }
-
-        @keyframes bounce {
-            0%, 100% { transform: translateX(-50%) translateY(0); }
-            50% { transform: translateX(-50%) translateY(10px); }
-        }
-
-        .feature-section:nth-child(even) .feature-card {
-            margin-left: auto;
-        }
-
-        .feature-section:nth-child(odd) .feature-card {
-            margin-right: auto;
+            font-size: 0.7rem; color: #475569;
+            text-transform: uppercase; letter-spacing: 1.5px; font-weight: 700;
         }
 
         .cta-section {
             min-height: 80vh;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
+            display: flex; align-items: center; justify-content: center;
             padding: 80px 20px;
-            text-align: center;
         }
 
         .cta-card {
-            background: linear-gradient(135deg, rgba(59, 130, 246, 0.15), rgba(59, 130, 246, 0.05));
-            backdrop-filter: blur(25px);
-            -webkit-backdrop-filter: blur(25px);
-            border: 1px solid rgba(59, 130, 246, 0.3);
-            border-radius: 40px;
-            padding: 60px 80px;
-            max-width: 700px;
-            box-shadow:
-                0 20px 60px rgba(59, 130, 246, 0.3),
-                inset 1px 1px 2px rgba(255, 255, 255, 0.1);
-            opacity: 0;
-            transform: translateY(60px);
-            transition: all 0.8s cubic-bezier(0.16, 1, 0.3, 1);
+            max-width: 680px; width: 100%; text-align: center;
+            background: rgba(8, 14, 28, 0.8);
+            backdrop-filter: blur(30px);
+            border: 1px solid rgba(59,130,246,0.2);
+            border-radius: 36px; padding: 64px 72px;
+            box-shadow: 0 0 80px rgba(59,130,246,0.15), 0 24px 64px rgba(0,0,0,0.5);
+            opacity: 0; transform: translateY(50px);
+            transition: all 0.9s cubic-bezier(0.16, 1, 0.3, 1);
+            position: relative; overflow: hidden;
         }
-
-        .cta-card.visible {
-            opacity: 1;
-            transform: translateY(0);
+        .cta-card::before {
+            content: ''; position: absolute;
+            top: 0; left: 0; right: 0; height: 1px;
+            background: linear-gradient(90deg, transparent, rgba(59,130,246,0.6), rgba(6,182,212,0.6), transparent);
         }
+        .cta-card.visible { opacity: 1; transform: translateY(0); }
 
         .cta-card h2 {
-            font-size: 2.8rem;
-            font-weight: 800;
-            background: linear-gradient(135deg, #ffffff, #93c5fd);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            background-clip: text;
-            margin: 0 0 20px 0;
+            font-size: 2.6rem; font-weight: 900;
+            color: #f8fafc; letter-spacing: -1px;
+            line-height: 1.1; margin-bottom: 16px;
         }
-
-        .cta-card p {
-            font-size: 1.2rem;
-            color: #cbd5e1;
-            margin: 0 0 35px 0;
-        }
+        .cta-card p { font-size: 1.05rem; color: #64748b; margin-bottom: 36px; line-height: 1.7; }
 
         .cta-btn {
-            background: linear-gradient(135deg, #3b82f6, #2563eb);
-            color: white;
-            border: none;
-            padding: 16px 48px;
-            font-size: 1.1rem;
-            font-weight: 700;
-            border-radius: 30px;
-            cursor: pointer;
-            box-shadow:
-                0 8px 24px rgba(59, 130, 246, 0.4),
-                inset 1px 1px 2px rgba(255, 255, 255, 0.2);
+            background: linear-gradient(135deg, #3b82f6, #06b6d4);
+            color: white; border: none;
+            padding: 16px 48px; font-size: 1rem; font-weight: 700;
+            border-radius: 50px; cursor: pointer;
+            box-shadow: 0 0 40px rgba(59,130,246,0.4);
             transition: all 0.3s ease;
-            text-transform: uppercase;
-            letter-spacing: 1px;
+            text-transform: uppercase; letter-spacing: 0.5px;
         }
-
         .cta-btn:hover {
             transform: translateY(-3px);
-            box-shadow:
-                0 12px 32px rgba(59, 130, 246, 0.5),
-                inset 1px 1px 2px rgba(255, 255, 255, 0.3);
+            box-shadow: 0 0 60px rgba(59,130,246,0.6);
         }
+
+        .role-overlay {
+            position: fixed; inset: 0;
+            background: rgba(4,8,15,0.75);
+            backdrop-filter: blur(8px);
+            z-index: 1999;
+            opacity: 0; pointer-events: none;
+            transition: opacity 0.5s ease;
+        }
+        .role-overlay.active { opacity: 1; pointer-events: auto; }
 
         .role-container {
-    position: absolute;
-    /* Change top from 55% to a fixed position or a smaller percentage */
-    top: 120px; 
-    left: 50%;
-    /* Update the vertical translate from -50% to 0 so it aligns cleanly from its top edge */
-    transform: translate(-50%, 0) scale(0.9);
-    
-    width: 90%;
-    max-width: 480px;
-    background: rgba(10, 17, 34, 0.7);
-    backdrop-filter: blur(18px);
-    -webkit-backdrop-filter: blur(18px);
-    border: 1px solid rgba(255, 255, 255, 0.12);
-    box-shadow: 0 30px 70px rgba(0, 0, 0, 0.5);
-    border-radius: 28px;
-    overflow: hidden;
-    display: flex;
-    flex-direction: column;
-    z-index: 2000;
-    opacity: 0;
-    pointer-events: none;
-    transition: all 0.8s cubic-bezier(0.16, 1, 0.3, 1);
-}
-
+            position: fixed;
+            top: 50%; left: 50%;
+            transform: translate(-50%, -48%) scale(0.94);
+            width: 92%; max-width: 500px;
+            background: rgba(8, 14, 28, 0.97);
+            backdrop-filter: blur(30px);
+            -webkit-backdrop-filter: blur(30px);
+            border: 1px solid rgba(59,130,246,0.25);
+            border-radius: 28px;
+            box-shadow: 0 0 80px rgba(59,130,246,0.2), 0 40px 80px rgba(0,0,0,0.6);
+            z-index: 2000;
+            opacity: 0; pointer-events: none;
+            transition: all 0.6s cubic-bezier(0.16, 1, 0.3, 1);
+            overflow: hidden;
+        }
+        .role-container::before {
+            content: ''; position: absolute;
+            top: 0; left: 0; right: 0; height: 1px;
+            background: linear-gradient(90deg, transparent, rgba(59,130,246,0.7), rgba(6,182,212,0.7), transparent);
+        }
         .role-container.active {
-    opacity: 1;
-    pointer-events: auto;
-    transform: translate(-50%, 0) scale(1);
-}
+            opacity: 1; pointer-events: auto;
+            transform: translate(-50%, -50%) scale(1);
+        }
+
+        .role-top { padding: 32px 32px 0; }
+
+        .role-eyebrow {
+            font-size: 0.65rem; font-weight: 800; letter-spacing: 2.5px;
+            text-transform: uppercase; color: #3b82f6; margin-bottom: 10px;
+        }
 
         .role-header {
-            background: rgba(59, 130, 246, 0.15);
-            border-bottom: 1px solid rgba(255, 255, 255, 0.08);
-            color: #f8fafc;
-            padding: 22px 24px 4px;
-            font-weight: 700;
-            font-size: 16px;
+            font-size: 1.5rem; font-weight: 800;
+            color: #f8fafc; letter-spacing: -0.5px; margin-bottom: 8px;
         }
 
-        .role-subtext {
-            color: #94a3b8;
-            font-size: 13px;
-            padding: 0 24px 18px;
-        }
+        .role-subtext { color: #475569; font-size: 0.9rem; line-height: 1.6; padding-bottom: 4px; }
 
-        .role-options {
-            display: flex;
-            flex-direction: column;
-            gap: 14px;
-            padding: 8px 24px 28px;
-        }
+        .role-options { display: flex; flex-direction: column; gap: 12px; padding: 24px 32px 32px; }
 
         .role-btn {
-            display: flex;
-            align-items: center;
-            gap: 14px;
-            background: rgba(30, 41, 59, 0.8);
-            border: 1px solid rgba(255, 255, 255, 0.08);
-            color: #f8fafc;
-            padding: 18px 20px;
-            border-radius: 16px;
-            font-size: 15px;
-            font-weight: 600;
-            cursor: pointer;
-            text-align: left;
-            transition: all 0.2s ease;
+            display: flex; align-items: center; gap: 18px;
+            background: rgba(255,255,255,0.03);
+            border: 1px solid rgba(255,255,255,0.07);
+            color: #e2e8f0; padding: 20px 22px;
+            border-radius: 18px; font-size: 0.95rem; font-weight: 600;
+            cursor: pointer; text-align: left;
+            transition: all 0.25s ease; position: relative; overflow: hidden;
         }
-
-        .role-btn:hover {
-            background: #3b82f6;
-            border-color: #3b82f6;
-            transform: translateY(-1px);
+        .role-btn::before {
+            content: ''; position: absolute; inset: 0;
+            background: linear-gradient(135deg, rgba(59,130,246,0.1), rgba(6,182,212,0.05));
+            opacity: 0; transition: opacity 0.25s ease;
         }
+        .role-btn:hover { border-color: rgba(59,130,246,0.4); transform: translateY(-2px); }
+        .role-btn:hover::before { opacity: 1; }
 
-        .role-btn .icon {
-            font-size: 22px;
+        .role-btn-icon {
+            width: 48px; height: 48px; border-radius: 14px;
+            display: flex; align-items: center; justify-content: center;
+            font-size: 1.5rem; flex-shrink: 0;
         }
+        .icon-home { background: rgba(16,185,129,0.12); border: 1px solid rgba(16,185,129,0.2); }
+        .icon-invest { background: rgba(139,92,246,0.12); border: 1px solid rgba(139,92,246,0.2); }
 
-        .role-btn .desc {
-            font-size: 12.5px;
-            font-weight: 400;
-            color: #cbd5e1;
-            margin-top: 2px;
+        .role-btn-text { flex: 1; }
+        .role-btn-title { font-size: 1rem; font-weight: 700; color: #f1f5f9; margin-bottom: 3px; }
+        .role-btn-desc { font-size: 0.8rem; color: #475569; font-weight: 400; }
+        .role-btn:hover .role-btn-desc { color: #64748b; }
+
+        .role-btn-arrow {
+            color: #334155; font-size: 1.1rem;
+            transition: all 0.25s ease;
         }
+        .role-btn:hover .role-btn-arrow { color: #3b82f6; transform: translateX(4px); }
 
-        .role-btn:hover .desc {
-            color: #e0ecff;
+        .role-loading { display: none; padding: 0 32px 28px; text-align: center; }
+        .role-loading-bar {
+            height: 2px; background: rgba(255,255,255,0.05);
+            border-radius: 2px; overflow: hidden; margin-bottom: 12px;
         }
+        .role-loading-fill {
+            height: 100%;
+            background: linear-gradient(90deg, #3b82f6, #06b6d4);
+            border-radius: 2px;
+            animation: loading-bar 1.5s ease-in-out infinite;
+        }
+        @keyframes loading-bar {
+            0% { width: 0%; margin-left: 0; }
+            50% { width: 70%; margin-left: 15%; }
+            100% { width: 0%; margin-left: 100%; }
+        }
+        .role-loading-text { font-size: 0.8rem; color: #475569; letter-spacing: 0.5px; }
 
-        .role-loading {
-            text-align: center;
-            color: #94a3b8;
-            font-size: 13px;
-            padding: 0 24px 24px;
-            display: none;
+        .orb {
+            position: fixed; border-radius: 50%;
+            pointer-events: none; z-index: 2;
+            filter: blur(80px); opacity: 0.12;
+        }
+        .orb-1 {
+            width: 500px; height: 500px;
+            background: radial-gradient(circle, #3b82f6, transparent);
+            top: 10%; right: -8%;
+            animation: orb-float 22s ease-in-out infinite;
+        }
+        .orb-2 {
+            width: 350px; height: 350px;
+            background: radial-gradient(circle, #06b6d4, transparent);
+            bottom: 20%; left: -5%;
+            animation: orb-float 28s ease-in-out infinite reverse;
+        }
+        .orb-3 {
+            width: 280px; height: 280px;
+            background: radial-gradient(circle, #8b5cf6, transparent);
+            top: 55%; right: 15%;
+            animation: orb-float 18s ease-in-out infinite 5s;
+        }
+        @keyframes orb-float {
+            0%, 100% { transform: translate(0,0) scale(1); }
+            33% { transform: translate(-30px, 40px) scale(1.1); }
+            66% { transform: translate(20px, -25px) scale(0.9); }
         }
     </style>
 </head>
 <body>
-    <div class="top-header-panel" id="headerPanel">
-        <div class="logo-area">
-            <span class="logo-title">FinGeoRisk Portal</span>
-        </div>
-        <button class="btn-get-started" id="getStartedBtn" onclick="startOnboardingAnimation()">Get Started</button>
-    </div>
 
+    <canvas id="starCanvas"></canvas>
     <div id="cesiumContainer"></div>
 
-    <div class="floating-orb orb-1"></div>
-    <div class="floating-orb orb-2"></div>
-    <div class="floating-orb orb-3"></div>
+    <div class="orb orb-1"></div>
+    <div class="orb orb-2"></div>
+    <div class="orb orb-3"></div>
+
+    <nav class="navbar" id="headerPanel">
+        <div class="logo-area">
+            <div class="logo-pulse"></div>
+            <span class="logo-title">FinGeoRisk</span>
+        </div>
+        <div class="nav-links">
+            <span class="nav-tag">AI-Powered</span>
+            <span class="nav-tag">Real-Time</span>
+            <button class="btn-get-started" id="getStartedBtn" onclick="startOnboardingAnimation()">Get Started →</button>
+        </div>
+    </nav>
+
+    <div class="hero-overlay" id="heroOverlay">
+        <div class="hero-badge">
+            <div class="hero-badge-dot"></div>
+            Geospatial Risk Intelligence
+        </div>
+        <h1 class="hero-title">
+            <span class="line1">Know Your Risk.</span>
+            <span class="line2">Own Your Future.</span>
+        </h1>
+        <p class="hero-sub">AI-powered property risk analysis for homeowners and investors. Real-time data, global coverage, actionable insights.</p>
+        <div class="hero-cta-group">
+            <button class="hero-btn-primary" onclick="startOnboardingAnimation()">Get Started →</button>
+            <button class="hero-btn-secondary" onclick="document.querySelector('.scroll-content').scrollIntoView({behavior:'smooth'})">See How It Works</button>
+        </div>
+    </div>
 
     <div class="scroll-indicator" id="scrollIndicator">
-        <span>Scroll to Explore</span>
-        <div class="arrow"></div>
+        <div class="scroll-ring"></div>
+        <span class="scroll-label">Scroll</span>
     </div>
 
     <div class="scroll-content">
         <div class="feature-section">
             <div class="feature-card" data-animate>
-                <div class="feature-icon">🌍</div>
-                <h2>Global Risk Intelligence</h2>
-                <p>Access comprehensive geospatial risk data from anywhere in the world. Our AI-powered platform analyzes flood zones, wildfire hazards, slope stability, and infrastructure risks in real-time.</p>
-                <div class="feature-stats">
-                    <div class="stat-item">
-                        <div class="stat-value">150+</div>
-                        <div class="stat-label">Countries</div>
-                    </div>
-                    <div class="stat-item">
-                        <div class="stat-value">50M+</div>
-                        <div class="stat-label">Properties</div>
-                    </div>
-                    <div class="stat-item">
-                        <div class="stat-value">99.9%</div>
-                        <div class="stat-label">Accuracy</div>
-                    </div>
-                </div>
-            </div>
-        </div>
-
-        <div class="feature-section">
-            <div class="feature-card" data-animate>
-                <div class="feature-icon">🏠</div>
-                <h2>Homeowner Protection</h2>
-                <p>Make informed decisions about your most valuable asset. Get detailed risk assessments for any property, including interactive simulations showing potential hazards and mitigation strategies.</p>
-                <div class="feature-stats">
-                    <div class="stat-item">
-                        <div class="stat-value">24/7</div>
-                        <div class="stat-label">Monitoring</div>
-                    </div>
-                    <div class="stat-item">
-                        <div class="stat-value">AI</div>
-                        <div class="stat-label">Powered</div>
-                    </div>
-                    <div class="stat-item">
-                        <div class="stat-value">Real</div>
-                        <div class="stat-label">Time</div>
+                <div class="feature-card-inner">
+                    <div class="feature-accent accent-blue"></div>
+                    <div class="feature-body">
+                        <div class="feature-eyebrow eyebrow-blue">Coverage</div>
+                        <div class="feature-header">
+                            <div class="feature-icon-wrap icon-blue">🌍</div>
+                            <h2>Global Risk Intelligence</h2>
+                        </div>
+                        <p>Access comprehensive geospatial risk data from anywhere in the world. Our AI-powered platform analyzes flood zones, wildfire hazards, slope stability, and infrastructure risks in real-time.</p>
+                        <div class="feature-stats">
+                            <div class="stat-item">
+                                <div class="stat-value">150+</div>
+                                <div class="stat-label">Countries</div>
+                            </div>
+                            <div class="stat-item">
+                                <div class="stat-value">50M+</div>
+                                <div class="stat-label">Properties</div>
+                            </div>
+                            <div class="stat-item">
+                                <div class="stat-value">99.9%</div>
+                                <div class="stat-label">Accuracy</div>
+                            </div>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -535,21 +557,62 @@
 
         <div class="feature-section">
             <div class="feature-card" data-animate>
-                <div class="feature-icon">📈</div>
-                <h2>Investor Insights</h2>
-                <p>Evaluate commercial and residential investment opportunities with precision. Analyze entire tracts, assess financial viability, and identify high-potential areas with comprehensive market intelligence.</p>
-                <div class="feature-stats">
-                    <div class="stat-item">
-                        <div class="stat-value">ROI</div>
-                        <div class="stat-label">Analysis</div>
+                <div class="feature-card-inner">
+                    <div class="feature-accent accent-green"></div>
+                    <div class="feature-body">
+                        <div class="feature-eyebrow eyebrow-green">Homeowners</div>
+                        <div class="feature-header">
+                            <div class="feature-icon-wrap icon-green">🏠</div>
+                            <h2>Homeowner Protection</h2>
+                        </div>
+                        <p>Make informed decisions about your most valuable asset. Get detailed risk assessments for any property, including interactive simulations showing potential hazards and mitigation strategies.</p>
+                        <div class="feature-stats">
+                            <div class="stat-item">
+                                <div class="stat-value">24/7</div>
+                                <div class="stat-label">Monitoring</div>
+                            </div>
+                            <div class="stat-item">
+                                <div class="stat-value">AI</div>
+                                <div class="stat-label">Powered</div>
+                            </div>
+                            <div class="stat-item">
+                                <div class="stat-value">Real-Time</div>
+                                <div class="stat-label">Alerts</div>
+                            </div>
+                        </div>
                     </div>
-                    <div class="stat-item">
-                        <div class="stat-value">Market</div>
-                        <div class="stat-label">Trends</div>
-                    </div>
-                    <div class="stat-item">
-                        <div class="stat-value">Risk</div>
-                        <div class="stat-label">Scoring</div>
+                </div>
+            </div>
+        </div>
+
+        <div class="feature-section">
+            <div class="feature-card" data-animate>
+                <div class="feature-card-inner">
+                    <div class="feature-accent accent-purple"></div>
+                    <div class="feature-body">
+                        <div class="feature-eyebrow eyebrow-purple">Investors</div>
+                        <div class="feature-header">
+                            <div class="feature-icon-wrap icon-purple">📈</div>
+                            <h2>Investor Insights</h2>
+                        </div>
+                        <p>Evaluate commercial and residential investment opportunities with precision. Analyze entire tracts, assess financial viability, and identify high-potential areas with comprehensive market intelligence.</p>
+                        <div class="feature-stats">
+                            <div class="stat-item">
+                                <div class="stat-value">ROI</div>
+                                <div class="stat-label">Analysis</div>
+                            </div>
+                            <div class="stat-item">
+                                <div class="stat-value">Market
+                            </div>
+                            <div class="stat-item">
+                                <div class="stat-value">Market</div>
+                                <div class="stat-label">Trends</div>
+                            </div>
+                            <div class="stat-item">
+                                <div class="stat-value">Risk</div>
+                                <div class="stat-label">Scoring</div>
+                            </div>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -564,29 +627,73 @@
         </div>
     </div>
 
+    <div class="role-overlay" id="roleOverlay"></div>
+
     <div class="role-container" id="rolePopup">
-        <div class="role-header">Welcome to FinGeoRisk</div>
-        <div class="role-subtext">Tell us who you are so we can show you the right view.</div>
+        <div class="role-top">
+            <div class="role-eyebrow">Welcome</div>
+            <div class="role-header">Who are you?</div>
+            <div class="role-subtext">Tell us who you are so we can show you the right view.</div>
+        </div>
         <div class="role-options">
             <button class="role-btn" onclick="selectRole('homeowner')">
-                <span class="icon">🏠</span>
-                <span>
-                    Homeowner
-                    <div class="desc">Checking risk for a home I own or live in</div>
-                </span>
+                <div class="role-btn-icon icon-home">🏠</div>
+                <div class="role-btn-text">
+                    <div class="role-btn-title">Homeowner</div>
+                    <div class="role-btn-desc">Checking risk for a home I own or live in</div>
+                </div>
+                <div class="role-btn-arrow">→</div>
             </button>
             <button class="role-btn" onclick="selectRole('investor')">
-                <span class="icon">📈</span>
-                <span>
-                    Investor
-                    <div class="desc">Evaluating land or property for purchase</div>
-                </span>
+                <div class="role-btn-icon icon-invest">📈</div>
+                <div class="role-btn-text">
+                    <div class="role-btn-title">Investor</div>
+                    <div class="role-btn-desc">Evaluating land or property for purchase</div>
+                </div>
+                <div class="role-btn-arrow">→</div>
             </button>
         </div>
-        <div class="role-loading" id="roleLoading">Loading your dashboard...</div>
+        <div class="role-loading" id="roleLoading">
+            <div class="role-loading-bar">
+                <div class="role-loading-fill"></div>
+            </div>
+            <div class="role-loading-text">Loading your dashboard...</div>
+        </div>
     </div>
 
     <script>
+        // Stars
+        const canvas = document.getElementById('starCanvas');
+        const ctx = canvas.getContext('2d');
+        canvas.width = window.innerWidth;
+        canvas.height = window.innerHeight;
+        const stars = Array.from({length: 180}, () => ({
+            x: Math.random() * canvas.width,
+            y: Math.random() * canvas.height,
+            r: Math.random() * 1.2 + 0.2,
+            o: Math.random() * 0.5 + 0.1,
+            speed: Math.random() * 0.3 + 0.05
+        }));
+        function drawStars() {
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+            stars.forEach(s => {
+                s.o += s.speed * 0.01;
+                if (s.o > 0.6) s.speed = -Math.abs(s.speed);
+                if (s.o < 0.1) s.speed = Math.abs(s.speed);
+                ctx.beginPath();
+                ctx.arc(s.x, s.y, s.r, 0, Math.PI * 2);
+                ctx.fillStyle = `rgba(148,163,184,${s.o})`;
+                ctx.fill();
+            });
+            requestAnimationFrame(drawStars);
+        }
+        drawStars();
+        window.addEventListener('resize', () => {
+            canvas.width = window.innerWidth;
+            canvas.height = window.innerHeight;
+        });
+
+        // Cesium
         Cesium.Ion.defaultAccessToken = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJqdGkiOiI3NWYzMmM1OS1lMzE5LTRmZTMtOWNlNi00OWZmMzkxMDhlNzgiLCJpZCI6NDUwNDgwLCJzdWIiOiJTaWRkaGFudF8xMjEzIiwiaXNzIjoiaHR0cHM6Ly9hcGkuY2VzaXVtLmNvbSIsImF1ZCI6IlVudGl0bGVkIiwiaWF0IjoxNzgyNzU0MTU2fQ.H6iNblLtKvy83srBaTEv1BJl_xO17vJE3hCZZ0x3M-4';
 
         const viewer = new Cesium.Viewer('cesiumContainer', {
@@ -616,24 +723,21 @@
         let lastTime = Date.now();
         let spinning = true;
 
-        const spinGlobe = () => {
-            if (spinning) {
-                const now = Date.now();
-                const delta = (now - lastTime) / 1000;
-                lastTime = now;
-                viewer.camera.rotate(Cesium.Cartesian3.UNIT_Z, -0.04 * delta);
-            }
-        };
-
-        viewer.scene.postRender.addEventListener(spinGlobe);
+        viewer.scene.postRender.addEventListener(() => {
+            if (!spinning) return;
+            const now = Date.now();
+            const delta = (now - lastTime) / 1000;
+            lastTime = now;
+            viewer.camera.rotate(Cesium.Cartesian3.UNIT_Z, -0.04 * delta);
+        });
 
         function startOnboardingAnimation() {
             spinning = false;
 
             document.getElementById('getStartedBtn').style.opacity = '0';
             document.getElementById('getStartedBtn').style.pointerEvents = 'none';
-            document.getElementById('headerPanel').style.top = '12px';
-            document.getElementById('headerPanel').style.background = 'rgba(230, 238, 248, 0.4)';
+            document.getElementById('heroOverlay').style.opacity = '0';
+            document.getElementById('heroOverlay').style.transition = 'opacity 0.5s ease';
             document.getElementById('scrollIndicator').style.opacity = '0';
 
             viewer.camera.flyTo({
@@ -641,43 +745,30 @@
                 duration: 2.8,
                 easingFunction: Cesium.EasingFunction.QUADRATIC_IN_OUT,
                 complete: function() {
+                    document.getElementById('roleOverlay').classList.add('active');
                     document.getElementById('rolePopup').classList.add('active');
                 }
             });
         }
 
-        const observerOptions = {
-            threshold: 0.2,
-            rootMargin: '0px 0px -100px 0px'
-        };
-
         const observer = new IntersectionObserver((entries) => {
             entries.forEach(entry => {
-                if (entry.isIntersecting) {
-                    entry.target.classList.add('visible');
-                }
+                if (entry.isIntersecting) entry.target.classList.add('visible');
             });
-        }, observerOptions);
+        }, { threshold: 0.2, rootMargin: '0px 0px -100px 0px' });
 
-        document.querySelectorAll('[data-animate]').forEach(el => {
-            observer.observe(el);
-        });
+        document.querySelectorAll('[data-animate]').forEach(el => observer.observe(el));
 
         let hasScrolled = false;
         window.addEventListener('scroll', () => {
             if (!hasScrolled && window.scrollY > 50) {
                 hasScrolled = true;
-                const scrollIndicator = document.getElementById('scrollIndicator');
-                if (scrollIndicator) {
-                    scrollIndicator.style.opacity = '0';
-                    scrollIndicator.style.transition = 'opacity 0.3s ease';
-                }
+                document.getElementById('scrollIndicator').style.opacity = '0';
             }
         });
 
         async function selectRole(role) {
             document.getElementById('roleLoading').style.display = 'block';
-
             try {
                 await fetch('/api/set_role', {
                     method: 'POST',
@@ -687,7 +778,6 @@
             } catch (e) {
                 console.warn('Could not save role to session:', e);
             }
-
             window.location.href = role === 'investor' ? '/investor' : '/homeowner';
         }
     </script>
